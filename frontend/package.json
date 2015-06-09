@@ -1,0 +1,65 @@
+{
+  "name": "raid-composer",
+  "version": "0.3.1",
+  "description": "Lightweight starting point for a react web app.",
+  "keywords": [
+    "react",
+    "frontend"
+  ],
+  "main": "index.html",
+  "scripts": {
+    "start": "gulp",
+    "test": "jest"
+  },
+  "author": "@moklick <mo@webkid.io>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "*",
+    "babel-jest": "*",
+    "babel-loader": "*",
+    "del": "*",
+    "gulp": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-concat": "*",
+    "gulp-connect": "*",
+    "gulp-livereload": "*",
+    "gulp-load-plugins": "*",
+    "gulp-size": "*",
+    "gulp-stylus": "*",
+    "gulp-uglify": "*",
+    "gulp-util": "*",
+    "gulp-watch": "*",
+    "gulp-webpack": "*",
+    "jest-cli": "*",
+    "object-assign": "*",
+    "react-tools": "*",
+    "webpack": "*"
+  },
+  "dependencies": {
+    "alt": "*",
+    "immutable": "*",
+    "react": "*",
+    "react-router": "*",
+    "react-dnd": "*",
+    "whatwg-fetch": "*"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "testFileExtensions": [
+      "es6",
+      "js",
+      "jsx"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx",
+      "es6"
+    ],
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/object-assign",
+      "<rootDir>/test-utils/stubRouterContext.jsx"
+    ]
+  }
+}
