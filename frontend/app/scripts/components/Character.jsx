@@ -35,7 +35,7 @@ const Character = React.createClass({
     const { connectDragSource, isDragging } = this.props;
 
     return connectDragSource(
-      <div className='character'>
+      <div className='Character'>
         {this.props.character.name}
         <a href='#' onClick={this.props.delete.bind(null, this.props.character.id)}>x</a>
       </div>

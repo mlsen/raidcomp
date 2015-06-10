@@ -22,7 +22,9 @@ const App = React.createClass({
 
   render() {
     return (
-      <Workspace characters={this.state.characters} raids={this.state.raids} />
+      <div className='App'>
+        <Workspace characters={this.state.characters} raids={this.state.raids} />
+      </div>
     );
   }
 

@@ -33,7 +33,7 @@ const Raid = React.createClass({
     const { connectDropTarget, isOver } = this.props;
 
     return connectDropTarget(
-      <div className='raid'>
+      <div className='Raid'>
         <h2>Raid #{this.props.raid.id}</h2>
         <CharacterList characters={this.props.raid.characters} delete={this.remove} />
       </div>

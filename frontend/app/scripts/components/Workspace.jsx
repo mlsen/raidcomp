@@ -13,7 +13,7 @@ const Workspace = React.createClass({
 
   render() {
     return (
-      <div className='workspace'>
+      <div className='Workspace'>
         <AvailableCharacterList characters={this.props.characters} />
         <RaidList raids={this.props.raids} />
       </div>
