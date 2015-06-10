@@ -1,5 +1,6 @@
 import React from 'react';
 import CharacterStore from '../stores/CharacterStore';
+import Menubar from '../components/Menubar.jsx';
 import Workspace from '../components/Workspace.jsx';
 
 const App = React.createClass({
@@ -23,6 +24,7 @@ const App = React.createClass({
   render() {
     return (
       <div className='App'>
+        <Menubar />
         <Workspace characters={this.state.characters} raids={this.state.raids} />
       </div>
     );
