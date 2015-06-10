@@ -1,0 +1,26 @@
+.Menubar {
+
+  // Fixed top menubar
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  background: $light-gray;
+  border-bottom: 1px solid $medium-gray;
+}
+
+.Menubar-links {
+
+}
+
+.Menubar-item {
+  display: inline-block;
+
+  padding: 1em;
+}
+
+.Menubar-item:hover {
+  background: darken($light-gray, 10%);
+}

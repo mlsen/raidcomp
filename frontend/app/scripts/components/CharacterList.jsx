@@ -10,11 +10,11 @@ const CharacterList = React.createClass({
 
   render() {
     return (
-      <div className='CharacterList'>
+      <ul className='CharacterList'>
         {this.props.characters.map(character => {
           return <Character key={character.id} character={character} delete={this.props.delete} />;
         })}
-      </div>
+      </ul>
     );
   }
 

@@ -1,15 +1,17 @@
 import React from 'react';
+import RaidActions from '../actions/RaidActions';
 
 const Menubar = React.createClass({
+
+  handleCreateRaid() {
+    RaidActions.create();
+  },
 
   render() {
     return (
       <nav className='Menubar'>
-        <ul className='Menubar-links'>
-          <li><a href='#'>Bla</a></li>
-          <li><a href='#'>Blub</a></li>
-          <li><a href='#'>Blu</a></li>
-          <li><a href='#'>Bli</a></li>
+        <ul className='Menubar-list'>
+          <li className='Menubar-item'><a href='#' onClick={this.handleCreateRaid}>Create Raid</a></li>
         </ul>
       </nav>
     );

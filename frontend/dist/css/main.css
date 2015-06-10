@@ -559,3 +559,105 @@ html {
 *::after,
 *::before {
   box-sizing: inherit; }
+
+.AvailableCharacterList {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 14.70196%; }
+  .AvailableCharacterList:last-child {
+    margin-right: 0; }
+
+.AvailableCharacterList-form {
+  position: relative; }
+
+.AvailableCharacterList-form > input {
+  position: relative; }
+
+.AvailableCharacterList-form > button {
+  background-color: #477dca;
+  border-radius: 3px;
+  border: 0;
+  color: white;
+  display: inline-block;
+  font-size: inherit;
+  font-weight: bold;
+  padding: 7px 18px;
+  text-decoration: none;
+  background-clip: padding-box;
+  position: absolute;
+  top: 0em;
+  right: 0em;
+  bottom: 0em;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  outline: none;
+  padding: 5px 10px; }
+  .AvailableCharacterList-form > button:hover:not(:disabled) {
+    background-color: #578ad4;
+    cursor: pointer; }
+  .AvailableCharacterList-form > button:active:not(:disabled),
+  .AvailableCharacterList-form > button:focus:not(:disabled) {
+    background-color: #3c71bb;
+    cursor: pointer; }
+  .AvailableCharacterList-form > button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5; }
+
+.CharacterList {
+  margin-top: 1em;
+  padding-top: .3em;
+  border-top: 1px dashed #999; }
+
+.Character {
+  margin: .1em;
+  padding: .3em;
+  background: #ddd;
+  border: 1px solid #999;
+  text-align: center; }
+
+.Character-delete {
+  float: right; }
+
+.Menubar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ddd;
+  border-bottom: 1px solid #999; }
+
+.Menubar-item {
+  display: inline-block;
+  padding: 1em; }
+
+.Menubar-item:hover {
+  background: #c4c4c4; }
+
+.RaidList {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 82.94039%; }
+  .RaidList:last-child {
+    margin-right: 0; }
+
+.Raid {
+  float: left;
+  display: block;
+  margin-right: 2.84259%;
+  width: 17.72593%;
+  padding-bottom: 3em;
+  text-align: center; }
+  .Raid:last-child {
+    margin-right: 0; }
+
+.Workspace {
+  max-width: 98%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4em; }
+  .Workspace::after {
+    clear: both;
+    content: "";
+    display: table; }

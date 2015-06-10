@@ -19,9 +19,6 @@ const RaidList = React.createClass({
         {this.props.raids.map(raid => {
           return <Raid key={raid.id} raid={raid} />;
         })}
-        <div className='RaidList-form'>
-          <button onClick={this.handleCreate}>Create Raid</button>
-        </div>
       </div>
     );
   }

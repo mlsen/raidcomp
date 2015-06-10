@@ -1,0 +1,11 @@
+.Character {
+  margin: .1em;
+  padding: .3em;
+  background: $light-gray;
+  border: 1px solid $medium-gray;
+  text-align: center;
+}
+
+.Character-delete {
+  float: right;
+}

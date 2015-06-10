@@ -35,12 +35,17 @@ const AvailableCharacterList = React.createClass({
   render() {
     return (
       <div className='AvailableCharacterList'>
-        <CharacterList characters={this.props.characters} delete={this.delete} />
         <div className='AvailableCharacterList-form'>
-          <input type='text' ref='characterName' onChange={this.handleChange} value={this.state.characterName} placeholder='Name' />
-          <br />
-          <button onClick={this.handleCreate}>Create Character</button>
+          <input
+            type='text'
+            ref='characterName'
+            onChange={this.handleChange}
+            value={this.state.characterName}
+            placeholder='Name'
+          />
+          <button onClick={this.handleCreate}>+</button>
         </div>
+        <CharacterList characters={this.props.characters} delete={this.delete} />
       </div>
     );
   }
