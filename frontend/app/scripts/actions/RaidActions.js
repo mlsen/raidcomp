@@ -24,6 +24,11 @@ class RaidActions {
     });
   }
 
+  fetch(hash) {
+    // Request
+    this.dispatch();
+  }
+
 }
 
 export default alt.createActions(RaidActions);

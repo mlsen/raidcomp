@@ -44,15 +44,16 @@ class CharacterStore {
   }
 
   handleCreateCharacter(character) {
+    if(!character.name) {
+      return;
+    }
 
-    const id = this.nextRaidId++;
+    const id = this.nextCharacterId++;
     character = new Character({
       id: id,
       name: character.name,
       class: getRandomClass()
     });
-
-    console.log(character.class);
 
     this.setState({
       characters: this.state.characters.set(id.toString(), character)
@@ -84,11 +85,9 @@ class CharacterStore {
   }
 
   handleAddToRaid(props) {
-    const newRaidId = props.raidId;
+    const raidId = props.raidId;
     const oldRaidId = props.character.get('currentRaidId');
     let character = props.character;
-
-    console.log(newRaidId, oldRaidId, character);
 
     // Remove from old raid
     if(oldRaidId !== null) {
@@ -98,11 +97,11 @@ class CharacterStore {
     }
 
     // Add to new raid
-    let newRaid = this.state.raids.get(newRaidId.toString());
-    character = props.character.set('currentRaidId', newRaidId);
-    newRaid.characters = newRaid.characters.set(character.id.toString(), character);
+    let raid = this.state.raids.get(raidId.toString());
+    character = props.character.set('currentRaidId', raidId);
+    raid.characters = raid.characters.set(character.id.toString(), character);
 
-    this.state.raids = this.state.raids.set(newRaidId.toString(), newRaid);
+    this.state.raids = this.state.raids.set(raidId.toString(), raid);
 
     this.setState({
       characters: this.state.characters.delete(character.id.toString())

@@ -10,6 +10,11 @@ class CharacterActions {
     this.dispatch(characterId);
   }
 
+  fetch(hash) {
+    // Request
+    this.dispatch(hash);
+  }
+
 }
 
 export default alt.createActions(CharacterActions);
