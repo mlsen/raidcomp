@@ -43,7 +43,9 @@ const AvailableCharacterList = React.createClass({
             value={this.state.characterName}
             placeholder='Name'
           />
-          <button onClick={this.handleCreate}>+</button>
+          <button onClick={this.handleCreate}>
+            <i className='fa fa-plus'></i>
+          </button>
         </div>
         <CharacterList characters={this.props.characters} delete={this.delete} />
       </div>
