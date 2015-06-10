@@ -5,6 +5,7 @@ import RaidActions from '../actions/RaidActions';
 
 const Character = Immutable.Record({
   id: null,
+  currentRaidId: null,
   name: null
 });
 
@@ -65,20 +66,37 @@ class CharacterStore {
   }
 
   handleAddToRaid(props) {
-    const { raidId, character } = props;
-    let raid = this.state.raids.get(raidId.toString());
-    raid.characters = raid.characters.set(character.id.toString(), character);
+    const newRaidId = props.raidId;
+    const oldRaidId = props.character.get('currentRaidId');
+    let character = props.character;
+
+    console.log(newRaidId, oldRaidId, character);
+
+    // Remove from old raid
+    if(oldRaidId !== null) {
+      let oldRaid = this.state.raids.get(oldRaidId.toString());
+      oldRaid.characters = oldRaid.characters.delete(character.id.toString());
+      this.state.raids = this.state.raids.set(oldRaidId.toString(), oldRaid);
+    }
+
+    // Add to new raid
+    let newRaid = this.state.raids.get(newRaidId.toString());
+    character = props.character.set('currentRaidId', newRaidId);
+    newRaid.characters = newRaid.characters.set(character.id.toString(), character);
+
+    this.state.raids = this.state.raids.set(newRaidId.toString(), newRaid);
 
     this.setState({
-      characters: this.state.characters.delete(character.id.toString()),
-      raids: this.state.raids.set(raidId.toString(), raid)
+      characters: this.state.characters.delete(character.id.toString())
     });
   }
 
   handleRemoveFromRaid(props) {
     const { raidId, characterId } = props;
     let raid = this.state.raids.get(raidId.toString());
-    const character = raid.characters.get(characterId.toString());
+
+    let character = raid.characters.get(characterId.toString());
+    character = character.set('currentRaidId', null);
 
     raid.characters = raid.characters.delete(characterId.toString());
 

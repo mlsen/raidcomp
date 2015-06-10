@@ -10,6 +10,7 @@ const characterSource = {
   },
 
   endDrag(props, monitor, component) {
+    console.log(props);
     const dropResult = monitor.getDropResult();
     if(dropResult && dropResult.hasOwnProperty('raidId')) {
       RaidActions.addCharacter(dropResult.raidId, props.character);
