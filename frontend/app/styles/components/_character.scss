@@ -1,11 +1,46 @@
 .Character {
   margin: .1em;
   padding: .3em;
-  background: $light-gray;
   border: 1px solid $medium-gray;
   text-align: center;
 }
 
 .Character-delete {
   float: right;
+}
+
+.deathknight {
+  background: $deathknight;
+}
+
+.druid {
+  background: $druid;
+}
+
+.hunter {
+  background: $hunter;
+}
+
+.mage {
+  background: $mage;
+}
+
+.monk {
+  background: $monk;
+}
+
+.paladin {
+  background: $paladin;
+}
+
+.priest {
+  background: $priest;
+}
+
+.warlock {
+  background: $warlock;
+}
+
+.warrior {
+  background: $warrior;
 }

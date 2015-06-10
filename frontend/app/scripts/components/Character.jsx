@@ -4,7 +4,6 @@ import ItemTypes from '../misc/itemTypes';
 import RaidActions from '../actions/RaidActions';
 
 const characterSource = {
-
   beginDrag(props) {
     return {};
   },
@@ -35,8 +34,11 @@ const Character = React.createClass({
   render() {
     const { connectDragSource, isDragging } = this.props;
 
+    const cssClass = 'Character ' + this.props.character.class;
+    console.log(cssClass);
+
     return connectDragSource(
-      <li className='Character'>
+      <li className={cssClass}>
         {this.props.character.name}
         <span className='Character-delete'>
           <a href='#' onClick={this.props.delete.bind(null, this.props.character.id)}>

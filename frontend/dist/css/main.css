@@ -607,22 +607,49 @@ html {
 .CharacterList {
   margin-top: 1em;
   padding-top: .3em;
-  border-top: 1px dashed #999; }
+  border-top: 1px dashed #ddd; }
 
 .Character {
   margin: .1em;
   padding: .3em;
-  background: #ddd;
   border: 1px solid #999;
   text-align: center; }
 
 .Character-delete {
   float: right; }
 
+.deathknight {
+  background: #C41F3B; }
+
+.druid {
+  background: #FF7D0A; }
+
+.hunter {
+  background: #ABD473; }
+
+.mage {
+  background: #69CCF0; }
+
+.monk {
+  background: #00FF96; }
+
+.paladin {
+  background: #F58CBA; }
+
+.priest {
+  background: #FFFFFF; }
+
+.warlock {
+  background: #9482C9; }
+
+.warrior {
+  background: #C79C6E; }
+
 .Menubar {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1;
   width: 100%;
   background: #ddd;
   border-bottom: 1px solid #999; }
@@ -648,7 +675,9 @@ html {
   margin-right: 2.84259%;
   width: 17.72593%;
   padding-bottom: 3em;
-  text-align: center; }
+  text-align: center;
+  border: 1px dashed #999;
+  margin-bottom: 1em; }
   .Raid:last-child {
     margin-right: 0; }
 

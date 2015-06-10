@@ -3,10 +3,24 @@ import alt from '../alt';
 import CharacterActions from '../actions/CharacterActions';
 import RaidActions from '../actions/RaidActions';
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+const classes = [
+  'deathknight', 'druid', 'hunter', 'mage', 'monk', 'paladin',
+  'priest', 'rogue', 'shaman', 'warlock', 'warrior'
+];
+
+function getRandomClass() {
+  return classes[getRandomInt(0, classes.length)];
+}
+
 const Character = Immutable.Record({
   id: null,
   currentRaidId: null,
-  name: null
+  name: null,
+  class: null
 });
 
 class CharacterStore {
@@ -17,7 +31,7 @@ class CharacterStore {
 
     this.state = {};
     this.state.characters = Immutable.Map();
-    this.state.raids = Immutable.Map();
+    this.state.raids = Immutable.OrderedMap();
 
     this.bindListeners({
       handleCreateCharacter: CharacterActions.CREATE,
@@ -30,11 +44,15 @@ class CharacterStore {
   }
 
   handleCreateCharacter(character) {
+
     const id = this.nextRaidId++;
     character = new Character({
       id: id,
-      name: character.name
+      name: character.name,
+      class: getRandomClass()
     });
+
+    console.log(character.class);
 
     this.setState({
       characters: this.state.characters.set(id.toString(), character)
