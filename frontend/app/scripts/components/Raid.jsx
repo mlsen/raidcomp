@@ -1,12 +1,14 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd';
+import RaidActions from '../actions/RaidActions';
 import ItemTypes from '../misc/itemTypes';
-import CharacterActions from '../actions/CharacterActions';
-import Character from './Character.jsx';
+import CharacterList from './CharacterList.jsx';
 
 const raidTarget = {
   drop(props, monitor) {
-    CharacterActions.add(monitor.getItem());
+    return {
+      raidId: props.raid.id
+    };
   }
 };
 
@@ -19,21 +21,21 @@ function collect(connect, monitor) {
 
 const Raid = React.createClass({
 
+  propTypes: {
+    raid: React.PropTypes.object
+  },
+
+  remove(characterId) {
+    RaidActions.removeCharacter(this.props.raid.id, characterId);
+  },
+
   render() {
     const { connectDropTarget, isOver } = this.props;
 
-    const nodes = this.props.characters.map(character => {
-      console.log(character);
-      return <Character name={ character.get('name') } />;
-    });
-
     return connectDropTarget(
-      <div style={{
-        border: '1px solid black',
-        height: '40vh',
-        width: '10%'
-      }}>
-        { nodes }
+      <div className='raid'>
+        <h2>Raid #{this.props.raid.id}</h2>
+        <CharacterList characters={this.props.raid.characters} delete={this.remove} />
       </div>
     );
   }

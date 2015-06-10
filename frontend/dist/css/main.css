@@ -177,3 +177,41 @@ td,
 th {
   padding: 0;
 }
+.available-characters {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 15%;
+  border-right: 1px solid #000;
+  height: 100vh;
+  background: #808080;
+}
+.available-characters-form {
+  position: fixed;
+  bottom: 3em;
+}
+.characters {
+  width: 100%;
+}
+.character {
+  border: 1px solid #f00;
+  background: #ffa500;
+  margin: 0.1em;
+  padding: 0.2em;
+}
+.raid {
+  display: inline-block;
+  border: 1px solid #000;
+  padding-bottom: 1em;
+  width: 15%;
+  margin: 0 1em 1em 0;
+}
+.raids {
+  position: fixed;
+  top: 0;
+  left: 16%;
+  width: 100%;
+}
+.raids > .characters {
+  display: inline-block;
+}

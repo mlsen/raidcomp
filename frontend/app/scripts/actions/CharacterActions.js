@@ -2,9 +2,12 @@ import alt from '../alt';
 
 class CharacterActions {
 
-  add(character) {
-    console.log('Add:', character);
+  create(character) {
     this.dispatch(character);
+  }
+
+  delete(characterId) {
+    this.dispatch(characterId);
   }
 
 }

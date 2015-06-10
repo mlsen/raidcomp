@@ -1,12 +1,19 @@
 import React from 'react';
 import { DragSource } from 'react-dnd';
 import ItemTypes from '../misc/itemTypes';
+import RaidActions from '../actions/RaidActions';
 
 const characterSource = {
+
   beginDrag(props) {
-    return {
-      name: props.name
-    };
+    return {};
+  },
+
+  endDrag(props, monitor, component) {
+    const dropResult = monitor.getDropResult();
+    if(dropResult && dropResult.hasOwnProperty('raidId')) {
+      RaidActions.addCharacter(dropResult.raidId, props.character);
+    }
   }
 };
 
@@ -14,21 +21,23 @@ function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
-  };
+  }
 }
 
 const Character = React.createClass({
 
+  propTypes: {
+    character: React.PropTypes.object,
+    delete: React.PropTypes.func
+  },
+
   render() {
     const { connectDragSource, isDragging } = this.props;
-    const name = this.props.name;
 
     return connectDragSource(
-      <div style={{
-        opacity: isDragging ? 0.5 : 1,
-        cursor: 'move'
-      }}>
-        Character {{ name }}
+      <div className='character'>
+        {this.props.character.name}
+        <a href='#' onClick={this.props.delete.bind(null, this.props.character.id)}>x</a>
       </div>
     );
   }

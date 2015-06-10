@@ -1,23 +1,19 @@
 import React from 'react';
 import Character from './Character.jsx';
 
-
 const CharacterList = React.createClass({
 
+  propTypes: {
+    characters: React.PropTypes.object,
+    delete: React.PropTypes.func
+  },
+
   render() {
-
-    const nodes = this.props.characters.map(character => {
-      console.log('Character:', character.get('name'));
-      return <Character name={ character.get('name') } />;
-    });
-
     return (
-      <div style={{
-        border: '1px solid blue',
-        height: '40vh',
-        width: '10%'
-      }}>
-        { nodes }
+      <div className='characters'>
+        {this.props.characters.map(character => {
+          return <Character key={character.id} character={character} delete={this.props.delete} />;
+        })}
       </div>
     );
   }
