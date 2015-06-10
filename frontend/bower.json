@@ -1,0 +1,23 @@
+{
+  "name": "raidcomp",
+  "version": "0.0.1",
+  "authors": [
+    "mlsn"
+  ],
+  "description": "Raid Composer",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bourbon": "latest",
+    "neat": "latest",
+    "bitters": "latest"
+  }
+}
