@@ -13,6 +13,7 @@ const raidTarget = {
 };
 
 function collect(connect, monitor) {
+  console.log(monitor.isOver());
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver()
@@ -31,10 +32,15 @@ const Raid = React.createClass({
 
   render() {
     const { connectDropTarget, isOver } = this.props;
+    const style = {
+      background: isOver ? '#26ADE4' : ''
+    };
 
     return connectDropTarget(
-      <div className='Raid'>
-        <h2>Raid #{this.props.raid.id}</h2>
+      <div className='Raid' style={style}>
+        <div className='Raid-header'>
+          Raid {this.props.raid.id}
+        </div>
         <CharacterList characters={this.props.raid.characters} delete={this.remove} />
       </div>
     );

@@ -4,3 +4,7 @@
 @import 'vendor/neat/neat';
 
 @import 'components/components';
+
+body {
+  background: $dark-gray;
+}

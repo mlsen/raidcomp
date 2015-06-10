@@ -8,8 +8,8 @@
 
   width: 100%;
 
-  background: $light-gray;
-  border-bottom: 1px solid $medium-gray;
+  background: lighten($dark-gray, 10%);
+  border-bottom: 1px solid $base-border-color;
 }
 
 .Menubar-links {
@@ -23,5 +23,5 @@
 }
 
 .Menubar-item:hover {
-  background: darken($light-gray, 10%);
+  background: lighten($dark-gray, 15%);
 }

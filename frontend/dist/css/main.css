@@ -360,7 +360,7 @@ button {
   -o-appearance: none;
   appearance: none;
   -webkit-font-smoothing: antialiased;
-  background-color: #477dca;
+  background-color: #D1E751;
   border-radius: 3px;
   border: none;
   color: #fff;
@@ -385,7 +385,7 @@ button {
   input[type="submit"]:focus,
   button:hover,
   button:focus {
-    background-color: #2c5999;
+    background-color: #b5cf1d;
     color: #fff; }
   button:disabled, input[type="button"]:disabled, input[type="reset"]:disabled, input[type="submit"]:disabled,
   button:disabled {
@@ -393,8 +393,8 @@ button {
     opacity: 0.5; }
 
 fieldset {
-  background-color: #f7f7f7;
-  border: 1px solid #ddd;
+  background-color: #5e5e5e;
+  border: 1px solid #444444;
   margin: 0 0 0.75em;
   padding: 1.5em; }
 
@@ -416,8 +416,8 @@ label {
 input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], textarea,
 select[multiple=multiple],
 textarea {
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: #2b2b2b;
+  border: 1px solid #444444;
   border-radius: 3px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
@@ -431,12 +431,12 @@ textarea {
   input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="email"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="password"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="text"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover, textarea:hover,
   select[multiple=multiple]:hover,
   textarea:hover {
-    border-color: #c4c4c4; }
+    border-color: #2b2b2b; }
   input[type="color"]:focus, input[type="date"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="email"]:focus, input[type="month"]:focus, input[type="number"]:focus, input[type="password"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="text"]:focus, input[type="time"]:focus, input[type="url"]:focus, input[type="week"]:focus, textarea:focus,
   select[multiple=multiple]:focus,
   textarea:focus {
-    border-color: #477dca;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 5px rgba(55, 112, 192, 0.7);
+    border-color: #D1E751;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 5px rgba(203, 228, 59, 0.7);
     outline: none; }
 
 textarea {
@@ -488,13 +488,13 @@ table {
   width: 100%; }
 
 th {
-  border-bottom: 1px solid #b7b7b7;
+  border-bottom: 1px solid #1e1e1e;
   font-weight: 600;
   padding: 0.75em 0;
   text-align: left; }
 
 td {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #444444;
   padding: 0.75em 0; }
 
 tr,
@@ -508,7 +508,7 @@ body {
   -ms-font-feature-settings: "kern", "liga", "pnum";
   font-feature-settings: "kern", "liga", "pnum";
   -webkit-font-smoothing: antialiased;
-  color: #333;
+  color: #FFFFFF;
   font-family: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
   font-size: 1em;
   line-height: 1.5; }
@@ -528,20 +528,20 @@ p {
   margin: 0 0 0.75em; }
 
 a {
-  color: #477dca;
+  color: #D1E751;
   text-decoration: none;
   -webkit-transition: color 0.1s linear;
           transition: color 0.1s linear; }
   a:active,
   a:focus,
   a:hover {
-    color: #2c5999; }
+    color: #b5cf1d; }
   a:active,
   a:focus {
     outline: none; }
 
 hr {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #444444;
   border-left: none;
   border-right: none;
   border-top: none;
@@ -564,7 +564,10 @@ html {
   float: left;
   display: block;
   margin-right: 2.35765%;
-  width: 14.70196%; }
+  width: 23.23176%;
+  position: fixed;
+  top: 5em;
+  left: 1em; }
   .AvailableCharacterList:last-child {
     margin-right: 0; }
 
@@ -575,10 +578,10 @@ html {
   position: relative; }
 
 .AvailableCharacterList-form > button {
-  background-color: #477dca;
+  background-color: #D1E751;
   border-radius: 3px;
   border: 0;
-  color: white;
+  color: #333333;
   display: inline-block;
   font-size: inherit;
   font-weight: bold;
@@ -594,26 +597,25 @@ html {
   outline: none;
   padding: 5px 10px; }
   .AvailableCharacterList-form > button:hover:not(:disabled) {
-    background-color: #578ad4;
+    background-color: #d9ee64;
     cursor: pointer; }
   .AvailableCharacterList-form > button:active:not(:disabled),
   .AvailableCharacterList-form > button:focus:not(:disabled) {
-    background-color: #3c71bb;
+    background-color: #c8df3f;
     cursor: pointer; }
   .AvailableCharacterList-form > button:disabled {
     cursor: not-allowed;
     opacity: 0.5; }
 
 .CharacterList {
-  margin-top: 1em;
-  padding-top: .3em;
-  border-top: 1px dashed #ddd; }
+  padding-top: .3em; }
 
 .Character {
-  margin: .1em;
+  margin-bottom: .3em;
   padding: .3em;
-  border: 1px solid #999;
-  text-align: center; }
+  text-align: center;
+  text-shadow: 2px 2px 1px #000;
+  border-radius: 4px; }
 
 .Character-delete {
   float: right; }
@@ -639,6 +641,12 @@ html {
 .priest {
   background: #FFFFFF; }
 
+.rogue {
+  background: #FFF569; }
+
+.shaman {
+  background: #0070DE; }
+
 .warlock {
   background: #9482C9; }
 
@@ -651,42 +659,53 @@ html {
   left: 0;
   z-index: 1;
   width: 100%;
-  background: #ddd;
-  border-bottom: 1px solid #999; }
+  background: #2b2b2b;
+  border-bottom: 1px solid #444444; }
 
 .Menubar-item {
   display: inline-block;
   padding: 1em; }
 
 .Menubar-item:hover {
-  background: #c4c4c4; }
+  background: #373737; }
 
 .RaidList {
   float: left;
   display: block;
   margin-right: 2.35765%;
-  width: 82.94039%; }
+  width: 74.41059%;
+  margin-left: 25.58941%; }
   .RaidList:last-child {
     margin-right: 0; }
 
 .Raid {
   float: left;
   display: block;
-  margin-right: 2.84259%;
-  width: 17.72593%;
-  padding-bottom: 3em;
+  margin-right: 3.16844%;
+  width: 31.22104%;
+  padding-bottom: .5em;
   text-align: center;
-  border: 1px dashed #999;
+  background: #1e1e1e;
   margin-bottom: 1em; }
   .Raid:last-child {
     margin-right: 0; }
+
+.Raid:nth-child(3n+3) {
+  margin-right: 0; }
+
+.Raid-header {
+  padding: .5em;
+  border-top: 1px solid #444444; }
 
 .Workspace {
   max-width: 98%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 4em; }
+  margin-top: 5em; }
   .Workspace::after {
     clear: both;
     content: "";
     display: table; }
+
+body {
+  background: #111111; }

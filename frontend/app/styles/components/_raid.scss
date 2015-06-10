@@ -1,11 +1,21 @@
 .Raid {
-  @include span-columns(2 of 10);
+  @include span-columns(3 of 9);
 
   // Leave a bit of space to drop further characters
-  padding-bottom: 3em;
+  padding-bottom: .5em;
 
   text-align: center;
-  border: 1px dashed $medium-gray;
+  // border: 1px solid $base-border-color;
+  background: lighten($dark-gray, 5%);
 
   margin-bottom: 1em;
+}
+
+.Raid:nth-child(3n+3) {
+  @include omega();
+}
+
+.Raid-header {
+  padding: .5em;
+  border-top: 1px solid $base-border-color;
 }

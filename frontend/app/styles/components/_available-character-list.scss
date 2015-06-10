@@ -1,5 +1,8 @@
 .AvailableCharacterList {
-  @include span-columns(2);
+  @include span-columns(3);
+  position: fixed;
+  top: 5em;
+  left: 1em;
 }
 
 .AvailableCharacterList-form {
