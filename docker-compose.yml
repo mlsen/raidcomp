@@ -7,18 +7,19 @@
 
 frontend:
     build: ./frontend
-    expose:
+    ports:
         - "80:80"
     # environment:
     #     VIRTUAL_HOST:
 
 backend:
     build: ./backend
+    command: node --harmony /srv/rc/app.js
     links:
         - mongo
     volumes:
-        - ./backend:/srv/raidcomp/backend
-    expose:
+        - ./backend:/srv/rc
+    ports:
         - "5000:5000"
     # environment:
     #     VIRTUAL_HOST:
