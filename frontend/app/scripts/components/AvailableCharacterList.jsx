@@ -8,34 +8,31 @@ const AvailableCharacterList = React.createClass({
     characters: React.PropTypes.object
   },
 
-  getInitialState() {
-    return {
-      characterName: ''
-    };
-  },
-
-  handleChange(e) {
-    this.setState({
-      characterName: e.target.value
-    });
-  },
-
-  handleCreate(e) {
-    e.preventDefault();
-    CharacterActions.create({
-      name: this.state.characterName
-    });
-    this.setState(this.getInitialState());
-  },
-
   delete(characterId) {
     CharacterActions.delete(characterId);
   },
 
+  renderNoCharacters() {
+    return (
+      <div className='AvailableCharacterList-noCharacters'>
+        <p>No characters available.</p>
+        <a href='#'><i className='fa fa-2x fa-plus'></i></a>
+        <p>Add some!</p>
+      </div>
+    );
+  },
+
   render() {
+    let node = null;
+    if(this.props.characters.size) {
+      node = <CharacterList characters={this.props.characters} delete={this.delete} />;
+    } else {
+      node = this.renderNoCharacters();
+    }
+
     return (
       <div className='AvailableCharacterList'>
-        <CharacterList characters={this.props.characters} delete={this.delete} />
+        {node}
       </div>
     );
   }

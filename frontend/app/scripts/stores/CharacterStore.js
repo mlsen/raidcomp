@@ -7,11 +7,11 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function getRandomName() {
+function getRandomName(length) {
   var text = ''
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  for( var i=0; i < 8; i++ )
+  for( var i=0; i < length; i++ )
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
@@ -55,7 +55,7 @@ class CharacterStore {
 
   handleCreateCharacter(character) {
     if(!character.name) {
-      character.name = getRandomName();
+      character.name = getRandomName(12);
     }
 
     const id = this.nextCharacterId++;
