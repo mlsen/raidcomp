@@ -7,6 +7,16 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+function getRandomName() {
+  var text = ''
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for( var i=0; i < 8; i++ )
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
 const classes = [
   'deathknight', 'druid', 'hunter', 'mage', 'monk', 'paladin',
   'priest', 'rogue', 'shaman', 'warlock', 'warrior'
@@ -30,7 +40,7 @@ class CharacterStore {
     this.nextRaidId = 1;
 
     this.state = {};
-    this.state.characters = Immutable.Map();
+    this.state.characters = Immutable.OrderedMap();
     this.state.raids = Immutable.OrderedMap();
 
     this.bindListeners({
@@ -45,7 +55,7 @@ class CharacterStore {
 
   handleCreateCharacter(character) {
     if(!character.name) {
-      return;
+      character.name = getRandomName();
     }
 
     const id = this.nextCharacterId++;

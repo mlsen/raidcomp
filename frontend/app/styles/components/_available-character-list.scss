@@ -3,6 +3,9 @@
   position: fixed;
   top: 5em;
   left: 1em;
+
+  max-height: 87vh;
+  overflow: auto;
 }
 
 .AvailableCharacterList-form {

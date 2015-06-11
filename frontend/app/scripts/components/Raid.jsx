@@ -13,7 +13,6 @@ const raidTarget = {
 };
 
 function collect(connect, monitor) {
-  console.log(monitor.isOver());
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver()

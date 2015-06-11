@@ -567,7 +567,9 @@ html {
   width: 23.23176%;
   position: fixed;
   top: 5em;
-  left: 1em; }
+  left: 1em;
+  max-height: 87vh;
+  overflow: auto; }
   .AvailableCharacterList:last-child {
     margin-right: 0; }
 
@@ -662,6 +664,13 @@ html {
   background: #2b2b2b;
   border-bottom: 1px solid #444444; }
 
+.Menubar-brand {
+  display: inline;
+  margin: 0 1em;
+  padding-top: .1em;
+  float: left;
+  font-size: 2em; }
+
 .Menubar-item {
   display: inline-block;
   padding: 1em; }
@@ -683,9 +692,10 @@ html {
   display: block;
   margin-right: 3.16844%;
   width: 31.22104%;
-  padding-bottom: .5em;
+  padding: 0 0.3em 2em;
   text-align: center;
   background: #1e1e1e;
+  border-bottom: 1px solid #444444;
   margin-bottom: 1em; }
   .Raid:last-child {
     margin-right: 0; }
@@ -709,3 +719,19 @@ html {
 
 body {
   background: #111111; }
+
+.fade-appear {
+  opacity: 0;
+  -webkit-transition: opacity 0.5s ease-in;
+          transition: opacity 0.5s ease-in; }
+
+.fade-appear.fade-appear-active {
+  opacity: 1; }
+
+.fade-leave {
+  opacity: 1;
+  -webkit-transition: opacity 0.5s ease-in;
+          transition: opacity 0.5s ease-in; }
+
+.fade-leave.fade-leave-active {
+  opacity: 0; }

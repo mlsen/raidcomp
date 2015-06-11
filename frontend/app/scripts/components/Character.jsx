@@ -9,7 +9,6 @@ const characterSource = {
   },
 
   endDrag(props, monitor, component) {
-    console.log(props);
     const dropResult = monitor.getDropResult();
     if(dropResult && dropResult.hasOwnProperty('raidId')) {
       RaidActions.addCharacter(dropResult.raidId, props.character);
@@ -33,9 +32,7 @@ const Character = React.createClass({
 
   render() {
     const { connectDragSource, isDragging } = this.props;
-
     const cssClass = 'Character ' + this.props.character.class;
-    console.log(cssClass);
 
     return connectDragSource(
       <li className={cssClass}>

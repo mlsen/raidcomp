@@ -12,13 +12,19 @@
   border-bottom: 1px solid $base-border-color;
 }
 
-.Menubar-links {
+.Menubar-brand {
+  display: inline;
+  margin: 0 1em;
+  padding-top: .1em;
+  float: left;
+  font-size: 2em;
+}
 
+.Menubar-links {
 }
 
 .Menubar-item {
   display: inline-block;
-
   padding: 1em;
 }
 

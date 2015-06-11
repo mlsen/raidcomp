@@ -37,10 +37,13 @@
   },
   "dependencies": {
     "alt": "*",
+    "classnames": "^1.2.2",
     "immutable": "*",
     "react": "*",
-    "react-router": "*",
     "react-dnd": "*",
+    "react-modal": "^0.2.0",
+    "react-modal-component": "^1.0.9",
+    "react-router": "*",
     "whatwg-fetch": "*"
   },
   "jest": {
