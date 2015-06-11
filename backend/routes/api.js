@@ -1,14 +1,10 @@
+'use strict';
+
 var router = require('express').Router();
-var Raid = require('../models/raid').model;
+var Raid = require('../models/raid');
 
 var generateCompId = function () {
-  var idLength = 32;
-  var id = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    for (var i=0; i < idLength; i++)
-      id += possible.charAt(Math.floor(Math.random() * possible.length));
-    return id;
+  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
 }
 
 router.post('/', function (req, res, next) {
@@ -27,12 +23,11 @@ router.get('/:compid', function (req, res, next) {
   Raid.find({_compid: req.params.compid})
     .exec(function (err, raids) {
       if (err) return handleError(err);
-
       if (!raids.length) {
         res.status(404).send({error: 'There\'s no RaidComp with this Id.'});
         return next();
       }
-      console.log(raids);
+
       res.send(raids);
     });
 });

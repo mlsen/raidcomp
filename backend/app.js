@@ -1,3 +1,5 @@
+'use strict';
+
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -12,20 +14,20 @@ mongoose.connect('mongodb://mongo/raidcomp');
 //  // do stuff
 // });
 
-app.use(bodyparser.json());
+//app.use(bodyparser.json());
 
-router = require('./routes/api');
+var router = require('./routes/api');
 app.use('/comp', router);
 
 // debug
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/client.html');
-});
+// app.get('/', function (req, res) {
+//   res.sendFile(__dirname + '/client.html');
+// });
 
-socketActions = require('./actions/socket');
+var SocketActions = require('./actions/socket');
 io.on('connection', function (socket) {
   socket.on('raidcomp', function (data) {
-    socketActions.processMessage(data);
+    SocketActions.processMessage(data);
   });
 });
 

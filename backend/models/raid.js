@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema;
 
@@ -19,4 +21,4 @@ var raidSchema = new Schema({
 
 var Raid = mongoose.model('Raid', raidSchema);
 
-exports.model = Raid;
+module.exports = Raid;

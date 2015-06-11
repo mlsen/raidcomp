@@ -1,4 +1,6 @@
-var Raid = require('../models/raid').model;
+'use strict';
+
+var Raid = require('../models/raid');
 
 var Actions = {
   processMessage: function (data) {
