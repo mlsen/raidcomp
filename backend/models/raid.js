@@ -14,7 +14,7 @@ var characterSchema = new Schema({
 })
 
 var raidSchema = new Schema({
-	_compid: String,
+	_compId: String,
 	id: Number,
 	characters: [characterSchema]
 });
