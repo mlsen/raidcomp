@@ -8,27 +8,28 @@ var generateCompId = function () {
 }
 
 router.post('/', function (req, res, next) {
-  var compid = generateCompId();
+  var compId = generateCompId();
 
   for (var i = 0; i < 2; i++) {
-    Raid.create({_compid: compid, id: i}, function (err, raid) {
+    Raid.create({ _compId: compId, id: i }, function (err, raid) {
       if (err) return handleError();
     });
   }
 
-  res.send({compid: compid});
+  res.send({ compId: compid });
 });
 
-router.get('/:compid', function (req, res, next) {
-  Raid.find({_compid: req.params.compid})
+router.get('/:compId', function (req, res, next) {
+  Raid.find({ _compId: req.params.compId })
     .exec(function (err, raids) {
       if (err) return handleError(err);
       if (!raids.length) {
-        res.status(404).send({error: 'There\'s no RaidComp with this Id.'});
+        res.status(404).send({ error: 'There\'s no RaidComp with this Id.' });
         return next();
       }
 
       res.send(raids);
+      return next();
     });
 });
 
