@@ -1,4 +1,11 @@
 .RaidList {
-  @include span-columns(9);
-  @include shift(3);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+
+  margin-left: 300px;
+  padding: 0 .5em;
 }

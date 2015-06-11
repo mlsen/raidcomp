@@ -1,20 +1,15 @@
 .Raid {
-  @include span-columns(3 of 9);
+
+  width: 250px;
 
   // Leave a bit of space to drop further characters
-  // padding-bottom: 2em;
-  padding: 0 .3em 2em;
+  padding-bottom: 2em;
 
   text-align: center;
-  // border: 1px solid $base-border-color;
   background: lighten($dark-gray, 5%);
   border-bottom: 1px solid $base-border-color;
 
-  margin-bottom: 1em;
-}
-
-.Raid:nth-child(3n+3) {
-  @include omega();
+  margin: 0 .5em 1em;
 }
 
 .Raid-header {

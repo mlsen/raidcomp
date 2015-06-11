@@ -1,11 +1,12 @@
 .AvailableCharacterList {
-  @include span-columns(3);
   position: fixed;
   top: 5em;
   left: 1em;
 
+  width: 280px;
   max-height: 87vh;
-  overflow: auto;
+  overflow-y: scroll;
+  padding-right: .2em;
 }
 
 .AvailableCharacterList-noCharacters {

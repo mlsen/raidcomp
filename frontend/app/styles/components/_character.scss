@@ -1,7 +1,6 @@
 .Character {
   margin-bottom: .3em;
   padding: .3em;
-  // border: 1px solid $base-border-color;
   text-align: center;
   text-shadow: 2px 2px 1px #000;
   border-radius: 4px;
@@ -11,46 +10,12 @@
   float: right;
 }
 
-.deathknight {
-  background: $deathknight;
+.Character-delete .fa-remove {
+  color: red;
 }
 
-.druid {
-  background: $druid;
-}
-
-.hunter {
-  background: $hunter;
-}
-
-.mage {
-  background: $mage;
-}
-
-.monk {
-  background: $monk;
-}
-
-.paladin {
-  background: $paladin;
-}
-
-.priest {
-  background: $priest;
-}
-
-.rogue {
-  background: $rogue;
-}
-
-.shaman {
-  background: $shaman;
-}
-
-.warlock {
-  background: $warlock;
-}
-
-.warrior {
-  background: $warrior;
+@each $class, $color in $class-colors {
+  .#{$class} {
+    background: #{$color};
+  }
 }
