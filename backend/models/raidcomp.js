@@ -5,6 +5,9 @@ var mongoose = require('mongoose')
 
 
 var characterSchema = new Schema({
+  _compId: String,
+  _raidId: Number,
+  id: String,
 	name: String,
 	realm: String,
 	region: String,
@@ -15,10 +18,13 @@ var characterSchema = new Schema({
 
 var raidSchema = new Schema({
 	_compId: String,
-	id: Number,
-	characters: [characterSchema]
+	numRaids: Number,
 });
 
+var Character = mongoose.model('Character', characterSchema);
 var Raid = mongoose.model('Raid', raidSchema);
 
-module.exports = Raid;
+module.exports = {
+  Raid: Raid,
+  Character: Character
+}

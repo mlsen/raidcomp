@@ -11,12 +11,20 @@
   });
 
   function add() {
-  	socket.emit('raidcomp', {action: 'add', compId: compId, user: 'user', character: {name: 'blah', className: 'death knight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'TANK'}});
+  	socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: 'user', character: { id: 'id', name: 'blah', className: 'death knight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'TANK'}});
   }
-  function move() {
-
+  function moveto2() {
+    socket.emit('raidcomp', {action: 'moveCharacter', to: 2, compId: compId, user: 'user', character: { id: 'id' } });
+  }
+  function moveto1() {
+    socket.emit('raidcomp', {action: 'moveCharacter', to: 1, compId: compId, user: 'user', character: { id: 'id' } });
+  }
+  function removeca() {
+    socket.emit('raidcomp', {action: 'removeCharacter', compId: compId, user: 'user', character: {id:'id'}});
   }
 </script>
 
 <div onclick="add();">add char</div>
-<div onclick="move();">move</div>
+<div onclick="moveto1();">move1</div>
+<div onclick="moveto2();">move2</div>
+<div onclick="removeca();">remove</div>

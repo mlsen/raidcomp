@@ -1,80 +1,150 @@
 'use strict';
 
-var Raid = require('../models/raid');
+var Raid = require('../models/raidcomp').Raid;
+var Character = require('../models/raidcomp').Character;
 
 var Actions = {
   processMessage: function (data, socketResponse) {
-    console.log(data);
-    if (!data.action && !data.compId && !data.user) return;
+    if (!data.action || !data.compId || !data.user || !socketResponse) return;
 
     switch(data.action) {
-      case 'add':
-        if (data.character) this.addCharacter(data, 0, socketResponse);
+      case 'addCharacter':
+        Actions.addCharacter(data, socketResponse);
         break;
-      case 'move':
-
+      case 'moveCharacter':
+        Actions.moveCharacter(data, socketResponse);
         break;
-      case 'remove':
-
+      case 'removeCharacter':
+        Actions.removeCharacter(data, socketResponse);
+        break;
+      case 'addRaid':
+        Actions.changeNumRaids(data, 1, socketResponse);
+        break;
+      case 'removeRaid':
+        Actions.changeNumRaids(data, -1, socketResponse);
         break;
       case 'name':
-
+        // user names
         break;
     }
   },
-  addCharacter: function (data, raidId, socketResponse) {
-    var character = data.character;
-    if (!character.name || !character.realm || !character.region ||
-      !character.className || !character.spec || !character.role) {
 
-      socketResponse(data.compId + ':' + data.user, { error: 'Some character data was missing.' });
-      return;
-    }
-    if (!raidId >= 0) {
-      socketResponse(data.compId + ':' + data.user, { error: 'Bad raid id given.' });
+  addCharacter: function (data, socketResponse) {
+    if (!data.character || !Actions.validateCharacter(data.character)) {
+      if (socketResponse) socketResponse(data.compId + ':' + data.user, { error: 'Some character data was missing.' });
       return;
     }
 
-    Raid.findOne({ _compId: data.compId, id: raidId })
-        .exec(function (err, raid) {
-          if (err) return handleError(err);
-          if (!raid) {
-            socketResponse(data.compId + ':' + data.user, { error: 'Specified RaidComp not found.' });
+    Raid
+    .findOne({ _compId: data.compId })
+    .exec(function (err, raid) {
+      if (err) return handleError(err);
+      if (err || !raid) {
+        return Actions.throwError(data, 'Specified RaidComp not found.', socketResponse);
+      }
+
+      var character = {
+        _compId: data.compId,
+        _raidId: 0,
+        id: data.character.id,
+        name: data.character.name,
+        realm: data.character.realm,
+        region: data.character.region,
+        className: data.character.className,
+        spec: data.character.spec,
+        role: data.character.role
+      }
+
+      Character.findOneAndUpdate(
+        { _compId: data.compId, _raidId: 0, id: data.character.id },
+        character,
+        { upsert: true, new: true },
+        function (err, character) {
+          if (socketResponse) {
+            if (err || !character) {
+              return Actions.throwError(data, 'Adding character failed. Maybe it had a reason..or not?', socketResponse);
+            }
+            socketResponse(data.compId, { action: data.action, user: data.user, character: character });
             return;
           }
-
-          for (var raidchar of raid.characters) {
-            if (raidchar.name === character.name
-              && raidchar.realm === character.realm
-              && raidchar.region === character.region) {
-
-              raidchar.className = character.className;
-              raidchar.spec = character.spec;
-              raidchar.role = character.role;
-
-              raid.save(function (err) {
-                if (err) return handleError(err);
-                socketResponse(data.compId + ':' + data.user, { msg: 'update' });
-              });
-              return;
-            }
-          }
-
-          // add a new character
-          raid.characters.push({
-            name: character.name,
-            realm: character.realm,
-            region: character.region,
-            className: character.className,
-            spec: character.spec,
-            role: character.role
-          });
-          raid.save(function (err) {
-            if (err) return handleError(err);
-            socketResponse(data.compId, { msg: 'added' + character.name });
-          });
-          return;
+        }
+      );
     });
+  },
+
+  moveCharacter: function (data, socketResponse) {
+    if (!data.character || !data.character.id || !data.to)
+      return Actions.throwError(data, 'Required data for moving a character was missing.', socketResponse);
+
+    Raid
+    .findOne({ _compId: data.compId })
+    .exec(function (err, raid) {
+      if (err || !raid || raid.numRaids < data.to) {
+        return Actions.throwError(data, 'Target raid does not exist.', socketResponse);
+      }
+
+      Character
+      .findOneAndUpdate(
+        { _compId: data.compId, id: data.character.id },
+        { _raidId: data.to },
+        { new: true },
+        function (err, character) {
+          if (socketResponse) {
+            if (err || !character) {
+              return Actions.throwError(data, 'Moving character failed, it might not exist or something went wrong.', socketResponse);
+            }
+            socketResponse(data.compId, { action: data.action, user: data.user, character: character });
+            return;
+          }
+        }
+      );
+    });
+  },
+
+  removeCharacter: function (data, socketResponse) {
+    if (!data.character || !data.character.id)
+      return Actions.throwError(data, 'Required data for removing a character was missing.', socketResponse);
+
+    Character.findOneAndRemove(
+      { _compId: data.compId, id: data.character.id },
+      function (err, character) {
+        if (socketResponse) {
+          if (err || !character) {
+            return Actions.throwError(data, 'Removing character failed.', socketResponse);
+          }
+          socketResponse(data.compId, { action: data.action, user: data.user, character: character });
+          return;
+        }
+      }
+    )
+  },
+
+  changeNumRaids: function (data, num, socketResponse) {
+    Raid
+    .findOne({ _compId: data.compId })
+    .exec(function (err, raid) {
+      if (err || !raid) {
+        return Actions.throwError(data, 'Specified RaidComp not found.', socketResponse);
+      }
+
+      if (num === -1 && raid.numRaids === 1) {
+        return Actions.throwError(data, 'Cannot delete the only raid.', socketResponse);
+      }
+      raid.numRaids += num;
+      raid.save()
+      socketResponse(data.compId, { action: data.action, user: data.user, raid: raid });
+      return;
+    });
+  },
+
+  validateCharacter: function (character) {
+    return character.id && character.name && character.realm && character.region
+      && character.className && character.spec && character.role;
+  },
+
+  throwError: function (data, msg, socketResponse) {
+    socketResponse(data.compId + ':' + data.user, { error: msg });
+    return;
   }
 }
 
