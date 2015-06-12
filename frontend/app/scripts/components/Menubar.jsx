@@ -5,11 +5,11 @@ import RaidActions from '../actions/RaidActions';
 const Menubar = React.createClass({
 
   handleCreateRaid() {
-    RaidActions.create();
+    RaidActions.add();
   },
 
   handleCreateCharacter() {
-    CharacterActions.create({});
+    CharacterActions.add({});
   },
 
   render() {

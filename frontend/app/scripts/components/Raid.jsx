@@ -1,6 +1,6 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd';
-import RaidActions from '../actions/RaidActions';
+import CharacterActions from '../actions/CharacterActions';
 import ItemTypes from '../misc/itemTypes';
 import CharacterList from './CharacterList.jsx';
 
@@ -26,7 +26,7 @@ const Raid = React.createClass({
   },
 
   remove(characterId) {
-    RaidActions.removeCharacter(this.props.raid.id, characterId);
+    CharacterActions.move(characterId, 0);
   },
 
   render() {

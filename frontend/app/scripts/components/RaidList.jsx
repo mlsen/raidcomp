@@ -14,9 +14,12 @@ const RaidList = React.createClass({
   },
 
   render() {
+
+    const raids = this.props.raids.delete('0');
+
     return (
       <div className='RaidList'>
-        {this.props.raids.map(raid => {
+        {raids.map(raid => {
           return <Raid key={raid.id} raid={raid} />;
         })}
       </div>

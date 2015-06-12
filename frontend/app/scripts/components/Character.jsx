@@ -2,6 +2,7 @@ import React from 'react';
 import { DragSource } from 'react-dnd';
 import ItemTypes from '../misc/itemTypes';
 import RaidActions from '../actions/RaidActions';
+import CharacterActions from '../actions/CharacterActions';
 
 const characterSource = {
   beginDrag(props) {
@@ -11,7 +12,7 @@ const characterSource = {
   endDrag(props, monitor, component) {
     const dropResult = monitor.getDropResult();
     if(dropResult && dropResult.hasOwnProperty('raidId')) {
-      RaidActions.addCharacter(dropResult.raidId, props.character);
+      CharacterActions.move(props.character.id, dropResult.raidId);
     }
   }
 };

@@ -2,12 +2,19 @@ import alt from '../alt';
 
 class CharacterActions {
 
-  create(character) {
+  add(character) {
     this.dispatch(character);
   }
 
   delete(characterId) {
     this.dispatch(characterId);
+  }
+
+  move(characterId, raidId) {
+    this.dispatch({
+      characterId: characterId,
+      raidId: raidId
+    });
   }
 
   fetch(hash) {

@@ -1,136 +1,111 @@
 import Immutable from 'immutable';
+import sha1 from 'sha1';
 import alt from '../alt';
 import CharacterActions from '../actions/CharacterActions';
 import RaidActions from '../actions/RaidActions';
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
-function getRandomName(length) {
-  var text = ''
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for( var i=0; i < length; i++ )
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return text;
-}
-
-const classes = [
-  'deathknight', 'druid', 'hunter', 'mage', 'monk', 'paladin',
-  'priest', 'rogue', 'shaman', 'warlock', 'warrior'
-];
-
-function getRandomClass() {
-  return classes[getRandomInt(0, classes.length)];
-}
+import { generateRandomCharacter } from '../misc/tools';
 
 const Character = Immutable.Record({
   id: null,
-  currentRaidId: null,
+  currentRaidId: 0,
   name: null,
+  region: null,
+  realm: null,
   class: null
 });
+
+function isValidCharacter(character) {
+  return character.name && character.class && character.region && character.realm;
+}
 
 class CharacterStore {
 
   constructor() {
-    this.nextCharacterId = 1;
+    // These are getting incremented
     this.nextRaidId = 1;
 
-    this.state = {};
-    this.state.characters = Immutable.OrderedMap();
-    this.state.raids = Immutable.OrderedMap();
+    this.state = {
+
+      // All characters
+      characters: Immutable.OrderedMap(),
+
+      // Raids
+      // Key '0' contains all characters that are not in a raid yet
+      raids: Immutable.OrderedMap({
+        0: { id: 0, characters: Immutable.OrderedMap() }
+      })
+    };
 
     this.bindListeners({
-      handleCreateCharacter: CharacterActions.CREATE,
+      handleAddCharacter: CharacterActions.ADD,
       handleDeleteCharacter: CharacterActions.DELETE,
-      handleCreateRaid: RaidActions.CREATE,
-      handleDeleteRaid: RaidActions.DELETE,
-      handleAddToRaid: RaidActions.ADD_CHARACTER,
-      handleRemoveFromRaid: RaidActions.REMOVE_CHARACTER
+      handleMoveCharacter: CharacterActions.MOVE,
+      handleAddRaid: RaidActions.ADD,
+      handleDeleteRaid: RaidActions.DELETE
     });
   }
 
-  handleCreateCharacter(character) {
-    if(!character.name) {
-      character.name = getRandomName(12);
+  handleAddCharacter(character) {
+    if(!character || !isValidCharacter(character)) {
+      character = generateRandomCharacter();
     }
 
-    const id = this.nextCharacterId++;
-    character = new Character({
-      id: id,
-      name: character.name,
-      class: getRandomClass()
-    });
+    character.id = sha1(character.region + character.realm + character.name);
+    character = new Character(character);
 
-    this.setState({
-      characters: this.state.characters.set(id.toString(), character)
-    });
+    // Add to all characters
+    this.state.characters = this.state.characters.set(character.id, character);
+
+    // Add to raid '0'
+    let raid = this.state.raids.get('0');
+    raid.characters = raid.characters.set(character.id, character);
+    this.state.raids = this.state.raids.set('0', raid);
   }
 
   handleDeleteCharacter(characterId) {
-    this.setState({
-      characters: this.state.characters.delete(characterId.toString())
-    });
+    const character = this.state.characters.get(characterId);
+
+    // Delete from all characters
+    this.state.characters = this.state.characters.delete(characterId);
+
+    // Delete from current raid
+    let raid = this.state.raids.get(character.currentRaidId.toString());
+    raid.characters = raid.characters.delete(character.id);
+    this.state.raids = this.state.raids.set(raid.id.toString(), raid);
   }
 
-  handleCreateRaid() {
-    const id = this.nextRaidId++;
-    const raid = {
-      id: id,
-      characters: Immutable.Map()
-    };
+  handleMoveCharacter(props) {
+    const { characterId, raidId } = props;
+    let character = this.state.characters.get(characterId);
 
-    this.setState({
-      raids: this.state.raids.set(id.toString(), raid)
-    });
+    // Delete from current raid
+    let currentRaid = this.state.raids.get(character.currentRaidId.toString());
+    currentRaid.characters = currentRaid.characters.delete(character.id);
+
+    // Add to new raid
+    let newRaid = this.state.raids.get(raidId.toString());
+    character = character.set('currentRaidId', newRaid.id);
+    newRaid.characters = newRaid.characters.set(character.id, character);
+
+    let updatedRaids = {};
+    updatedRaids[currentRaid.id.toString()] = currentRaid;
+    updatedRaids[newRaid.id.toString()] = newRaid;
+
+    this.state.characters = this.state.characters.set(character.id, character);
+    this.state.raids.merge(updatedRaids);
+  }
+
+  handleAddRaid() {
+    const raid = {
+      id: this.nextRaidId++,
+      characters: Immutable.OrderedMap()
+    };
+    this.state.raids = this.state.raids.set(raid.id.toString(), raid);
   }
 
   handleDeleteRaid(raidId) {
-    this.setState({
-      raids: this.state.raids.delete(raidId.toString())
-    });
-  }
-
-  handleAddToRaid(props) {
-    const raidId = props.raidId;
-    const oldRaidId = props.character.get('currentRaidId');
-    let character = props.character;
-
-    // Remove from old raid
-    if(oldRaidId !== null) {
-      let oldRaid = this.state.raids.get(oldRaidId.toString());
-      oldRaid.characters = oldRaid.characters.delete(character.id.toString());
-      this.state.raids = this.state.raids.set(oldRaidId.toString(), oldRaid);
-    }
-
-    // Add to new raid
-    let raid = this.state.raids.get(raidId.toString());
-    character = props.character.set('currentRaidId', raidId);
-    raid.characters = raid.characters.set(character.id.toString(), character);
-
-    this.state.raids = this.state.raids.set(raidId.toString(), raid);
-
-    this.setState({
-      characters: this.state.characters.delete(character.id.toString())
-    });
-  }
-
-  handleRemoveFromRaid(props) {
-    const { raidId, characterId } = props;
-    let raid = this.state.raids.get(raidId.toString());
-
-    let character = raid.characters.get(characterId.toString());
-    character = character.set('currentRaidId', null);
-
-    raid.characters = raid.characters.delete(characterId.toString());
-
-    this.setState({
-      characters: this.state.characters.set(characterId.toString(), character),
-      raids: this.state.raids.set(raidId.toString(), raid)
-    });
+    this.state.raids = this.state.raids.delete(raidId.toString());
   }
 
 }
