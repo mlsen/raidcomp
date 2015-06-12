@@ -1,0 +1,22 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var compId = 'gquktqw9yk2ihpviw0v5sukhb0529';
+  var socket = io.connect('http://192.168.59.103:5000');
+  socket.on(compId, function (data) {
+    console.log(data);
+    // socket.emit('my other event', { my: 'data' });
+  });
+  socket.on(compId+':user', function (data) {
+    console.log(data);
+  });
+
+  function add() {
+  	socket.emit('raidcomp', {action: 'add', compId: compId, user: 'user', character: {name: 'blah', className: 'death knight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'TANK'}});
+  }
+  function move() {
+
+  }
+</script>
+
+<div onclick="add();">add char</div>
+<div onclick="move();">move</div>
