@@ -42,8 +42,8 @@
     "react": "*",
     "react-dnd": "*",
     "react-modal": "^0.2.0",
-    "react-modal-component": "^1.0.9",
     "react-router": "*",
+    "react-simpletabs": "^0.6.1",
     "sha1": "^1.1.1",
     "whatwg-fetch": "*"
   },

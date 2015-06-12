@@ -1,0 +1,27 @@
+.ImportGuildTab {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+}
+
+.ImportGuildTab-form {
+  min-width: 220px;
+  padding-right: 20px;
+  margin-right: .5em;
+  border-right: 1px solid $base-border-color;
+}
+
+.ImportGuildTab-searchButton {
+  width: 100%;
+  margin-top: .5em;
+  color: $dark-gray;
+}
+
+.ImportGuildTab-results {
+  margin: 0 .5em;
+  min-width: 500px;
+  flex-grow: 1;
+}

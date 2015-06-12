@@ -1,0 +1,53 @@
+.ImportModal {
+
+  .tabs {
+  }
+
+  .tabs-navigation {
+    padding: 0 50px;
+  }
+
+  .tabs-navigation {
+    padding: 0 20px;
+    border-bottom: 1px solid $base-border-color;
+  }
+
+  .tabs-menu {
+    display: table;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tabs-menu-item {
+    float: left;
+  }
+
+  .tabs-menu-item a {
+    display: block;
+    padding: 0 40px;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 0;
+  }
+
+  .tabs-menu-item:not(.is-active) a:hover {
+    background: lighten($dark-gray, 5%);
+  }
+
+  .tabs-menu-item.is-active a {
+    background: lighten($dark-gray, 10%);
+    border-top: 1px solid $base-border-color;
+    border-bottom: 0;
+  }
+
+  .tab-panel {
+    margin: 1em 20px;
+  }
+}
+
+.ImportModal-closeIcon {
+  float: right;
+}
+
+
