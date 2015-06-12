@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import alt from '../alt';
 import ImportActions from '../actions/ImportActions';
+import CharacterActions from '../actions/CharacterActions';
 import { classes } from '../misc/wow';
 
 const classIds = {
@@ -25,18 +26,21 @@ class ImportStore {
 
     this.bindListeners({
       handleUpdateMembers: ImportActions.UPDATE_MEMBERS,
-      handleFetchGuildFailed: ImportActions.FETCH_GUILD_FAILED
+      handleFetchGuildFailed: ImportActions.FETCH_GUILD_FAILED,
+      handleImportRanks: ImportActions.IMPORT_RANKS
     });
   }
 
-  handleUpdateMembers(members) {
+  handleUpdateMembers(props) {
     let ranks = {};
     let character = {};
-    members.map(member => {
+    props.members.map(member => {
       if(!ranks.hasOwnProperty(member.rank)) {
         ranks[member.rank] = [];
       }
       character = {
+        region: props.guild.region,
+        realm: props.guild.realm,
         name: member.character.name,
         class: classIds[member.character.class]
       };
@@ -47,6 +51,20 @@ class ImportStore {
 
   handleFetchGuildFailed(err) {
     console.log(err);
+  }
+
+  handleImportRanks(ranks) {
+    let key = null;
+    let characters = [];
+
+    ranks.forEach(rank => {
+      key = rank.toString();
+
+      this.state.ranks.get(key).map(character => {
+        characters.push(character);
+      });
+    });
+    this.state.importCharacters = Immutable.fromJS(characters);
   }
 
 }

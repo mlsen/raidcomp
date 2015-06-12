@@ -3,6 +3,7 @@ import sha1 from 'sha1';
 import alt from '../alt';
 import CharacterActions from '../actions/CharacterActions';
 import RaidActions from '../actions/RaidActions';
+import ImportStore from './ImportStore';
 
 import { generateRandomCharacter } from '../misc/tools';
 
@@ -41,6 +42,7 @@ class CharacterStore {
       handleAddCharacter: CharacterActions.ADD,
       handleDeleteCharacter: CharacterActions.DELETE,
       handleMoveCharacter: CharacterActions.MOVE,
+      handleImportCharacters: CharacterActions.IMPORT,
       handleAddRaid: RaidActions.ADD,
       handleDeleteRaid: RaidActions.DELETE
     });
@@ -106,6 +108,15 @@ class CharacterStore {
 
   handleDeleteRaid(raidId) {
     this.state.raids = this.state.raids.delete(raidId.toString());
+  }
+
+  handleImportCharacters() {
+    this.waitFor(ImportStore);
+    const importCharacters = ImportStore.getState().importCharacters;
+
+    importCharacters.map(character => {
+      this.handleAddCharacter(character.toObject());
+    });
   }
 
 }

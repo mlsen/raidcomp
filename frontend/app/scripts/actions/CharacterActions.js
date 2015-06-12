@@ -17,9 +17,8 @@ class CharacterActions {
     });
   }
 
-  fetch(hash) {
-    // Request
-    this.dispatch(hash);
+  import() {
+    this.dispatch();
   }
 
 }

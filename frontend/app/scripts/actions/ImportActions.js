@@ -1,5 +1,6 @@
 import alt from '../alt';
 import Armory from '../misc/armoryApi';
+import CharacterActions from './CharacterActions';
 
 class ImportActions {
 
@@ -8,15 +9,25 @@ class ImportActions {
 
     Armory.fetchGuild(region, realm, name)
       .then(guild => {
-        this.actions.updateMembers(guild.members);
+        this.actions.updateMembers({
+          region: region,
+          realm: realm,
+          guild: name
+        },
+        guild.members);
       })
       .catch(err => {
         this.actions.fetchGuildFailed(err);
       });
   }
 
-  updateMembers(members) {
-    this.dispatch(members);
+  importRanks(ranks) {
+    this.dispatch(ranks);
+    CharacterActions.import();
+  }
+
+  updateMembers(guild, members) {
+    this.dispatch({ guild: guild, members: members });
   }
 
   fetchGuildFailed(err) {
