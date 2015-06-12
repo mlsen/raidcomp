@@ -8,10 +8,10 @@
 }
 
 .ImportGuildTab-form {
-  min-width: 220px;
+  width: 220px;
   padding-right: 20px;
-  margin-right: .5em;
-  border-right: 1px solid $base-border-color;
+  margin: 0 .5em 1em;
+  // border-right: 1px solid $base-border-color;
 }
 
 .ImportGuildTab-searchButton {
@@ -20,8 +20,37 @@
   color: $dark-gray;
 }
 
+.ImportGuildTab-importButton {
+  width: 100%;
+  margin-top: .5em;
+  background: $light-blue;
+  color: $dark-gray;
+}
+
 .ImportGuildTab-results {
-  margin: 0 .5em;
-  min-width: 500px;
+  // margin: 0 .5em;
+  // width: 100%;
   flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 500px;
+}
+
+.ImportGuildTab-rank {
+  background: lighten($dark-gray, 5%);
+  margin-bottom: 1em;
+  border: 1px solid $base-border-color;
+}
+
+.ImportGuildTab-rankHeader {
+  padding: .4em;
+  border-bottom: 1px solid $base-border-color;
+}
+
+.ImportGuildTab-rankCharacters {
+  padding: .4em;
+}
+
+.ImportGuildTab-character {
+  display: inline-block;
+  margin-right: .3em;
 }

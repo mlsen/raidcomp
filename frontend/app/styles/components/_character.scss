@@ -15,7 +15,11 @@
 }
 
 @each $class, $color in $class-colors {
-  .#{$class} {
+  .bg-#{$class} {
     background: #{$color};
+  }
+
+  .fg-#{$class} {
+    color: #{$color};
   }
 }

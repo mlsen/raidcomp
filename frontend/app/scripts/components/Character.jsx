@@ -33,7 +33,7 @@ const Character = React.createClass({
 
   render() {
     const { connectDragSource, isDragging } = this.props;
-    const cssClass = 'Character ' + this.props.character.class;
+    const cssClass = 'Character bg-' + this.props.character.class;
 
     return connectDragSource(
       <li className={cssClass}>

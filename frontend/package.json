@@ -44,8 +44,8 @@
     "react-modal": "^0.2.0",
     "react-router": "*",
     "react-simpletabs": "^0.6.1",
-    "sha1": "^1.1.1",
-    "whatwg-fetch": "*"
+    "reqwest": "^1.1.5",
+    "sha1": "^1.1.1"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",

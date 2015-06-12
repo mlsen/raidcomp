@@ -1,7 +1,7 @@
 const roles = {
   HEALER: 'healer',
   MELEE: 'melee',
-  RANGED: 'ranged'
+  RANGED: 'ranged',
   TANK: 'tank'
 };
 
@@ -20,60 +20,60 @@ const classes = {
 };
 
 const specs = {
-  'deathknight': {
+  deathknight: {
     Blood: roles.TANK,
     Frost: roles.MELEE,
     Unholy: roles.MELEE
   },
-  'druid': {
+  druid: {
     Balance: roles.RANGED,
     Feral: roles.MELEE,
     Restoration: roles.HEALER
   },
-  'hunter': {
+  hunter: {
     Beastmaster: roles.RANGED,
     Marksman: roles.RANGED,
     Survival: roles.RANGED
   },
-  'mage': {
+  mage: {
     Arcane: roles.RANGED,
     Fire: roles.RANGED,
     Frost: roles.RANGED
   },
-  'monk': {
+  monk: {
     Brewmaster: roles.TANK,
     Mistweaver: roles.HEALER,
     Windwalker: roles.MELEE
   },
-  'paladin': {
+  paladin: {
     Holy: roles.HEALER,
     Protection: roles.TANK,
     Retribution: roles.MELEE
   },
-  'priest': {
+  priest: {
     Discipline: roles.HEALER,
     Holy: roles.HEALER,
     Shadow: roles.RANGED
   },
-  'rogue': {
+  rogue: {
     Assasination: roles.MELEE,
     Combat: roles.MELEE,
     Subtlety: roles.MELEE
   },
-  'shaman': {
+  shaman: {
     Elemental: roles.RANGED,
     Enhancement: roles.MELEE,
     Restoration: roles.HEALER
   },
-  'warlock': {
-    Afflication: roles.RANGED,
+  warlock: {
+    Affliction: roles.RANGED,
     Demonology: roles.RANGED,
     Destruction: roles.RANGED
   }
 };
 
 export {
-  roles: roles,
-  classes: classes,
-  specs: specs
+  roles,
+  classes,
+  specs
 };
