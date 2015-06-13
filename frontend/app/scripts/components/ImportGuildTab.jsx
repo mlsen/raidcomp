@@ -17,6 +17,7 @@ const ImportGuildTab = React.createClass({
 
   componentDidMount() {
     ImportStore.listen(this.onStoreChange);
+    this.setState({ isLoading: true });
     ImportActions.fetchRealms(this.state.selectedRegion);
   },
 
@@ -40,6 +41,7 @@ const ImportGuildTab = React.createClass({
   handleRegionChange(e) {
     const region = e.target.value;
     if(!this.state.store.realms.has(region)) {
+      this.setState({ isLoading: true });
       ImportActions.fetchRealms(region);
     }
     this.setState({ selectedRegion: region });
