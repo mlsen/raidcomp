@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 
 var characterSchema = new Schema({
   _compId: String,
-  _raidId: Number,
+  raidId: String,
   id: String,
 	name: String,
 	realm: String,
@@ -19,7 +19,7 @@ var characterSchema = new Schema({
 
 var raidSchema = new Schema({
 	_compId: String,
-	numRaids: Number,
+	raidIds: [String]
 });
 
 var Character = mongoose.model('Character', characterSchema);

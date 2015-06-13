@@ -1,28 +1,32 @@
-# proxy:
-#     image: jwilder/nginx-proxy
-#     ports:
-#         - "80:80"
-#     volumes:
-#         - /var/run/docker.sock:/tmp/docker.sock
+proxy:
+  image: jwilder/nginx-proxy
+  ports:
+    - "80:80"
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
 
-frontend:
-    build: ./frontend
-    ports:
-        - "80:80"
-    # environment:
-    #     VIRTUAL_HOST:
+# frontend:
+#   build: ./frontend
+#   command: npm run start
+#   volumes:
+#     - ./frontend/app:/srv/rc/app
+#   ports:
+#     - "80:1337"
+#   environment:
+#     VIRTUAL_HOST:
 
 backend:
-    build: ./backend
-    command: node --harmony /srv/rc/app.js
-    links:
-        - mongo
-    volumes:
-        - ./backend:/srv/rc
-    ports:
-        - "5000:5000"
-    # environment:
-    #     VIRTUAL_HOST:
+  build: ./backend
+  command: node --harmony /srv/rc/app.js
+  links:
+    - mongo
+  volumes:
+    - ./backend/app:/srv/rc/app
+    - ./backend/app.js:/srv/rc/app.js
+  ports:
+    - "5000:5000"
+  environment:
+    VIRTUAL_HOST: api.raidcomp.dev
 
 mongo:
-    image: mongo
+  image: mongo

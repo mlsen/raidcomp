@@ -6,5 +6,3 @@ ADD . /srv/rc
 RUN cd /srv/rc && npm install
 
 EXPOSE 5000
-
-# CMD node --harmony /srv/rc/app.js

@@ -1,14 +1,14 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  var compId = 'crmujgary3vgf1orghxbtzbn6ebnvcxr';
-  var socket = io.connect('http://api.raidcomp.dev:5000');
-  socket.on(compId, function (data) {
+  var compId = 'h2c90z7us25a5rk9pdznc1ck1dk21emi';
+  var socket = io.connect('http://api.raidcomp.dev/');
+  socket.on(compId.slice(0, 10), function (data) {
     console.log(data);
 
     if (data.action === 'requestNames') socket.emit('raidcomp', {action:'sendName', compId: compId, user: 'user', name: 'requestTest'});
     // socket.emit('my other event', { my: 'data' });
   });
-  socket.on(compId+':user', function (data) {
+  socket.on(compId.slice(0, 10)+':user', function (data) {
     console.log(data);
   });
 
@@ -16,10 +16,10 @@
   	socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: 'user', character: { id: 'id', name: 'blah', className: 'death knight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'TANK'}});
   }
   function moveto2() {
-    socket.emit('raidcomp', {action: 'moveCharacter', to: 2, compId: compId, user: 'user', character: { id: 'id' } });
+    socket.emit('raidcomp', {action: 'moveCharacter', to: 'abcdef', compId: compId, user: 'user', character: { id: 'id' } });
   }
   function moveto1() {
-    socket.emit('raidcomp', {action: 'moveCharacter', to: 1, compId: compId, user: 'user', character: { id: 'id' } });
+    socket.emit('raidcomp', {action: 'moveCharacter', to: '0', compId: compId, user: 'user', character: { id: 'id' } });
   }
   function removeca() {
     socket.emit('raidcomp', {action: 'removeCharacter', compId: compId, user: 'user', character: {id:'id'}});
@@ -28,6 +28,13 @@
   function requestNames() {
     socket.emit('raidcomp', {action: 'requestNames', compId: compId, user: 'user'});
   }
+  function addRaid() {
+    socket.emit('raidcomp', {action: 'addRaid', compId: compId, user: 'user', raidId: 'abcdef'});
+  }
+  function removeRaid() {
+    socket.emit('raidcomp', {action: 'removeRaid', compId: compId, user: 'user', raidId: 'abcdef'});
+  }
+
 </script>
 
 <div onclick="add();">add char</div>
@@ -35,3 +42,7 @@
 <div onclick="moveto2();">move2</div>
 <div onclick="removeca();">remove</div>
 <div onclick="requestNames();">requestNames</div>
+<br/>
+<div onclick="addRaid();">addRaid</div>
+<div onclick="removeRaid();">removeRaid</div>
+
