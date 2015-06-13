@@ -116,7 +116,7 @@ const ImportGuildTab = React.createClass({
           });
 
           return (
-            <div className='ImportGuildTab-rank'>
+            <div key={rank} className='ImportGuildTab-rank'>
               <div className={headerStyle}>
                 <a href='#' onClick={this.handleSelect.bind(this, rank)}>
                   <i className={selectIcon}></i>
@@ -131,11 +131,11 @@ const ImportGuildTab = React.createClass({
                       {character.get('name')}
                     </span>
                   );
-                })}
+                }).toArray()}
               </div>
             </div>
           );
-        })}
+        }).toArray()}
       </div>
     );
   },
