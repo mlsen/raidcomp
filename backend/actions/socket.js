@@ -84,20 +84,19 @@ var Actions = {
       }
 
       Character
-      .findOneAndUpdate(
-        { _compId: data.compId, id: data.character.id },
-        { _raidId: data.to },
-        { new: true },
-        function (err, character) {
-          if (socketResponse) {
-            if (err || !character) {
-              return Actions.throwError(data, 'Moving character failed, it might not exist or something went wrong.', socketResponse);
-            }
-            socketResponse(data.compId, { action: data.action, user: data.user, character: character });
-            return;
+      .findOne({ _compId: data.compId, id: data.character.id })
+      .exec(function (err, character) {
+        if (socketResponse) {
+          if (err || !character || character._raidId == data.to) {
+            return Actions.throwError(data, 'Moving character failed - it might not exist, was already in the same raid or something went wrong.', socketResponse);
           }
+
+          character._raidId = data.to;
+          character.save();
+          socketResponse(data.compId, { action: data.action, user: data.user, character: character });
+          return;
         }
-      );
+      });
     });
   },
 
