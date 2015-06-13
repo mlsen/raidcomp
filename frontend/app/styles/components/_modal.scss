@@ -16,10 +16,9 @@
 
   background: rgba($dark-gray, 1);
   border: 1px solid $base-border-color;
-  margin-left: 15%;
-  margin-top: 5%;
-  width: 60%;
-  height: 70%;
+  margin: auto;
+  max-width: 70vw;
+  height: 80vh;
 }
 
 .ReactModal__Content--after-open {

@@ -1,7 +1,7 @@
 .ImportGuildTab {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: no-wrap;
   justify-content: flex-start;
   align-content: flex-start;
   align-items: flex-start;
@@ -48,9 +48,9 @@
 
 .ImportGuildTab-results {
   overflow-y: auto;
-  max-height: 60vh;
+  max-height: 73vh;
   flex-grow: 1;
-  flex-shrink: 0;
+  // flex-shrink: 0;
   flex-basis: 500px;
   padding-right: .2em;
 }
@@ -58,7 +58,6 @@
 .ImportGuildTab-rank {
   background: lighten($dark-gray, 5%);
   margin-bottom: 1em;
-  // border: 1px solid $base-border-color;
   border-top: 5px solid lighten($dark-gray, 40%);
   border-radius: 2px;
   cursor: pointer;
