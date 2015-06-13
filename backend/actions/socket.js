@@ -10,22 +10,25 @@ var Actions = {
     switch(data.action) {
       case 'addCharacter':
         Actions.addCharacter(data, socketResponse);
-        break;
+      break;
       case 'moveCharacter':
         Actions.moveCharacter(data, socketResponse);
-        break;
+      break;
       case 'removeCharacter':
         Actions.removeCharacter(data, socketResponse);
-        break;
+      break;
       case 'addRaid':
         Actions.changeNumRaids(data, 1, socketResponse);
-        break;
+      break;
       case 'removeRaid':
         Actions.changeNumRaids(data, -1, socketResponse);
-        break;
-      case 'name':
-        // user names
-        break;
+      break;
+      case 'requestNames':
+        Actions.requestNames(data, socketResponse);
+      break;
+      case 'sendName':
+        Actions.sendName(data, socketResponse);
+      break;
     }
   },
 
@@ -134,6 +137,20 @@ var Actions = {
       socketResponse(data.compId, { action: data.action, user: data.user, raid: raid });
       return;
     });
+  },
+
+  requestNames: function (data, socketResponse) {
+    socketResponse(data.compId, { action: 'requestNames', user: data.user, requestFrom: data.user });
+    return;
+  },
+
+  sendName: function (data, socketResponse) {
+    if (!data.name) {
+      return Actions.throwError(data, 'No name given.', socketResponse);
+    }
+    var socket = data.requestFrom ? data.compId + ':' + data.requestFrom : data.compId;
+    socketResponse(socket, { action: 'sendName', user: data.user, name: data.name });
+    return;
   },
 
   validateCharacter: function (character) {

@@ -4,6 +4,8 @@
   var socket = io.connect('http://192.168.59.103:5000');
   socket.on(compId, function (data) {
     console.log(data);
+
+    if (data.action === 'requestNames') socket.emit('raidcomp', {action:'sendName', compId: compId, user: 'user', name: 'requestTest'});
     // socket.emit('my other event', { my: 'data' });
   });
   socket.on(compId+':user', function (data) {
@@ -22,9 +24,14 @@
   function removeca() {
     socket.emit('raidcomp', {action: 'removeCharacter', compId: compId, user: 'user', character: {id:'id'}});
   }
+
+  function requestNames() {
+    socket.emit('raidcomp', {action: 'requestNames', compId: compId, user: 'user'});
+  }
 </script>
 
 <div onclick="add();">add char</div>
 <div onclick="moveto1();">move1</div>
 <div onclick="moveto2();">move2</div>
 <div onclick="removeca();">remove</div>
+<div onclick="requestNames();">requestNames</div>
