@@ -86,9 +86,46 @@ const specs = {
   }
 };
 
+const tokens = {
+  CONQUEROR: 'conqueror',
+  PROTECTOR: 'protector',
+  VANQUISHER: 'vanquisher'
+};
+
+const classTokens = {
+  conqueror: [
+    classes.PALADIN,
+    classes.PRIEST,
+    classes.WARLOCK
+  ],
+  protector: [
+    classes.HUNTER,
+    classes.SHAMAN,
+    classes.WARRIOR,
+    classes.MONK
+  ],
+  vanquisher: [
+    classes.DEATHKNIGHT,
+    classes.DRUID,
+    classes.MAGE,
+    classes.ROGUE
+  ]
+};
+
+function getTokenForClass(className) {
+  for(let token in classTokens) {
+    if(classTokens.hasOwnProperty(token) && classTokens[token].indexOf(className) > -1) {
+      return token;
+    }
+  }
+}
+
 export {
   roles,
   classes,
+  classTokens,
+  getTokenForClass,
   specs,
-  regions
+  regions,
+  tokens
 };

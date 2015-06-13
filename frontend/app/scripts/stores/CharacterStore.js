@@ -4,8 +4,8 @@ import alt from '../alt';
 import CharacterActions from '../actions/CharacterActions';
 import RaidActions from '../actions/RaidActions';
 import ImportStore from './ImportStore';
+import { getTokenForClass, tokens } from '../misc/wow';
 
-import { generateRandomCharacter } from '../misc/tools';
 
 const Character = Immutable.Record({
   id: null,
@@ -36,7 +36,11 @@ class CharacterStore {
       // Raids
       // Key '0' contains all characters that are not in a raid yet
       raids: Immutable.OrderedMap({
-        0: { id: 0, characters: Immutable.OrderedMap() }
+        0: {
+          id: 0,
+          characters: Immutable.OrderedMap(),
+          tokens: Immutable.Map()
+        }
       })
     };
 
@@ -65,10 +69,8 @@ class CharacterStore {
     if(this.state.characters.has(character.id)) {
       return;
     }
-
     character = new Character(character);
 
-    console.log(character.spec, character.role);
     // Add to all characters
     this.state.characters = this.state.characters.set(character.id, character);
 
@@ -94,14 +96,18 @@ class CharacterStore {
     const { characterId, raidId } = props;
     let character = this.state.characters.get(characterId);
 
+    const token = getTokenForClass(character.class);
+
     // Delete from current raid
     let currentRaid = this.state.raids.get(character.currentRaidId.toString());
     currentRaid.characters = currentRaid.characters.delete(character.id);
+    currentRaid.tokens = currentRaid.tokens.set(token, currentRaid.tokens.get(token) - 1);
 
     // Add to new raid
     let newRaid = this.state.raids.get(raidId.toString());
     character = character.set('currentRaidId', newRaid.id);
     newRaid.characters = newRaid.characters.set(character.id, character);
+    newRaid.tokens = newRaid.tokens.set(token, newRaid.tokens.get(token) + 1);
 
     let updatedRaids = {};
     updatedRaids[currentRaid.id.toString()] = currentRaid;
@@ -112,9 +118,17 @@ class CharacterStore {
   }
 
   handleAddRaid() {
+    let tokensMap = {};
+    for(let token in tokens) {
+      if(tokens.hasOwnProperty(token)) {
+        tokensMap[tokens[token]] = 0;
+      }
+    }
+
     const raid = {
       id: this.nextRaidId++,
-      characters: Immutable.OrderedMap()
+      characters: Immutable.OrderedMap(),
+      tokens: Immutable.Map(tokensMap)
     };
     this.state.raids = this.state.raids.set(raid.id.toString(), raid);
   }

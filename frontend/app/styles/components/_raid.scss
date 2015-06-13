@@ -1,6 +1,5 @@
 .Raid {
-
-  width: 250px;
+  width: 500px;
 
   // Leave a bit of space to drop further characters
   padding-bottom: 2em;
@@ -17,4 +16,17 @@
   border-bottom: 1px solid $base-border-color;
   font-weight: bold;
   color: $action-color;
+}
+
+.Raid-body {
+  padding: .5em;
+}
+
+.Raid-characters {
+  width: 50%;
+  float: left;
+}
+
+.Raid-summary {
+  margin-left: 50%;
 }
