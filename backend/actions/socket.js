@@ -1,3 +1,4 @@
+(function () {
 'use strict';
 
 var Raid = require('../models/raidcomp').Raid;
@@ -56,7 +57,7 @@ var Actions = {
         className: data.character.className,
         spec: data.character.spec,
         role: data.character.role
-      }
+      };
 
       Character.findOneAndUpdate(
         { _compId: data.compId, _raidId: 0, id: data.character.id },
@@ -118,7 +119,7 @@ var Actions = {
           return;
         }
       }
-    )
+    );
   },
 
   changeNumRaids: function (data, num, socketResponse) {
@@ -133,7 +134,7 @@ var Actions = {
         return Actions.throwError(data, 'Cannot delete the only raid.', socketResponse);
       }
       raid.numRaids += num;
-      raid.save()
+      raid.save();
       socketResponse(data.compId, { action: data.action, user: data.user, raid: raid });
       return;
     });
@@ -154,14 +155,15 @@ var Actions = {
   },
 
   validateCharacter: function (character) {
-    return character.id && character.name && character.realm && character.region
-      && character.className && character.spec && character.role;
+    return character.id && character.name && character.realm && character.region &&
+      character.className && character.spec && character.role;
   },
 
   throwError: function (data, msg, socketResponse) {
     socketResponse(data.compId + ':' + data.user, { error: msg });
     return;
   }
-}
+};
 
 module.exports = Actions;
+}());

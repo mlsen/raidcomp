@@ -1,3 +1,4 @@
+(function () {
 'use strict';
 
 var router = require('express').Router();
@@ -6,7 +7,7 @@ var Character = require('../models/raidcomp').Character;
 
 var generateCompId = function () {
   return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-}
+};
 
 router.post('/', function (req, res, next) {
   var compId = generateCompId();
@@ -35,12 +36,13 @@ router.get('/:compId', function (req, res, next) {
         _compId: raid.compId,
         numRaids: raid.numRaids,
         characters: characters
-      }
+      };
       res.send(response);
       return next();
-    })
+    });
 
   });
 });
 
 module.exports = router;
+}());
