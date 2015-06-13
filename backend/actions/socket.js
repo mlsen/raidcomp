@@ -20,10 +20,10 @@ var Actions = {
         Actions.removeCharacter(data, socketResponse);
       break;
       case 'addRaid':
-        Actions.changeNumRaids(data, 1, socketResponse);
+        Actions.addRaid(data, socketResponse);
       break;
       case 'removeRaid':
-        Actions.changeNumRaids(data, -1, socketResponse);
+        Actions.removeRaid(data, socketResponse);
       break;
       case 'requestNames':
         Actions.requestNames(data, socketResponse);
@@ -36,21 +36,19 @@ var Actions = {
 
   addCharacter: function (data, socketResponse) {
     if (!data.character || !Actions.validateCharacter(data.character)) {
-      if (socketResponse) socketResponse(data.compId + ':' + data.user, { error: 'Some character data was missing.' });
-      return;
+      return Actions.throwError(data, 'Required data for creating a character was missing.', socketResponse);
     }
 
     Raid
     .findOne({ _compId: data.compId })
     .exec(function (err, raid) {
-      if (err) return handleError(err);
       if (err || !raid) {
         return Actions.throwError(data, 'Specified RaidComp not found.', socketResponse);
       }
 
       var character = {
         _compId: data.compId,
-        _raidId: 0,
+        raidId: '0',
         id: data.character.id,
         name: data.character.name,
         realm: data.character.realm,
@@ -61,7 +59,7 @@ var Actions = {
       };
 
       Character.findOneAndUpdate(
-        { _compId: data.compId, _raidId: 0, id: data.character.id },
+        { _compId: data.compId, raidId: 0, id: data.character.id },
         character,
         { upsert: true, new: true },
         function (err, character) {
@@ -82,9 +80,9 @@ var Actions = {
       return Actions.throwError(data, 'Required data for moving a character was missing.', socketResponse);
 
     Raid
-    .findOne({ _compId: data.compId })
+    .findOne({ _compId: data.compId, raidIds: data.to })
     .exec(function (err, raid) {
-      if (err || !raid || raid.numRaids < data.to) {
+      if (err || !raid) {
         return Actions.throwError(data, 'Target raid does not exist.', socketResponse);
       }
 
@@ -92,11 +90,11 @@ var Actions = {
       .findOne({ _compId: data.compId, id: data.character.id })
       .exec(function (err, character) {
         if (socketResponse) {
-          if (err || !character || character._raidId == data.to) {
+          if (err || !character || character.raidId == data.to) {
             return Actions.throwError(data, 'Moving character failed - it might not exist, was already in the same raid or something went wrong.', socketResponse);
           }
 
-          character._raidId = data.to;
+          character.raidId = data.to;
           character.save();
           socketResponse(data.shortId, { action: data.action, user: data.user, character: character });
           return;
@@ -123,20 +121,52 @@ var Actions = {
     );
   },
 
-  changeNumRaids: function (data, num, socketResponse) {
+  addRaid: function (data, socketResponse) {
+    if (!data.raidId)
+      return Actions.throwError(data, 'Required data for adding a raid was missing.', socketResponse);
+
     Raid
     .findOne({ _compId: data.compId })
     .exec(function (err, raid) {
-      if (err || !raid) {
+      if (err || !raid || raid.raidIds.indexOf(data.raidId) > -1) {
         return Actions.throwError(data, 'Specified RaidComp not found.', socketResponse);
       }
 
-      if (num === -1 && raid.numRaids === 1) {
-        return Actions.throwError(data, 'Cannot delete the only raid.', socketResponse);
-      }
-      raid.numRaids += num;
+      raid.raidIds.push(data.raidId);
       raid.save();
-      socketResponse(data.compId, { action: data.action, user: data.user, raid: raid });
+      socketResponse(data.shortId, { action: data.action, user: data.user, raid: raid });
+      return;
+    });
+  },
+
+  removeRaid: function (data, socketResponse) {
+    if (!data.raidId || data.raidId == '0')
+      return Actions.throwError(data, 'Required data for adding a raid was missing.', socketResponse);
+
+    Raid
+    .findOne({ _compId: data.compId, raidIds: data.raidId })
+    .exec(function (err, raid) {
+      if (err || !raid) {
+        return Actions.throwError(data, 'Specified RaidComp or raid not found.', socketResponse);
+      }
+
+      Character
+      .find({ _compId: data.compId, raidId: data.raidId })
+      .exec(function (err, characters) {
+        if (characters && characters.length) {
+          for (var character of characters) {
+            character.raidId = 0;
+            character.save();
+
+            socketResponse(data.shortId, { action: 'moveCharacter', user: data.user, character: character });
+          }
+        }
+      });
+
+      raid.raidIds.splice(raid.raidIds.indexOf(data.raidId), 1);
+      raid.save();
+
+      socketResponse(data.shortId, { action: data.action, user: data.user, raidId: data.raidId });
       return;
     });
   },

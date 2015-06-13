@@ -12,10 +12,12 @@ var generateCompId = function () {
 router.post('/', function (req, res, next) {
   var compId = generateCompId();
 
-  Raid.create({ _compId: compId, numRaids: 1 }, function (err, raid) {
-    if (err) return;
+  Raid.create({ _compId: compId, raidIds: '0' }, function (err, raid) {
+    if (err) {
+      res.status(400).send({ error: 'There was an error creating the RaidComp.' });
+      return;
+    }
   });
-
 
   res.send({ compId: compId });
 });
@@ -34,7 +36,7 @@ router.get('/:compId', function (req, res, next) {
     .exec(function (err, characters) {
       var response = {
         _compId: raid.compId,
-        numRaids: raid.numRaids,
+        raidIds: raid.raidIds,
         characters: characters
       };
       res.send(response);
