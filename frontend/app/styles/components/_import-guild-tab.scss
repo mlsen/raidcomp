@@ -24,7 +24,8 @@
 
 .ImportGuildTab-error {
   border: 1px solid $error-color;
-  background: rgba($error-color, 0.3);
+  border-radius: 2px;
+  background: rgba($error-color, 0.2);
   padding: 1em;
   text-align: center;
 }
