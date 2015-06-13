@@ -25,14 +25,26 @@ class ImportStore {
     this.state.realms = Immutable.Map();
     this.state.ranks = Immutable.Map();
     this.state.errorMessage = null;
+    this.state.loading = false;
 
     this.bindListeners({
+
+      handleFetchGuild: ImportActions.FETCH_GUILD,
       handleUpdateMembers: ImportActions.UPDATE_MEMBERS,
       handleFetchGuildFailed: ImportActions.FETCH_GUILD_FAILED,
+
+      handleFetchRealms: ImportActions.FETCH_REALMS,
       handleUpdateRealms: ImportActions.UPDATE_REALMS,
       handleFetchRealmsFailed: ImportActions.FETCH_REALMS_FAILED,
+
       handleImportRanks: ImportActions.IMPORT_RANKS
     });
+  }
+
+  handleFetchGuild() {
+    this.state.errorMessage = null;
+    this.state.loading = true;
+    this.state.ranks = Immutable.Map();
   }
 
   handleUpdateMembers(props) {
@@ -51,11 +63,17 @@ class ImportStore {
       ranks[member.rank].push(character);
     });
     this.state.ranks = Immutable.fromJS(ranks);
+    this.state.loading = false;
     this.state.errorMessage = null;
   }
 
   handleFetchGuildFailed(err) {
     this.state.errorMessage = 'No guild data available.';
+  }
+
+  handleFetchRealms() {
+    this.state.errorMessage = null;
+    this.state.loading = true;
   }
 
   handleUpdateRealms(props) {
@@ -69,6 +87,7 @@ class ImportStore {
       });
     });
     this.state.realms = this.state.realms.set(region, Immutable.fromJS(strippedRealms)),
+    this.state.loading = false;
     this.state.errorMessage = null;
   }
 

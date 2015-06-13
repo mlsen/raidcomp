@@ -43,6 +43,7 @@ class ImportActions {
   }
 
   fetchRealms(region) {
+    this.dispatch();
 
     // Dirty hack because jsonp doesn't allow proper error handling
     const failure = setTimeout(() => {

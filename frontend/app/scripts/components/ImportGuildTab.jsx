@@ -10,14 +10,12 @@ const ImportGuildTab = React.createClass({
     return {
       store: ImportStore.getState(),
       selectedRegion: 'eu',
-      selectedRanks: new Set(),
-      isLoading: false
+      selectedRanks: new Set()
     };
   },
 
   componentDidMount() {
     ImportStore.listen(this.onStoreChange);
-    this.setState({ isLoading: true });
     ImportActions.fetchRealms(this.state.selectedRegion);
   },
 
@@ -26,7 +24,7 @@ const ImportGuildTab = React.createClass({
   },
 
   onStoreChange(state) {
-    this.setState({ store: state, isLoading: false });
+    this.setState({ store: state });
   },
 
   handleSearch(e) {
@@ -34,14 +32,13 @@ const ImportGuildTab = React.createClass({
     const region = this.state.selectedRegion;
     const realm = this.refs.realm.getDOMNode().value;
     const guild = this.refs.guild.getDOMNode().value;
-    this.setState({ isLoading: true, selectedRanks: new Set() });
+    this.setState({ selectedRanks: new Set() });
     ImportActions.fetchGuild(region, realm, guild);
   },
 
   handleRegionChange(e) {
     const region = e.target.value;
     if(!this.state.store.realms.has(region)) {
-      this.setState({ isLoading: true });
       ImportActions.fetchRealms(region);
     }
     this.setState({ selectedRegion: region });
@@ -91,7 +88,7 @@ const ImportGuildTab = React.createClass({
       return this.renderErrorMessage();
     }
 
-    if(this.state.isLoading) {
+    if(this.state.store.loading) {
       return this.renderSpinner();
     }
 
