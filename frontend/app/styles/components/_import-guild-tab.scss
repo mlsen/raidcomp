@@ -58,17 +58,32 @@
 .ImportGuildTab-rank {
   background: lighten($dark-gray, 5%);
   margin-bottom: 1em;
-  border: 1px solid $base-border-color;
+  // border: 1px solid $base-border-color;
+  border-top: 5px solid lighten($dark-gray, 40%);
   border-radius: 2px;
 }
 
 .ImportGuildTab-rankHeader {
-  padding: .4em;
+  padding: .4em 1em;
   border-bottom: 1px solid $base-border-color;
+  font-weight: bold;
 }
 
 .ImportGuildTab-rankHeader.selected {
   background: rgba($dark-blue, 0.2);
+}
+
+.ImportGuildTab-checked, .ImportGuildTab-unchecked {
+  padding-top: .1em;
+  float: right;
+}
+
+.ImportGuildTab-checked {
+  color: $limey;
+}
+
+.ImportGuildTab-unchecked {
+  color: $error-color;
 }
 
 .ImportGuildTab-selectIcon {
@@ -76,7 +91,7 @@
 }
 
 .ImportGuildTab-rankCharacters {
-  padding: .4em;
+  padding: .4em 1em;
 }
 
 .ImportGuildTab-character {

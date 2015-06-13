@@ -1,8 +1,9 @@
 .Character {
   margin-bottom: .3em;
   padding: .3em;
+  color: $dark-gray;
+  font-weight: bold;
   text-align: center;
-  text-shadow: 2px 2px 1px #000;
   border-radius: 2px;
 }
 
@@ -11,6 +12,7 @@
 }
 
 .Character-delete .fa-remove {
+  text-shadow: 1px 1px 1px #000;
   color: red;
 }
 
