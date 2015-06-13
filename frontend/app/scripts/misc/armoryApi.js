@@ -17,16 +17,10 @@ api.request = function(region, url) {
   return request({
     url: url,
     type: 'jsonp',
-    jsonpCallback: 'jsonp',
-    crossOrigin: true,
-    withCredentials: true
+    jsonpCallback: 'jsonp'
   })
   .then(response => {
     return response;
-  })
-  .fail(err => {
-    console.log(err);
-    return err;
   });
 };
 

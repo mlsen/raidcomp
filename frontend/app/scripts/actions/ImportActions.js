@@ -2,22 +2,32 @@ import alt from '../alt';
 import Armory from '../misc/armoryApi';
 import CharacterActions from './CharacterActions';
 
+const timeout = 5000;
+
 class ImportActions {
 
   fetchGuild(region, realm, name) {
     this.dispatch();
 
+    // Dirty hack because jsonp doesn't allow proper error handling
+    const failure = setTimeout(() => {
+      this.actions.fetchGuildFailed({
+        msg: 'Operation timed out.'
+      });
+    }, timeout);
+
     Armory.fetchGuild(region, realm, name)
       .then(guild => {
+
+        // Dirty hack..
+        clearTimeout(failure);
+
         this.actions.updateMembers({
           region: region,
           realm: realm,
           guild: name
         },
         guild.members);
-      })
-      .fail(err => {
-        this.actions.fetchGuildFailed(err);
       });
   }
 
@@ -33,12 +43,21 @@ class ImportActions {
   }
 
   fetchRealms(region) {
+
+    // Dirty hack because jsonp doesn't allow proper error handling
+    const failure = setTimeout(() => {
+      this.actions.fetchGuildFailed({
+        msg: 'Operation timed out.'
+      });
+    }, timeout);
+
     Armory.fetchRealms(region)
       .then(response => {
+
+        // hack
+        clearTimeout(failure);
+
         this.actions.updateRealms(region, response.realms);
-      })
-      .fail(err => {
-        this.actions.fetchRealmsFailed(err);
       });
   }
 

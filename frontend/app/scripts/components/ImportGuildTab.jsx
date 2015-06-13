@@ -77,7 +77,20 @@ const ImportGuildTab = React.createClass({
     );
   },
 
+  renderErrorMessage() {
+    return (
+      <div className='ImportGuildTab-error'>
+        {this.state.store.errorMessage}
+      </div>
+    );
+  },
+
   renderResults() {
+
+    if(this.state.store.errorMessage) {
+      return this.renderErrorMessage();
+    }
+
     if(this.state.isLoading) {
       return this.renderSpinner();
     }

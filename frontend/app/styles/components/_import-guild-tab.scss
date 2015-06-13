@@ -22,6 +22,13 @@
   }
 }
 
+.ImportGuildTab-error {
+  border: 1px solid $error-color;
+  background: rgba($error-color, 0.3);
+  padding: 1em;
+  text-align: center;
+}
+
 .ImportGuildTab-searchButton {
   width: 100%;
   margin-top: .5em;

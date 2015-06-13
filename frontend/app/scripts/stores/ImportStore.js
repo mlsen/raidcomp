@@ -51,11 +51,11 @@ class ImportStore {
       ranks[member.rank].push(character);
     });
     this.state.ranks = Immutable.fromJS(ranks);
+    this.state.errorMessage = null;
   }
 
   handleFetchGuildFailed(err) {
-    console.log('Error:', err);
-    this.state.errorMessage = 'Guild data could not be fetched.';
+    this.state.errorMessage = 'No guild data available.';
   }
 
   handleUpdateRealms(props) {
@@ -68,12 +68,12 @@ class ImportStore {
         slug: realm.slug
       });
     });
-    this.state.realms = this.state.realms.set(region, Immutable.fromJS(strippedRealms));
+    this.state.realms = this.state.realms.set(region, Immutable.fromJS(strippedRealms)),
+    this.state.errorMessage = null;
   }
 
   handleFetchRealmsFailed(err) {
-    console.log('Error:', err);
-    this.state.errorMessage = 'Realm data could not be fetched.';
+    this.state.errorMessage = 'Loading realms failed.';
   }
 
   handleImportRanks(ranks) {

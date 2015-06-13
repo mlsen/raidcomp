@@ -21,6 +21,7 @@ $white: #FFFFFF;
 $limey: #D1E751;
 $light-blue: #4DBCE9;
 $dark-blue: #26ADE4;
+$red: red;
 
 $class-colors: (
   deathknight: #C41F3B,
@@ -35,6 +36,8 @@ $class-colors: (
   warlock: #9482C9,
   warrior: #C79C6E
 );
+
+$error-color: $red;
 
 // Font Colors
 $base-background-color: lighten($dark-gray, 10%);
