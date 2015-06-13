@@ -61,6 +61,11 @@
   // border: 1px solid $base-border-color;
   border-top: 5px solid lighten($dark-gray, 40%);
   border-radius: 2px;
+  cursor: pointer;
+}
+
+.ImportGuildTab-rank:hover, .ImportGuildTab-rank.selected {
+  border-top: 5px solid $limey;
 }
 
 .ImportGuildTab-rankHeader {
@@ -83,7 +88,7 @@
 }
 
 .ImportGuildTab-unchecked {
-  color: $error-color;
+  color: lighten($dark-gray, 20%);
 }
 
 .ImportGuildTab-selectIcon {

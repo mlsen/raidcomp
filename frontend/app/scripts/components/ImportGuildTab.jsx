@@ -101,32 +101,24 @@ const ImportGuildTab = React.createClass({
 
           let rankSelected = this.state.selectedRanks.has(parseInt(rank));
 
-          // Green header background if rank is selected
-          let headerStyle = classNames({
-            'ImportGuildTab-rankHeader': true,
-            // 'selected': rankSelected
+          const rankClasses = classNames({
+            'ImportGuildTab-rank': true,
+            'selected': rankSelected
           });
 
-          // Remove symbol if rank is selected
-          let selectIcon = classNames({
-            'ImportGuildTab-selectIcon': true,
+          const checkedIconClasses = classNames({
+            'ImportGuildTab-checked': rankSelected,
+            'ImportGuildTab-unchecked': !rankSelected,
             'fa': true,
-            'fa-plus-square': !rankSelected,
-            'fa-minus-square': rankSelected
+            'fa-lg': true,
+            'fa-fw': true,
+            'fa-check': true
           });
-
-          const selectedIcon = rankSelected ? (
-            <i className='ImportGuildTab-checked fa fa-lg fa-fw fa-check'></i>
-          ) : (
-            <i className='ImportGuildTab-unchecked fa fa-lg fa-fw fa-remove'></i>
-          );
 
           return (
-            <div key={rank} className='ImportGuildTab-rank'>
-              <div className={headerStyle}>
-                <a href='#' onClick={this.handleSelect.bind(this, rank)}>
-                  {selectedIcon}
-                </a>
+            <div key={rank} className={rankClasses} onClick={this.handleSelect.bind(this, rank)}>
+              <div className='ImportGuildTab-rankHeader'>
+                <i className={checkedIconClasses}></i>
                 Rank: {rank}
               </div>
               <div className='ImportGuildTab-rankCharacters'>
