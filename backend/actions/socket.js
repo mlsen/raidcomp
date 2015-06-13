@@ -7,6 +7,7 @@ var Character = require('../models/raidcomp').Character;
 var Actions = {
   processMessage: function (data, socketResponse) {
     if (!data.action || !data.compId || !data.user || !socketResponse) return;
+    data.shortId = data.compId.slice(0, 10);
 
     switch(data.action) {
       case 'addCharacter':
@@ -68,7 +69,7 @@ var Actions = {
             if (err || !character) {
               return Actions.throwError(data, 'Adding character failed. Maybe it had a reason..or not?', socketResponse);
             }
-            socketResponse(data.compId, { action: data.action, user: data.user, character: character });
+            socketResponse(data.shortId, { action: data.action, user: data.user, character: character });
             return;
           }
         }
@@ -97,7 +98,7 @@ var Actions = {
 
           character._raidId = data.to;
           character.save();
-          socketResponse(data.compId, { action: data.action, user: data.user, character: character });
+          socketResponse(data.shortId, { action: data.action, user: data.user, character: character });
           return;
         }
       });
@@ -115,7 +116,7 @@ var Actions = {
           if (err || !character) {
             return Actions.throwError(data, 'Removing character failed.', socketResponse);
           }
-          socketResponse(data.compId, { action: data.action, user: data.user, character: character });
+          socketResponse(data.shortId, { action: data.action, user: data.user, character: character });
           return;
         }
       }
@@ -141,7 +142,7 @@ var Actions = {
   },
 
   requestNames: function (data, socketResponse) {
-    socketResponse(data.compId, { action: 'requestNames', user: data.user, requestFrom: data.user });
+    socketResponse(data.shortId, { action: 'requestNames', user: data.user, requestFrom: data.user });
     return;
   },
 
@@ -149,7 +150,7 @@ var Actions = {
     if (!data.name) {
       return Actions.throwError(data, 'No name given.', socketResponse);
     }
-    var socket = data.requestFrom ? data.compId + ':' + data.requestFrom : data.compId;
+    var socket = data.requestFrom ? data.shortId + ':' + data.requestFrom : data.shortId;
     socketResponse(socket, { action: 'sendName', user: data.user, name: data.name });
     return;
   },
@@ -160,7 +161,7 @@ var Actions = {
   },
 
   throwError: function (data, msg, socketResponse) {
-    socketResponse(data.compId + ':' + data.user, { error: msg });
+    socketResponse(data.shortId + ':' + data.user, { error: msg });
     return;
   }
 };
