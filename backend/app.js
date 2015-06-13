@@ -1,3 +1,4 @@
+(function () {
 'use strict';
 
 var app = require('express')();
@@ -34,3 +35,4 @@ io.on('connection', function (socket) {
 });
 
 server.listen(5000);
+}());

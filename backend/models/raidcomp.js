@@ -1,7 +1,8 @@
+(function () {
 'use strict';
 
-var mongoose = require('mongoose')
-  , Schema = mongoose.Schema;
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
 
 
 var characterSchema = new Schema({
@@ -14,7 +15,7 @@ var characterSchema = new Schema({
 	className: String,
 	spec: String,
 	role: String
-})
+});
 
 var raidSchema = new Schema({
 	_compId: String,
@@ -27,4 +28,5 @@ var Raid = mongoose.model('Raid', raidSchema);
 module.exports = {
   Raid: Raid,
   Character: Character
-}
+};
+}());
