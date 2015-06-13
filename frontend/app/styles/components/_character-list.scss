@@ -1,2 +1,16 @@
 .CharacterList {
 }
+
+.CharacterList-role {
+  padding: .5em;
+  margin-top: 2em;
+  margin-bottom: .5em;
+  text-align: center;
+  background: lighten($dark-gray, 10%);
+  border-radius: 2px;
+  font-weight: bold;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
