@@ -24,6 +24,7 @@ class ImportStore {
     this.state = {};
     this.state.realms = Immutable.Map();
     this.state.ranks = Immutable.Map();
+    this.state.errorMessage = null;
 
     this.bindListeners({
       handleUpdateMembers: ImportActions.UPDATE_MEMBERS,
@@ -53,7 +54,8 @@ class ImportStore {
   }
 
   handleFetchGuildFailed(err) {
-    console.log(err);
+    console.log('Error:', err);
+    this.state.errorMessage = 'Guild data could not be fetched.';
   }
 
   handleUpdateRealms(props) {
@@ -70,7 +72,8 @@ class ImportStore {
   }
 
   handleFetchRealmsFailed(err) {
-    console.log(err);
+    console.log('Error:', err);
+    this.state.errorMessage = 'Realm data could not be fetched.';
   }
 
   handleImportRanks(ranks) {

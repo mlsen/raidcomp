@@ -9,18 +9,15 @@ const ImportGuildTab = React.createClass({
   getInitialState() {
     return {
       store: ImportStore.getState(),
-      form: {
-        region: 'eu',
-        realm: '',
-        guild: ''
-      },
-      selectedRanks: new Set()
+      selectedRegion: 'eu',
+      selectedRanks: new Set(),
+      isLoading: false
     };
   },
 
   componentDidMount() {
     ImportStore.listen(this.onStoreChange);
-    ImportActions.fetchRealms(this.state.form.region);
+    ImportActions.fetchRealms(this.state.selectedRegion);
   },
 
   componentWillUnmount() {
@@ -28,7 +25,7 @@ const ImportGuildTab = React.createClass({
   },
 
   onStoreChange(state) {
-    this.setState({ store: state });
+    this.setState({ store: state, isLoading: false });
   },
 
   handleSearch(e) {
@@ -36,6 +33,7 @@ const ImportGuildTab = React.createClass({
     const region = this.state.selectedRegion;
     const realm = this.refs.realm.getDOMNode().value;
     const guild = this.refs.guild.getDOMNode().value;
+    this.setState({ isLoading: true });
     ImportActions.fetchGuild(region, realm, guild);
   },
 
@@ -67,7 +65,21 @@ const ImportGuildTab = React.createClass({
     ImportActions.importRanks(this.state.selectedRanks);
   },
 
+  renderSpinner() {
+    return (
+      <div className='spinner'>
+        <div className='bounce1'></div>
+        <div className='bounce2'></div>
+        <div className='bounce3'></div>
+      </div>
+    );
+  },
+
   renderResults() {
+    if(this.state.isLoading) {
+      return this.renderSpinner();
+    }
+
     let headerStyle = null;
     let characterCssClass = '';
 
@@ -116,11 +128,11 @@ const ImportGuildTab = React.createClass({
     let nodes = [];
     for(let key in regions) {
       if(regions.hasOwnProperty(key)) {
-        nodes.push(<option value={key}>{regions[key]}</option>);
+        nodes.push(<option key={key} value={key}>{regions[key]}</option>);
       }
     }
     return (
-      <select value={this.state.form.region} onChange={this.handleRegionChange}>
+      <select value={this.state.selectedRegion} onChange={this.handleRegionChange}>
         {nodes}
       </select>
     );
@@ -128,8 +140,8 @@ const ImportGuildTab = React.createClass({
 
   renderRealms() {
     let nodes = [];
-    if(this.state.store.realms.has(this.state.form.region)) {
-      this.state.store.realms.get(this.state.form.region).map(realm => {
+    if(this.state.store.realms.has(this.state.selectedRegion)) {
+      this.state.store.realms.get(this.state.selectedRegion).map(realm => {
         nodes.push(<option key={realm.get('slug')} value={realm.get('slug')}>{realm.get('name')}</option>);
       });
     }

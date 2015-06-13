@@ -25,14 +25,17 @@
 .ImportGuildTab-searchButton {
   width: 100%;
   margin-top: .5em;
-  color: $dark-gray;
 }
 
 .ImportGuildTab-importButton {
   width: 100%;
   margin-top: .5em;
   background: $light-blue;
-  color: $dark-gray;
+
+  &:hover,
+  &:focus {
+    background-color: darken($light-blue, 15%);
+  }
 }
 
 .ImportGuildTab-results {
