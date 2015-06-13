@@ -27,6 +27,18 @@ function isValidCharacter(character) {
   );
 }
 
+function generateRaidId() {
+  return sha1(Math.random().toString(36).slice(2));
+}
+
+function generateCharacterId(region, realm, name) {
+  return sha1(
+    region.toLowerCase() +
+    realm.toLowerCase() +
+    name.toLowerCase()
+  );
+}
+
 class CharacterStore {
 
   constructor() {
@@ -66,11 +78,12 @@ class CharacterStore {
     }
 
     // The character id is a unique hash over region, realm and name
-    character.id = sha1(
-      character.region.toLowerCase() +
-      character.realm.toLowerCase() +
-      character.name.toLowerCase()
+    character.id = generateCharacterId(
+      character.region,
+      character.realm,
+      character.name
     );
+
     if(this.state.characters.has(character.id)) {
       return;
     }
@@ -99,10 +112,7 @@ class CharacterStore {
 
   handleMoveCharacter(props) {
     const { characterId, raidId } = props;
-    console.log('handleMoveCharacter CharacterId:', characterId);
     let character = this.state.characters.get(characterId);
-
-    console.log('handleMoveCharacter Character:', character);
 
     const token = getTokenForClass(character.class);
 
@@ -134,7 +144,7 @@ class CharacterStore {
     }
 
     const raid = {
-      id: this.nextRaidId++,
+      id: generateRaidId(),
       characters: Immutable.OrderedMap(),
       tokens: Immutable.Map(tokensMap)
     };
@@ -142,13 +152,10 @@ class CharacterStore {
   }
 
   handleDeleteRaid(raidId) {
-    console.log('RaidId:', raidId);
     const raid = this.state.raids.get(raidId.toString());
 
     // Put characters back to raid0 on delete
     raid.characters.map(character => {
-      console.log('Character:', character);
-      console.log('CharacterId:', character.get('id'), character.id);
       this.handleMoveCharacter({
         characterId: character.get('id'),
         raidId: 0

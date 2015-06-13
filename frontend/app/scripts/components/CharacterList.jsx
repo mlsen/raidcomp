@@ -20,7 +20,7 @@ const CharacterList = React.createClass({
   render() {
     let unknownCharacters = this.renderRole(null);
     if(unknownCharacters.length) {
-      unknownCharacters.unshift(<li className='CharacterList-role'>Unknown</li>);
+      unknownCharacters.unshift(<li key='unknown' className='CharacterList-role'>Unknown</li>);
     } else {
       unknownCharacters = null;
     }

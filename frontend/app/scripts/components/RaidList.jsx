@@ -15,11 +15,12 @@ const RaidList = React.createClass({
 
   render() {
     const raids = this.props.raids.delete('0');
+    let raidCount = 0;
 
     return (
       <div className='RaidList'>
         {raids.map(raid => {
-          return <Raid key={raid.id} raid={raid} />;
+          return <Raid key={raid.id} counter={++raidCount} raid={raid} />;
         }).toArray()}
       </div>
     );

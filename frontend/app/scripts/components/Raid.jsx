@@ -1,5 +1,6 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd';
+import classNames from 'classnames';
 import CharacterActions from '../actions/CharacterActions';
 import RaidActions from '../actions/RaidActions';
 import ItemTypes from '../misc/itemTypes';
@@ -23,7 +24,8 @@ function collect(connect, monitor) {
 const Raid = React.createClass({
 
   propTypes: {
-    raid: React.PropTypes.object
+    raid: React.PropTypes.object,
+    counter: React.PropTypes.number
   },
 
   removeRaid() {
@@ -67,17 +69,18 @@ const Raid = React.createClass({
 
   render() {
     const { connectDropTarget, isOver } = this.props;
-    const style = {
-      background: isOver ? '#26ADE4' : ''
-    };
+    const raidClasses = classNames({
+      'Raid': true,
+      'hover': isOver
+    });
 
     return connectDropTarget(
-      <div className='Raid' style={style}>
+      <div className={raidClasses}>
         <div className='Raid-header'>
           <a href='#' onClick={this.removeRaid}>
             <i className='Raid-deleteIcon fa fa-lg fa-remove'></i>
           </a>
-          Raid {this.props.raid.id}
+          Raid {this.props.counter}
         </div>
         <div className='Raid-body'>
           <div className='Raid-characters'>
