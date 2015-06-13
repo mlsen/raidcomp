@@ -17,15 +17,15 @@ mongoose.connect('mongodb://mongo/raidcomp');
 
 //app.use(bodyparser.json());
 
-var router = require('./routes/api');
+var router = require('./app/routes/api');
 app.use('/comp', router);
 
 // debug
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/client.html');
+  res.sendFile(__dirname + '/app/client.html');
 });
 
-var SocketActions = require('./actions/socket');
+var SocketActions = require('./app/actions/socket');
 io.on('connection', function (socket) {
   socket.on('raidcomp', function (data) {
     SocketActions.processMessage(data, function(socket, result) {
