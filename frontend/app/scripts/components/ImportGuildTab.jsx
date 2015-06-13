@@ -114,8 +114,8 @@ const ImportGuildTab = React.createClass({
           let selectIcon = classNames({
             'ImportGuildTab-selectIcon': true,
             'fa': true,
-            'fa-plus': !rankSelected,
-            'fa-minus': rankSelected
+            'fa-plus-square': !rankSelected,
+            'fa-minus-square': rankSelected
           });
 
           return (

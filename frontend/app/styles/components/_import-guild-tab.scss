@@ -52,12 +52,14 @@
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: 500px;
+  padding-right: .2em;
 }
 
 .ImportGuildTab-rank {
   background: lighten($dark-gray, 5%);
   margin-bottom: 1em;
   border: 1px solid $base-border-color;
+  border-radius: 2px;
 }
 
 .ImportGuildTab-rankHeader {
@@ -66,7 +68,7 @@
 }
 
 .ImportGuildTab-rankHeader.selected {
-  background: rgba($dark-blue, 0.4);
+  background: rgba($dark-blue, 0.2);
 }
 
 .ImportGuildTab-selectIcon {
