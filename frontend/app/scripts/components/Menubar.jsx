@@ -34,14 +34,21 @@ const Menubar = React.createClass({
           </div>
           <ul className='Menubar-list'>
             <li className='Menubar-item'>
-              <a href='#' onClick={this.openModal}><i className='fa fa-fw fa-lg fa-plus'></i> Import Characters</a>
+              <a href='#' onClick={this.openModal}>
+                <i className='fa fa-fw fa-lg fa-plus'></i> Import Characters
+              </a>
             </li>
             <li className='Menubar-item'>
-              <a href='#' onClick={this.handleCreateRaid}><i className='fa fa-fw fa-lg fa-rss'></i> Create Raid</a>
+              <a href='#' onClick={this.handleCreateRaid}>
+                <i className='fa fa-fw fa-lg fa-rss'></i> Create Raid
+              </a>
             </li>
           </ul>
         </nav>
-        <ImportModal isOpen={this.state.isModalOpen} onRequestClose={this.closeModal} />
+        <ImportModal
+          isOpen={this.state.isModalOpen}
+          onRequestClose={this.closeModal}
+        />
       </div>
     );
   }

@@ -19,7 +19,12 @@ const Character = Immutable.Record({
 });
 
 function isValidCharacter(character) {
-  return character.name && character.class && character.region && character.realm;
+  return (
+    character.name &&
+    character.class &&
+    character.region &&
+    character.realm
+  );
 }
 
 class CharacterStore {
@@ -94,7 +99,10 @@ class CharacterStore {
 
   handleMoveCharacter(props) {
     const { characterId, raidId } = props;
+    console.log('handleMoveCharacter CharacterId:', characterId);
     let character = this.state.characters.get(characterId);
+
+    console.log('handleMoveCharacter Character:', character);
 
     const token = getTokenForClass(character.class);
 
@@ -134,7 +142,23 @@ class CharacterStore {
   }
 
   handleDeleteRaid(raidId) {
-    this.state.raids = this.state.raids.delete(raidId.toString());
+    console.log('RaidId:', raidId);
+    const raid = this.state.raids.get(raidId.toString());
+
+    // Put characters back to raid0 on delete
+    raid.characters.map(character => {
+      console.log('Character:', character);
+      console.log('CharacterId:', character.get('id'), character.id);
+      this.handleMoveCharacter({
+        characterId: character.get('id'),
+        raidId: 0
+      });
+    });
+
+    let raids = this.state.raids;
+    raids = raids.delete(raidId.toString());
+
+    this.state.raids = raids;
   }
 
   handleImportCharacters() {

@@ -27,16 +27,16 @@ const CharacterList = React.createClass({
 
     return (
       <ul className='CharacterList'>
-        <li className='CharacterList-role'>Tank</li>
+        <li key='tank' className='CharacterList-role'>Tank</li>
         {this.renderRole(roles.TANK)}
 
-        <li className='CharacterList-role'>Healer</li>
+        <li key='healer' className='CharacterList-role'>Healer</li>
         {this.renderRole(roles.HEALER)}
 
-        <li className='CharacterList-role'>Ranged</li>
+        <li key='ranged' className='CharacterList-role'>Ranged</li>
         {this.renderRole(roles.RANGED)}
 
-        <li className='CharacterList-role'>Melee</li>
+        <li key='melee' className='CharacterList-role'>Melee</li>
         {this.renderRole(roles.MELEE)}
 
         {unknownCharacters}

@@ -12,7 +12,7 @@ const api = {};
 
 api.request = function(region, url) {
   region = regions.hasOwnProperty(region) ? regions[region] : regions['eu'];
-  url = ('http://' + region + '/api/wow/' + url).toLowerCase();
+  url = encodeURI('http://' + region + '/api/wow/' + url.toLowerCase());
 
   return request({
     url: url,

@@ -7,13 +7,17 @@ import RaidList from './RaidList.jsx';
 const Workspace = React.createClass({
 
   propTypes: {
-    raids: React.PropTypes.object
+    raids: React.PropTypes.object,
+    characters: React.PropTypes.object
   },
 
   render() {
     return (
       <div className='Workspace'>
-        <AvailableCharacterList characters={this.props.raids.get('0').characters} />
+        <AvailableCharacterList
+          characters={this.props.characters}
+          roster={this.props.raids.get('0').characters}
+        />
         <RaidList raids={this.props.raids} />
       </div>
     );

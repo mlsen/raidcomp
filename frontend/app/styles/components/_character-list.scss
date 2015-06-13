@@ -9,6 +9,7 @@
   background: lighten($dark-gray, 10%);
   border-radius: 2px;
   font-weight: bold;
+  border-top: 5px solid darken($limey, 20%);
 
   &:first-child {
     margin-top: 0;

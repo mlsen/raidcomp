@@ -1,6 +1,7 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd';
 import CharacterActions from '../actions/CharacterActions';
+import RaidActions from '../actions/RaidActions';
 import ItemTypes from '../misc/itemTypes';
 import CharacterList from './CharacterList.jsx';
 
@@ -25,8 +26,43 @@ const Raid = React.createClass({
     raid: React.PropTypes.object
   },
 
-  remove(characterId) {
+  removeRaid() {
+    RaidActions.delete(this.props.raid.id);
+  },
+
+  removeCharacter(characterId) {
     CharacterActions.move(characterId, 0);
+  },
+
+  renderCategory(name, content) {
+    return (
+      <div className='Raid-category'>
+        <div className='Raid-categoryHeader'>
+          {name}
+        </div>
+        <div className='Raid-categoryBody'>
+          {content}
+        </div>
+      </div>
+    );
+  },
+
+  renderInfoCategory() {
+    return this.renderCategory('Info', (
+      <ul className='Raid-infoList'>
+        <li>Characters: {this.props.raid.characters.size}</li>
+      </ul>
+    ));
+  },
+
+  renderTokenCategory() {
+    return this.renderCategory('Tokens', (
+      <ul className='Raid-tokenList'>
+        <li>Conqueror: {this.props.raid.tokens.get('conqueror')}</li>
+        <li>Protector: {this.props.raid.tokens.get('protector')}</li>
+        <li>Vanquisher: {this.props.raid.tokens.get('vanquisher')}</li>
+      </ul>
+    ));
   },
 
   render() {
@@ -38,17 +74,18 @@ const Raid = React.createClass({
     return connectDropTarget(
       <div className='Raid' style={style}>
         <div className='Raid-header'>
+          <a href='#' onClick={this.removeRaid}>
+            <i className='Raid-deleteIcon fa fa-lg fa-remove'></i>
+          </a>
           Raid {this.props.raid.id}
         </div>
         <div className='Raid-body'>
           <div className='Raid-characters'>
-            <CharacterList characters={this.props.raid.characters} delete={this.remove} />
+            <CharacterList characters={this.props.raid.characters} delete={this.removeCharacter} />
           </div>
           <div className='Raid-summary'>
-            <h2>Summary</h2>
-            <p>Conqueror: {this.props.raid.tokens.get('conqueror')}</p>
-            <p>Protector: {this.props.raid.tokens.get('protector')}</p>
-            <p>Vanquisher: {this.props.raid.tokens.get('vanquisher')}</p>
+            {this.renderInfoCategory()}
+            {this.renderTokenCategory()}
           </div>
         </div>
       </div>

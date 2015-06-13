@@ -5,7 +5,8 @@ import CharacterList from './CharacterList.jsx';
 const AvailableCharacterList = React.createClass({
 
   propTypes: {
-    characters: React.PropTypes.object
+    characters: React.PropTypes.object,
+    roster: React.PropTypes.object
   },
 
   delete(characterId) {
@@ -25,7 +26,12 @@ const AvailableCharacterList = React.createClass({
   render() {
     let node = null;
     if(this.props.characters.size) {
-      node = <CharacterList characters={this.props.characters} delete={this.delete} />;
+      node = (
+        <CharacterList
+          characters={this.props.roster}
+          delete={this.delete}
+        />
+      );
     } else {
       node = this.renderNoCharacters();
     }

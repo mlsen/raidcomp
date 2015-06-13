@@ -25,7 +25,7 @@ const App = React.createClass({
     return (
       <div className='App'>
         <Menubar />
-        <Workspace raids={this.state.raids} />
+        <Workspace characters={this.state.characters} raids={this.state.raids} />
       </div>
     );
   }

@@ -18,8 +18,14 @@
   color: $action-color;
 }
 
+.Raid-deleteIcon {
+  padding-top: .1em;
+  color: $error-color;
+  float: right;
+}
+
 .Raid-body {
-  padding: .5em;
+  padding: 1em;
 }
 
 .Raid-characters {
@@ -28,5 +34,26 @@
 }
 
 .Raid-summary {
-  margin-left: 50%;
+  margin-left: calc(50% + .5em);
+}
+
+.Raid-category {
+  padding: 0 0 0 .5em;
+  margin-bottom: .5em;
+}
+
+.Raid-categoryHeader {
+  padding: .5em 0;
+  background: lighten($dark-gray, 10%);
+  border-radius: 2px;
+  font-weight: bold;
+  border-top: 5px solid darken($light-blue, 20%);
+}
+
+.Raid-categoryBody {
+  padding: .5em 0;
+}
+
+.Raid-tokenList {
+
 }
