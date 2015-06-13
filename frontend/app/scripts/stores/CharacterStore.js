@@ -50,12 +50,17 @@ class CharacterStore {
 
   handleAddCharacter(character) {
     if(!character || !isValidCharacter(character)) {
-      character = generateRandomCharacter();
+      // Probably needs some error handling at this point
+      return;
     }
 
+    // The character id is a unique hash over region, realm and name
     character.id = sha1(character.region + character.realm + character.name);
-    character = new Character(character);
+    if(this.state.characters.has(character.id)) {
+      return;
+    }
 
+    character = new Character(character);
     // Add to all characters
     this.state.characters = this.state.characters.set(character.id, character);
 

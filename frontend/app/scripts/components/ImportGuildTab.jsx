@@ -33,7 +33,7 @@ const ImportGuildTab = React.createClass({
     const region = this.state.selectedRegion;
     const realm = this.refs.realm.getDOMNode().value;
     const guild = this.refs.guild.getDOMNode().value;
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, selectedRanks: new Set() });
     ImportActions.fetchGuild(region, realm, guild);
   },
 
@@ -114,7 +114,11 @@ const ImportGuildTab = React.createClass({
               <div className='ImportGuildTab-rankCharacters'>
                 {members.map((character, index) => {
                   characterCssClass = 'ImportGuildTab-character fg-' + character.get('class');
-                  return <span key={index} className={characterCssClass}>{character.get('name')}</span>;
+                  return (
+                    <span key={index} className={characterCssClass}>
+                      {character.get('name')}
+                    </span>
+                  );
                 })}
               </div>
             </div>
@@ -142,7 +146,11 @@ const ImportGuildTab = React.createClass({
     let nodes = [];
     if(this.state.store.realms.has(this.state.selectedRegion)) {
       this.state.store.realms.get(this.state.selectedRegion).map(realm => {
-        nodes.push(<option key={realm.get('slug')} value={realm.get('slug')}>{realm.get('name')}</option>);
+        nodes.push(
+          <option key={realm.get('slug')} value={realm.get('slug')}>
+            {realm.get('name')}
+          </option>
+        );
       });
     }
 
@@ -169,8 +177,12 @@ const ImportGuildTab = React.createClass({
             <label>Guild Name</label>
             <input type='text' ref='guild' />
           </p>
-          <button className='ImportGuildTab-searchButton' onClick={this.handleSearch}>Search</button>
-          <button className='ImportGuildTab-importButton' onClick={this.handleImport}>Import selected</button>
+          <button className='ImportGuildTab-searchButton' onClick={this.handleSearch}>
+            Search
+          </button>
+          <button className='ImportGuildTab-importButton' onClick={this.handleImport}>
+            Import selected
+          </button>
         </div>
         <div className='ImportGuildTab-results'>
           {this.renderResults()}
