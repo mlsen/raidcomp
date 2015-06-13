@@ -31,6 +31,9 @@ const CharacterList = React.createClass({
 
         <li className='CharacterList-role'>Melee</li>
         {this.renderRole(roles.MELEE)}
+
+        <li className='CharacterList-role'>Unknown</li>
+        {this.renderRole(null)}
       </ul>
     );
   }

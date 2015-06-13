@@ -46,15 +46,9 @@ const Raid = React.createClass({
           </div>
           <div className='Raid-summary'>
             <h2>Summary</h2>
-
-            <dl>
-              <dt>Conqueror</dt>
-              <dd>{this.props.raid.tokens.get('conqueror')}</dd>
-              <dt>Protector</dt>
-              <dd>{this.props.raid.tokens.get('protector')}</dd>
-              <dt>Vanquisher</dt>
-              <dd>{this.props.raid.tokens.get('vanquisher')}</dd>
-            </dl>
+            <p>Conqueror: {this.props.raid.tokens.get('conqueror')}</p>
+            <p>Protector: {this.props.raid.tokens.get('protector')}</p>
+            <p>Vanquisher: {this.props.raid.tokens.get('vanquisher')}</p>
           </div>
         </div>
       </div>
