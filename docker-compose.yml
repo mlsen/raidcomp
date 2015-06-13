@@ -11,9 +11,9 @@ proxy:
 #   volumes:
 #     - ./frontend/app:/srv/rc/app
 #   ports:
-#     - "80:1337"
+#     - "1337:1337"
 #   environment:
-#     VIRTUAL_HOST:
+#     VIRTUAL_HOST: raidcomp.dev
 
 backend:
   build: ./backend
