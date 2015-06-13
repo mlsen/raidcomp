@@ -13,7 +13,9 @@ const Character = Immutable.Record({
   name: null,
   region: null,
   realm: null,
-  class: null
+  class: null,
+  spec: null,
+  role: null
 });
 
 function isValidCharacter(character) {
@@ -55,12 +57,18 @@ class CharacterStore {
     }
 
     // The character id is a unique hash over region, realm and name
-    character.id = sha1(character.region + character.realm + character.name);
+    character.id = sha1(
+      character.region.toLowerCase() +
+      character.realm.toLowerCase() +
+      character.name.toLowerCase()
+    );
     if(this.state.characters.has(character.id)) {
       return;
     }
 
     character = new Character(character);
+
+    console.log(character.spec, character.role);
     // Add to all characters
     this.state.characters = this.state.characters.set(character.id, character);
 

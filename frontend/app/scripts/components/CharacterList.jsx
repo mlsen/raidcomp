@@ -1,5 +1,6 @@
 import React from 'react';
 import Character from './Character.jsx';
+import { roles } from '../misc/wow';
 
 const CharacterList = React.createClass({
 
@@ -8,12 +9,28 @@ const CharacterList = React.createClass({
     delete: React.PropTypes.func
   },
 
+  renderRole(role) {
+    return this.props.characters.filter(character => {
+      return character.role === role;
+    }).map(character => {
+      return <Character key={character.id} character={character} delete={this.props.delete} />;
+    });
+  },
+
   render() {
     return (
       <ul className='CharacterList'>
-        {this.props.characters.map(character => {
-          return <Character key={character.id} character={character} delete={this.props.delete} />;
-        })}
+        <li className='CharacterList-role'>Tank</li>
+        {this.renderRole(roles.TANK)}
+
+        <li className='CharacterList-role'>Healer</li>
+        {this.renderRole(roles.HEALER)}
+
+        <li className='CharacterList-role'>Ranged</li>
+        {this.renderRole(roles.RANGED)}
+
+        <li className='CharacterList-role'>Melee</li>
+        {this.renderRole(roles.MELEE)}
       </ul>
     );
   }
