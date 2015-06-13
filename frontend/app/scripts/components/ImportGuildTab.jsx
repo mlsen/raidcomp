@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import ImportActions from '../actions/ImportActions';
 import ImportStore from '../stores/ImportStore';
+import { regions } from '../misc/wow';
 
 const ImportGuildTab = React.createClass({
 
@@ -9,7 +10,7 @@ const ImportGuildTab = React.createClass({
     return {
       store: ImportStore.getState(),
       form: {
-        region: '',
+        region: 'eu',
         realm: '',
         guild: ''
       },
@@ -19,6 +20,7 @@ const ImportGuildTab = React.createClass({
 
   componentDidMount() {
     ImportStore.listen(this.onStoreChange);
+    ImportActions.fetchRealms(this.state.form.region);
   },
 
   componentWillUnmount() {
@@ -31,26 +33,18 @@ const ImportGuildTab = React.createClass({
 
   handleSearch(e) {
     e.preventDefault();
-    const { region, realm, guild } = this.state.form;
+    const region = this.state.selectedRegion;
+    const realm = this.refs.realm.getDOMNode().value;
+    const guild = this.refs.guild.getDOMNode().value;
     ImportActions.fetchGuild(region, realm, guild);
   },
 
   handleRegionChange(e) {
-    let form = this.state.form;
-    form.region = e.target.value;
-    this.setState({ form: form });
-  },
-
-  handleRealmChange(e) {
-    let form = this.state.form;
-    form.realm = e.target.value;
-    this.setState({ form: form });
-  },
-
-  handleGuildChange(e) {
-    let form = this.state.form;
-    form.guild = e.target.value;
-    this.setState({ form: form });
+    const region = e.target.value;
+    if(!this.state.store.realms.has(region)) {
+      ImportActions.fetchRealms(region);
+    }
+    this.setState({ selectedRegion: region });
   },
 
   handleSelect(rank) {
@@ -118,21 +112,50 @@ const ImportGuildTab = React.createClass({
     );
   },
 
+  renderRegions() {
+    let nodes = [];
+    for(let key in regions) {
+      if(regions.hasOwnProperty(key)) {
+        nodes.push(<option value={key}>{regions[key]}</option>);
+      }
+    }
+    return (
+      <select value={this.state.form.region} onChange={this.handleRegionChange}>
+        {nodes}
+      </select>
+    );
+  },
+
+  renderRealms() {
+    let nodes = [];
+    if(this.state.store.realms.has(this.state.form.region)) {
+      this.state.store.realms.get(this.state.form.region).map(realm => {
+        nodes.push(<option key={realm.get('slug')} value={realm.get('slug')}>{realm.get('name')}</option>);
+      });
+    }
+
+    return (
+      <select ref='realm'>
+        {nodes}
+      </select>
+    );
+  },
+
   render() {
     return (
       <div className='ImportGuildTab'>
         <div className='ImportGuildTab-form'>
           <p>
             <label>Region</label>
-            <input type='text' ref='region' value={this.state.form.region} onChange={this.handleRegionChange} />
+            {this.renderRegions()}
           </p>
           <p>
             <label>Realm</label>
-            <input type='text' ref='realm' value={this.state.form.realm} onChange={this.handleRealmChange} />
+            {this.renderRealms()}
           </p>
           <p>
             <label>Guild Name</label>
-            <input type='text' ref='guild' value={this.state.form.guild} onChange={this.handleGuildChange} />
+            <input type='text' ref='guild' />
           </p>
           <button className='ImportGuildTab-searchButton' onClick={this.handleSearch}>Search</button>
           <button className='ImportGuildTab-importButton' onClick={this.handleImport}>Import selected</button>

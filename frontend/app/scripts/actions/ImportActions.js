@@ -16,22 +16,46 @@ class ImportActions {
         },
         guild.members);
       })
-      .catch(err => {
+      .fail(err => {
         this.actions.fetchGuildFailed(err);
       });
+  }
+
+  updateMembers(guild, members) {
+    this.dispatch({
+      guild: guild,
+      members: members
+    });
+  }
+
+  fetchGuildFailed(err) {
+    this.dispatch(err);
+  }
+
+  fetchRealms(region) {
+    Armory.fetchRealms(region)
+      .then(response => {
+        this.actions.updateRealms(region, response.realms);
+      })
+      .fail(err => {
+        this.actions.fetchRealmsFailed(err);
+      });
+  }
+
+  updateRealms(region, realms) {
+    this.dispatch({
+      region: region,
+      realms: realms
+    });
+  }
+
+  fetchRealmsFailed(err) {
+    this.dispatch(err);
   }
 
   importRanks(ranks) {
     this.dispatch(ranks);
     CharacterActions.import();
-  }
-
-  updateMembers(guild, members) {
-    this.dispatch({ guild: guild, members: members });
-  }
-
-  fetchGuildFailed(err) {
-    this.dispatch(err);
   }
 
 }

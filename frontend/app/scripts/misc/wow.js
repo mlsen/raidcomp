@@ -1,3 +1,11 @@
+const regions = {
+  cn: 'China',
+  eu: 'Europe',
+  kr: 'Korea',
+  tw: 'Taiwan',
+  us: 'United States'
+};
+
 const roles = {
   HEALER: 'healer',
   MELEE: 'melee',
@@ -75,5 +83,6 @@ const specs = {
 export {
   roles,
   classes,
-  specs
+  specs,
+  regions
 };

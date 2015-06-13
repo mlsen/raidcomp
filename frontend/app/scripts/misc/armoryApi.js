@@ -12,7 +12,7 @@ const api = {};
 
 api.request = function(region, url) {
   region = regions.hasOwnProperty(region) ? regions[region] : regions['eu'];
-  url = 'http://' + region + '/api/wow/' + url;
+  url = ('http://' + region + '/api/wow/' + url).toLowerCase();
 
   return request({
     url: url,
@@ -30,8 +30,12 @@ api.request = function(region, url) {
   });
 };
 
-api.fetchGuild = function(region, realm, name) {
-  return api.request(region,  'guild/' + realm + '/' + name + '?fields=members');
+api.fetchGuild = function(region, realm, guild) {
+  return api.request(region,  'guild/' + realm + '/' + guild + '?fields=members');
+};
+
+api.fetchRealms = function(region) {
+  return api.request(region, 'realm/status');
 };
 
 export default api;

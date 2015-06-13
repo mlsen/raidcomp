@@ -12,6 +12,14 @@
   padding-right: 20px;
   margin: 0 .5em 1em;
   // border-right: 1px solid $base-border-color;
+
+  select {
+    background: $base-background-color;
+    padding: .5em;
+    border: 1px solid $base-border-color;
+    border-radius: 2px;
+    width: 100%;
+  }
 }
 
 .ImportGuildTab-searchButton {

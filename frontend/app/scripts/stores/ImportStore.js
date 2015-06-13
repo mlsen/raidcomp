@@ -22,11 +22,14 @@ class ImportStore {
 
   constructor() {
     this.state = {};
+    this.state.realms = Immutable.Map();
     this.state.ranks = Immutable.Map();
 
     this.bindListeners({
       handleUpdateMembers: ImportActions.UPDATE_MEMBERS,
       handleFetchGuildFailed: ImportActions.FETCH_GUILD_FAILED,
+      handleUpdateRealms: ImportActions.UPDATE_REALMS,
+      handleFetchRealmsFailed: ImportActions.FETCH_REALMS_FAILED,
       handleImportRanks: ImportActions.IMPORT_RANKS
     });
   }
@@ -50,6 +53,23 @@ class ImportStore {
   }
 
   handleFetchGuildFailed(err) {
+    console.log(err);
+  }
+
+  handleUpdateRealms(props) {
+    const { region, realms } = props;
+
+    let strippedRealms = [];
+    realms.map(realm => {
+      strippedRealms.push({
+        name: realm.name,
+        slug: realm.slug
+      });
+    });
+    this.state.realms = this.state.realms.set(region, Immutable.fromJS(strippedRealms));
+  }
+
+  handleFetchRealmsFailed(err) {
     console.log(err);
   }
 
