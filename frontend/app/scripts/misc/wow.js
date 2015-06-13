@@ -120,10 +120,25 @@ function getTokenForClass(className) {
   }
 }
 
+function getRoleForSpec(className, spec) {
+  // These classes can only fulfill one role
+  if([classes.HUNTER, classes.MAGE, classes.WARLOCK].indexOf(className) > -1) {
+    return roles.RANGED;
+  } else if(className === classes.ROGUE) {
+    return roles.MELEE;
+  }
+
+  if(typeof spec !== 'undefined' && spec !== null) {
+    return specs[className][spec];
+  }
+  return null;
+}
+
 export {
   roles,
   classes,
   classTokens,
+  getRoleForSpec,
   getTokenForClass,
   specs,
   regions,

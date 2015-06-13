@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import alt from '../alt';
 import ImportActions from '../actions/ImportActions';
 import CharacterActions from '../actions/CharacterActions';
-import { classes, specs } from '../misc/wow';
+import { classes, getRoleForSpec } from '../misc/wow';
 
 const classIds = {
   1: classes.WARRIOR,
@@ -58,15 +58,14 @@ class ImportStore {
 
       let className = classIds[member.character.class];
       let spec = member.character.hasOwnProperty('spec') ? member.character.spec.name : null;
-      let role = (spec !== null) ? specs[className][spec] : null;
 
       character = {
         region: props.guild.region,
         realm: props.guild.realm,
         name: member.character.name,
-        class: classIds[member.character.class],
+        class: className,
         spec: spec,
-        role: role
+        role: getRoleForSpec(className, spec)
       };
       ranks[member.rank].push(character);
     });
