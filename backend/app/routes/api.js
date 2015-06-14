@@ -3,7 +3,7 @@
 
 var ApiRouter = require('express').Router();
 var sha1 = require('sha1');
-var RaidComp = require('../models/raidcomp').RaidComp;
+var RaidComp = require('../models/raidComp').RaidComp;
 var Character = require('../models/character').Character;
 
 var generateCompId = function () {

@@ -1,7 +1,7 @@
 (function () {
 'use strict';
 
-var RaidComp = require('../models/raidcomp').RaidComp;
+var RaidComp = require('../models/raidComp').RaidComp;
 var Character = require('../models/character').Character;
 var respondWithError = require('../misc/utils').respondWithError;
 
