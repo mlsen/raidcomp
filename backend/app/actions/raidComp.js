@@ -1,20 +1,20 @@
 (function () {
 'use strict';
 
-var SocketHandler = require('../handlers/socket').SocketHandler;
 var RaidComp = require('../models/raidcomp').RaidComp;
 var Character = require('../models/character').Character;
+var respondWithError = require('../misc/utils').respondWithError;
 
 var RaidCompAction = {
   addRaid: function (data, socketResponse) {
     if (!data.raidId)
-      return SocketHandler.throwError(data, 'Required data for adding a raid was missing.', socketResponse);
+      return respondWithError(data, 'Required data for adding a raid was missing.', socketResponse);
 
     RaidComp
     .findOne({ _compId: data.compId })
     .exec(function (err, raid) {
       if (err || !raid || raid.raidIds.indexOf(data.raidId) > -1) {
-        return SocketHandler.throwError(data, 'Specified RaidComp not found.', socketResponse);
+        return respondWithError(data, 'Specified RaidComp not found.', socketResponse);
       }
 
       raid.raidIds.push(data.raidId);
@@ -26,13 +26,13 @@ var RaidCompAction = {
 
   removeRaid: function (data, socketResponse) {
     if (!data.raidId || data.raidId == '0')
-      return SocketHandler.throwError(data, 'Required data for adding a raid was missing.', socketResponse);
+      return respondWithError(data, 'Required data for adding a raid was missing.', socketResponse);
 
     RaidComp
     .findOne({ _compId: data.compId, raidIds: data.raidId })
     .exec(function (err, raid) {
       if (err || !raid) {
-        return SocketHandler.throwError(data, 'Specified RaidComp or raid not found.', socketResponse);
+        return respondWithError(data, 'Specified RaidComp or raid not found.', socketResponse);
       }
 
       Character

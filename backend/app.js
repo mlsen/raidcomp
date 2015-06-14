@@ -28,7 +28,6 @@ app.get('/', function (req, res) {
 });
 
 var SocketHandler = require('./app/handlers/socket').SocketHandler;
-console.log(SocketHandler);
 io.on('connection', function (socket) {
   socket.on('raidcomp', function (data) {
     SocketHandler.processMessage(data, function(socket, result) {

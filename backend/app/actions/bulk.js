@@ -1,9 +1,9 @@
 (function () {
 'use strict';
 
-var SocketHandler = require('../handlers/socket').SocketHandler;
 var RaidComp = require('../models/raidcomp').RaidComp;
 var Character = require('../models/character').Character;
+var respondWithError = require('../misc/utils').respondWithError;
 
 var BulkAction = {
   sendBulkData: function (data, socketResponse) {
@@ -11,7 +11,7 @@ var BulkAction = {
     .findOne({ _shortCompId: data.shortCompId })
     .exec(function (err, raid) {
       if (err || !raid) {
-        return SocketHandler.throwError(data, 'There\'s no RaidComp with this Id.', socketResponse);
+        return respondWithError(data, 'There\'s no RaidComp with this Id.', socketResponse);
       }
 
       Character
@@ -25,7 +25,7 @@ var BulkAction = {
         return;
       });
     });
-  },
+  }
 };
 
 module.exports = {

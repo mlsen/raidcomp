@@ -56,11 +56,6 @@ var SocketHandler = {
       break;
     }
   },
-
-  throwError: function (data, msg, socketResponse) {
-    socketResponse(data.shortCompId + ':' + data.user, { error: msg });
-    return;
-  }
 };
 
 module.exports = {
