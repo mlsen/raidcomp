@@ -13,7 +13,9 @@
   });
 
   function add() {
-  	socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: 'user', character: { id: 'id', name: 'blah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
+    socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: 'user', character: { id: 'id', name: 'blah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
+    socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: 'user', character: { id: 'id2', name: 'blhghjghah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
+  	socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: 'user', character: { id: 'id3', name: 'bljkhjghjah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
   }
   function moveto2() {
     socket.emit('raidcomp', {action: 'moveCharacter', to: 'abcdef', compId: compId, user: 'user', character: { id: 'id' } });

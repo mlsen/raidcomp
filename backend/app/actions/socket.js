@@ -31,8 +31,7 @@ var Actions = {
       case 'sendName':
         Actions.sendName(data, socketResponse);
       break;
-      case 'connect':
-        Actions.requestNames(data, socketResponse);
+      case 'requestBulkData':
         Actions.sendBulkData(data, socketResponse);
       break;
     }
