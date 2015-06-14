@@ -1,13 +1,13 @@
 (function () {
 'use strict';
 
-var Raid = require('../models/raidcomp').Raid;
+var RaidComp = require('../models/raidcomp').RaidComp;
 var Character = require('../models/raidcomp').Character;
 
 var Actions = {
   processMessage: function (data, socketResponse) {
     if (!data.action || !data.compId || !data.user || !socketResponse) return;
-    data.shortId = data.compId.slice(0, 10);
+    data.shortCompId = data.compId.slice(0, 10);
 
     switch(data.action) {
       case 'addCharacter':
@@ -31,7 +31,32 @@ var Actions = {
       case 'sendName':
         Actions.sendName(data, socketResponse);
       break;
+      case 'connect':
+        Actions.requestNames(data, socketResponse);
+        Actions.sendBulkData(data, socketResponse);
+      break;
     }
+  },
+
+  sendBulkData: function (data, socketResponse) {
+    RaidComp
+    .findOne({ _shortCompId: data.compId })
+    .exec(function (err, raid) {
+      if (err || !raid) {
+        return Actions.throwError(data, 'There\'s no RaidComp with this Id.', socketResponse);
+      }
+
+      Character
+      .find({ _compId: raid._compId })
+      .exec(function (err, characters) {
+        var response = {
+          raidIds: raid.raidIds,
+          characters: characters
+        };
+        socketResponse(data.shortCompId, { action: data.action, user: data.user, data: response });
+        return;
+      });
+    });
   },
 
   addCharacter: function (data, socketResponse) {
@@ -39,39 +64,56 @@ var Actions = {
       return Actions.throwError(data, 'Required data for creating a character was missing.', socketResponse);
     }
 
-    Raid
+    RaidComp
     .findOne({ _compId: data.compId })
     .exec(function (err, raid) {
       if (err || !raid) {
         return Actions.throwError(data, 'Specified RaidComp not found.', socketResponse);
       }
 
-      var character = {
-        _compId: data.compId,
-        raidId: '0',
-        id: data.character.id,
-        name: data.character.name,
-        realm: data.character.realm,
-        region: data.character.region,
-        className: data.character.className,
-        spec: data.character.spec,
-        role: data.character.role
-      };
-
-      Character.findOneAndUpdate(
-        { _compId: data.compId, raidId: 0, id: data.character.id },
-        character,
-        { upsert: true, new: true },
-        function (err, character) {
-          if (socketResponse) {
-            if (err || !character) {
-              return Actions.throwError(data, 'Adding character failed. Maybe it had a reason..or not?', socketResponse);
-            }
-            socketResponse(data.shortId, { action: data.action, user: data.user, character: character });
-            return;
-          }
+      Character
+      .findOne({ _compId: data.compId, id: data.character.id })
+      .exec(function (err, character) {
+        if (err) {
+          //handle error
+          return;
         }
-      );
+
+        var newCharacter = {
+          name: data.character.name,
+          realm: data.character.realm,
+          region: data.character.region,
+          className: data.character.className,
+          spec: data.character.spec,
+          role: data.character.role
+        };
+
+        if (!character) {
+          newCharacter._compId = data.compId;
+          newCharacter.raidId = '0';
+          newCharacter.id = data.character.id;
+
+          Character.create(newCharacter, function (err, character) {
+            if (err || !character)
+              Actions.throwError(data, 'Failed to create new character.', socketResponse);
+
+            socketResponse(data.shortCompId, { action: data.action, user: data.user, character: character});
+            return;
+          });
+        } else {
+          Character.update(
+            { _compId: data.compId, id: data.character.id },
+            newCharacter,
+            function (err, character) {
+              if (err || !character)
+                Actions.throwError(data, 'Failed to update character.', socketResponse);
+
+              socketResponse(data.shortCompId, { action: 'updateCharacter', user: data.user, character: character});
+              return;
+            }
+          );
+        }
+      });
     });
   },
 
@@ -79,7 +121,7 @@ var Actions = {
     if (!data.character || !data.character.id || !data.to)
       return Actions.throwError(data, 'Required data for moving a character was missing.', socketResponse);
 
-    Raid
+    RaidComp
     .findOne({ _compId: data.compId, raidIds: data.to })
     .exec(function (err, raid) {
       if (err || !raid) {
@@ -96,7 +138,7 @@ var Actions = {
 
           character.raidId = data.to;
           character.save();
-          socketResponse(data.shortId, { action: data.action, user: data.user, character: character });
+          socketResponse(data.shortCompId, { action: data.action, user: data.user, character: character });
           return;
         }
       });
@@ -114,7 +156,7 @@ var Actions = {
           if (err || !character) {
             return Actions.throwError(data, 'Removing character failed.', socketResponse);
           }
-          socketResponse(data.shortId, { action: data.action, user: data.user, character: character });
+          socketResponse(data.shortCompId, { action: data.action, user: data.user, character: character });
           return;
         }
       }
@@ -125,7 +167,7 @@ var Actions = {
     if (!data.raidId)
       return Actions.throwError(data, 'Required data for adding a raid was missing.', socketResponse);
 
-    Raid
+    RaidComp
     .findOne({ _compId: data.compId })
     .exec(function (err, raid) {
       if (err || !raid || raid.raidIds.indexOf(data.raidId) > -1) {
@@ -134,7 +176,7 @@ var Actions = {
 
       raid.raidIds.push(data.raidId);
       raid.save();
-      socketResponse(data.shortId, { action: data.action, user: data.user, raid: data.raidId });
+      socketResponse(data.shortCompId, { action: data.action, user: data.user, raid: data.raidId });
       return;
     });
   },
@@ -143,7 +185,7 @@ var Actions = {
     if (!data.raidId || data.raidId == '0')
       return Actions.throwError(data, 'Required data for adding a raid was missing.', socketResponse);
 
-    Raid
+    RaidComp
     .findOne({ _compId: data.compId, raidIds: data.raidId })
     .exec(function (err, raid) {
       if (err || !raid) {
@@ -155,10 +197,11 @@ var Actions = {
       .exec(function (err, characters) {
         if (characters && characters.length) {
           for (var character of characters) {
-            character.raidId = 0;
+            character.raidId = '0';
             character.save();
 
-            socketResponse(data.shortId, { action: 'moveCharacter', user: data.user, character: character });
+            // let the client handle the moving on remove raid
+            // socketResponse(data.shortCompId, { action: 'moveCharacter', user: data.user, character: character });
           }
         }
       });
@@ -166,13 +209,13 @@ var Actions = {
       raid.raidIds.splice(raid.raidIds.indexOf(data.raidId), 1);
       raid.save();
 
-      socketResponse(data.shortId, { action: data.action, user: data.user, raidId: data.raidId });
+      socketResponse(data.shortCompId, { action: data.action, user: data.user, raidId: data.raidId });
       return;
     });
   },
 
   requestNames: function (data, socketResponse) {
-    socketResponse(data.shortId, { action: 'requestNames', user: data.user, requestFrom: data.user });
+    socketResponse(data.shortCompId, { action: 'requestNames', user: data.user, requestFrom: data.user });
     return;
   },
 
@@ -180,7 +223,7 @@ var Actions = {
     if (!data.name) {
       return Actions.throwError(data, 'No name given.', socketResponse);
     }
-    var socket = data.requestFrom ? data.shortId + ':' + data.requestFrom : data.shortId;
+    var socket = data.requestFrom ? data.shortCompId + ':' + data.requestFrom : data.shortCompId;
     socketResponse(socket, { action: 'sendName', user: data.user, name: data.name });
     return;
   },
@@ -191,7 +234,7 @@ var Actions = {
   },
 
   throwError: function (data, msg, socketResponse) {
-    socketResponse(data.shortId + ':' + data.user, { error: msg });
+    socketResponse(data.shortCompId + ':' + data.user, { error: msg });
     return;
   }
 };

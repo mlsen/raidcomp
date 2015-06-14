@@ -17,16 +17,17 @@ var characterSchema = new Schema({
 	role: String
 });
 
-var raidSchema = new Schema({
+var raidCompSchema = new Schema({
 	_compId: String,
+  _shortCompId: String,
 	raidIds: [String]
 });
 
 var Character = mongoose.model('Character', characterSchema);
-var Raid = mongoose.model('Raid', raidSchema);
+var RaidComp = mongoose.model('RaidComp', raidCompSchema);
 
 module.exports = {
-  Raid: Raid,
+  RaidComp: RaidComp,
   Character: Character
 };
 }());
