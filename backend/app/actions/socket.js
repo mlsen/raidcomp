@@ -46,32 +46,49 @@ var Actions = {
         return Actions.throwError(data, 'Specified RaidComp not found.', socketResponse);
       }
 
-      var character = {
-        _compId: data.compId,
-        raidId: '0',
-        id: data.character.id,
-        name: data.character.name,
-        realm: data.character.realm,
-        region: data.character.region,
-        className: data.character.className,
-        spec: data.character.spec,
-        role: data.character.role
-      };
-
-      Character.findOneAndUpdate(
-        { _compId: data.compId, raidId: 0, id: data.character.id },
-        character,
-        { upsert: true, new: true },
-        function (err, character) {
-          if (socketResponse) {
-            if (err || !character) {
-              return Actions.throwError(data, 'Adding character failed. Maybe it had a reason..or not?', socketResponse);
-            }
-            socketResponse(data.shortId, { action: data.action, user: data.user, character: character });
-            return;
-          }
+      Character
+      .findOne({ _compId: data.compId, id: data.character.id })
+      .exec(function (err, character) {
+        if (err) {
+          //handle error
+          return;
         }
-      );
+
+        var newCharacter = {
+          name: data.character.name,
+          realm: data.character.realm,
+          region: data.character.region,
+          className: data.character.className,
+          spec: data.character.spec,
+          role: data.character.role
+        };
+
+        if (!character) {
+          newCharacter._compId = data.compId;
+          newCharacter.raidId = '0';
+          newCharacter.id = data.character.id;
+
+          Character.create(newCharacter, function (err, character) {
+            if (err || !character)
+              Actions.throwError(data, 'Failed to create new character.', socketResponse);
+
+            socketResponse(data.shortId, { action: data.action, user: data.user, character: character});
+            return;
+          });
+        } else {
+          Character.update(
+            { _compId: data.compId, id: data.character.id },
+            newCharacter,
+            function (err, character) {
+              if (err || !character)
+                Actions.throwError(data, 'Failed to update character.', socketResponse);
+
+              socketResponse(data.shortId, { action: 'updateCharacter', user: data.user, character: character});
+              return;
+            }
+          );
+        }
+      });
     });
   },
 
