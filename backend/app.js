@@ -2,6 +2,7 @@
 'use strict';
 
 var app = require('express')();
+var cors = require('cors');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
@@ -16,6 +17,7 @@ mongoose.connect('mongodb://mongo/raidcomp');
 // });
 
 //app.use(bodyparser.json());
+app.use(cors());
 
 var router = require('./app/routes/api');
 app.use('/comp', router);
