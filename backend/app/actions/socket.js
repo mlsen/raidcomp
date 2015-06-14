@@ -134,7 +134,7 @@ var Actions = {
 
       raid.raidIds.push(data.raidId);
       raid.save();
-      socketResponse(data.shortId, { action: data.action, user: data.user, raid: raid });
+      socketResponse(data.shortId, { action: data.action, user: data.user, raid: data.raidId });
       return;
     });
   },
