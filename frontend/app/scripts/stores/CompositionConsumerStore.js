@@ -66,12 +66,13 @@ class CompositionConsumerStore {
 
     this.waitFor(AppStore);
     AppStore.getState().socket.on(compositionId, data => {
+      console.log('incoming:', data);
       this._handleSocket(data);
     });
 
-    this.setState({
-      compositionId: compositionId
-    });
+    // this.setState({
+    //   compositionId: compositionId
+    // });
   }
 
   _handleSocket(data) {
@@ -93,6 +94,7 @@ class CompositionConsumerStore {
         this.handleAddRaid(data.raid);
         break;
       case actions.REMOVE_RAID:
+        console.log('remove raid olol');
         this.handleRemoveRaid(data.raidId);
         break;
       case actions.REQUEST_NAMES:
@@ -127,27 +129,35 @@ class CompositionConsumerStore {
   }
 
   handleMoveCharacter(props) {
+    // 1. Add to new raid
+    // 2. Delete from current raid
+
+    // raidId: ID of new raid
     const { characterId, raidId } = props;
-    console.log('moveCharacter:', characterId, raidId);
 
+    // Character info
     let character = this.state.characters.get(characterId);
-
-    const token = getTokenForClass(character.className);
-
-    // Delete from current raid
-    let currentRaid = this.state.raids.get(character.currentRaidId);
-    currentRaid.characters = currentRaid.characters.delete(character.id);
-    currentRaid.tokens = currentRaid.tokens.set(token, currentRaid.tokens.get(token) - 1);
+    const currentRaidId = character.currentRaidId;
+    const characterToken = getTokenForClass(character.className);
 
     // Add to new raid
     let newRaid = this.state.raids.get(raidId);
-    character = character.set('currentRaidId', newRaid.id);
-    newRaid.characters = newRaid.characters.set(character.id, character);
-    newRaid.tokens = newRaid.tokens.set(token, newRaid.tokens.get(token) + 1);
+    newRaid.characters = newRaid.characters.set(characterId, character);
+    newRaid.tokens = newRaid.tokens.set(characterToken, newRaid.tokens.get(characterToken) + 1);
 
-    this.setState({
-      characters: this.state.characters.set(character.id, character)
-    });
+    // Delete from old raid
+    let currentRaid = this.state.raids.get(currentRaidId);
+    currentRaid.characters = currentRaid.characters.delete(characterId);
+    currentRaid.tokens = currentRaid.tokens.set(characterToken, currentRaid.tokens.get(characterToken) - 1);
+
+    // Change currentRaidId to raidId
+    character = character.set('currentRaidId', raidId);
+
+    this.state.raids = this.state.raids.set(raidId, newRaid);
+    this.state.raids = this.state.raids.set(currentRaidId, currentRaid);
+    this.state.characters = this.state.characters.set(characterId, character);
+
+    this.emitChange();
   }
 
   handleRemoveCharacter(character) {
@@ -186,6 +196,8 @@ class CompositionConsumerStore {
 
   handleRemoveRaid(raidId) {
     const raid = this.state.raids.get(raidId);
+
+    console.log(raidId, this.state.raids.get(raidId));
 
     // Put characters back to raid0 on delete
     raid.characters.map(character => {
