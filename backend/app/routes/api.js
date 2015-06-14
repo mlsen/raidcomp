@@ -2,11 +2,12 @@
 'use strict';
 
 var router = require('express').Router();
+var sha1 = require('sha1');
 var RaidComp = require('../models/raidcomp').RaidComp;
 var Character = require('../models/raidcomp').Character;
 
 var generateCompId = function () {
-  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  return sha1(Math.random().toString(36).slice(2));
 };
 
 router.post('/', function (req, res, next) {
