@@ -22,29 +22,5 @@ router.post('/', function (req, res, next) {
   res.send({ compId: compId });
 });
 
-router.get('/:compId', function (req, res, next) {
-  Raid
-  .findOne({ _compId: req.params.compId })
-  .exec(function (err, raid) {
-    if (err || !raid) {
-      res.status(404).send({ error: 'There\'s no RaidComp with this Id.' });
-      return next();
-    }
-
-    Character
-    .find({ _compId: req.params.compId })
-    .exec(function (err, characters) {
-      var response = {
-        _compId: raid.compId,
-        raidIds: raid.raidIds,
-        characters: characters
-      };
-      res.send(response);
-      return next();
-    });
-
-  });
-});
-
 module.exports = router;
 }());

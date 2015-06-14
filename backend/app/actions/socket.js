@@ -31,7 +31,32 @@ var Actions = {
       case 'sendName':
         Actions.sendName(data, socketResponse);
       break;
+      case 'connect':
+        Actions.requestNames(data, socketResponse);
+        Actions.sendBulkData(data, socketResponse);
+      break;
     }
+  },
+
+  sendBulkData: function (data, socketResponse) {
+    RaidComp
+    .findOne({ _shortCompId: data.compId })
+    .exec(function (err, raid) {
+      if (err || !raid) {
+        return Actions.throwError(data, 'There\'s no RaidComp with this Id.', socketResponse);
+      }
+
+      Character
+      .find({ _compId: raid._compId })
+      .exec(function (err, characters) {
+        var response = {
+          raidIds: raid.raidIds,
+          characters: characters
+        };
+        socketResponse(data.shortCompId, { action: data.action, user: data.user, data: response });
+        return;
+      });
+    });
   },
 
   addCharacter: function (data, socketResponse) {
