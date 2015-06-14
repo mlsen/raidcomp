@@ -13,6 +13,11 @@
     console.log(':user', data);
   });
 
+
+  socket.emit('raidcomp', { action: 'sendName', compId: compId, user: user, name: user})
+  socket.emit('raidcomp', { action: 'requestNames', compId: compId, user: user, requestFrom: user})
+  socket.emit('raidcomp', { action: 'requestBulkData', compId: compId, user: user})
+
   function add() {
     socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: user, character: { id: 'id', name: 'blah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
     socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: user, character: { id: 'id2', name: 'blhghjghah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
