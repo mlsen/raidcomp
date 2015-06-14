@@ -17,7 +17,7 @@ const ImportModal = React.createClass({
     return (
       <Modal isOpen={this.props.isOpen}>
         <div className='ImportModal'>
-          <a onClick={this.props.onRequestClose} href='#'>
+          <a href='javascript:;' onClick={this.props.onRequestClose}>
             <i className='fa fa-lg fa-close ImportModal-closeIcon'></i>
           </a>
           <Tabs>

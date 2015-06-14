@@ -1,5 +1,5 @@
 import React from 'react';
-import CharacterActions from '../actions/CharacterActions';
+import CompositionActions from '../actions/CompositionActions';
 import CharacterList from './CharacterList.jsx';
 
 const AvailableCharacterList = React.createClass({
@@ -10,7 +10,7 @@ const AvailableCharacterList = React.createClass({
   },
 
   delete(characterId) {
-    CharacterActions.delete(characterId);
+    CompositionActions.deleteCharacter(characterId);
   },
 
   renderNoCharacters() {

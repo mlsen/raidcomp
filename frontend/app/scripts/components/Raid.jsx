@@ -1,8 +1,7 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd';
 import classNames from 'classnames';
-import CharacterActions from '../actions/CharacterActions';
-import RaidActions from '../actions/RaidActions';
+import CompositionActions from '../actions/CompositionActions';
 import ItemTypes from '../misc/itemTypes';
 import CharacterList from './CharacterList.jsx';
 
@@ -29,11 +28,11 @@ const Raid = React.createClass({
   },
 
   removeRaid() {
-    RaidActions.delete(this.props.raid.id);
+    CompositionActions.deleteRaid(this.props.raid.id);
   },
 
   removeCharacter(characterId) {
-    CharacterActions.move(characterId, 0);
+    CompositionActions.moveCharacter(characterId, 0);
   },
 
   renderCategory(name, content) {
@@ -77,7 +76,7 @@ const Raid = React.createClass({
     return connectDropTarget(
       <div className={raidClasses}>
         <div className='Raid-header'>
-          <a href='#' onClick={this.removeRaid}>
+          <a href='javascript:;' onClick={this.removeRaid}>
             <i className='Raid-deleteIcon fa fa-lg fa-remove'></i>
           </a>
           Raid {this.props.counter}

@@ -1,5 +1,5 @@
 import React from 'react';
-import RaidActions from '../actions/RaidActions';
+import CompositionActions from '../actions/CompositionActions';
 import Raid from './Raid.jsx';
 
 const RaidList = React.createClass({
@@ -10,7 +10,7 @@ const RaidList = React.createClass({
 
   handleCreate(e) {
     e.preventDefault();
-    RaidActions.create();
+    CompositionActions.createRaid();
   },
 
   render() {

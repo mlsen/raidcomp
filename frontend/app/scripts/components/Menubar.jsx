@@ -1,6 +1,5 @@
 import React from 'react';
-import CharacterActions from '../actions/CharacterActions';
-import RaidActions from '../actions/RaidActions';
+import CompositionActions from '../actions/CompositionActions';
 import ImportModal from './ImportModal.jsx';
 
 const Menubar = React.createClass({
@@ -18,11 +17,7 @@ const Menubar = React.createClass({
   },
 
   handleCreateRaid() {
-    RaidActions.add();
-  },
-
-  handleCreateCharacter() {
-    CharacterActions.add();
+    CompositionActions.addRaid();
   },
 
   render() {
@@ -34,12 +29,12 @@ const Menubar = React.createClass({
           </div>
           <ul className='Menubar-list'>
             <li className='Menubar-item'>
-              <a href='#' onClick={this.openModal}>
+              <a href='javascript:;' onClick={this.openModal}>
                 <i className='fa fa-fw fa-lg fa-plus'></i> Import Characters
               </a>
             </li>
             <li className='Menubar-item'>
-              <a href='#' onClick={this.handleCreateRaid}>
+              <a href='javascript:;' onClick={this.handleCreateRaid}>
                 <i className='fa fa-fw fa-lg fa-rss'></i> Create Raid
               </a>
             </li>

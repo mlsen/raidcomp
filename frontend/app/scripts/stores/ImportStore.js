@@ -1,7 +1,6 @@
 import Immutable from 'immutable';
 import alt from '../alt';
 import ImportActions from '../actions/ImportActions';
-import CharacterActions from '../actions/CharacterActions';
 import { classes, getRoleForSpec } from '../misc/wow';
 
 const classIds = {
@@ -63,7 +62,7 @@ class ImportStore {
         region: props.guild.region,
         realm: props.guild.realm,
         name: member.character.name,
-        class: className,
+        className: className,
         spec: spec,
         role: getRoleForSpec(className, spec)
       };

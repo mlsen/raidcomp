@@ -8,7 +8,7 @@ import Composition from './views/Composition.jsx';
 var routes = (
   <Route name="app" path="/" handler={App}>
     <DefaultRoute handler={Home} />
-    <Route name="composition" path="/:compId" handler={Composition} />
+    <Route name="composition" path="/:compositionId" handler={Composition} />
   </Route>
 );
 

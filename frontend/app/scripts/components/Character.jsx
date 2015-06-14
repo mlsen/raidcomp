@@ -1,8 +1,7 @@
 import React from 'react';
 import { DragSource } from 'react-dnd';
 import ItemTypes from '../misc/itemTypes';
-import RaidActions from '../actions/RaidActions';
-import CharacterActions from '../actions/CharacterActions';
+import CompositionActions from '../actions/CompositionActions';
 
 const characterSource = {
   beginDrag(props) {
@@ -12,7 +11,7 @@ const characterSource = {
   endDrag(props, monitor, component) {
     const dropResult = monitor.getDropResult();
     if(dropResult && dropResult.hasOwnProperty('raidId')) {
-      CharacterActions.move(props.character.id, dropResult.raidId);
+      CompositionActions.moveCharacter(props.character.id, dropResult.raidId);
     }
   }
 };
@@ -33,7 +32,7 @@ const Character = React.createClass({
 
   render() {
     const { connectDragSource, isDragging } = this.props;
-    const cssClass = 'Character bg-' + this.props.character.class;
+    const cssClass = 'Character bg-' + this.props.character.className;
 
     return connectDragSource(
       <li className={cssClass}>

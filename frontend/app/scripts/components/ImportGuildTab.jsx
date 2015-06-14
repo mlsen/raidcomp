@@ -123,7 +123,7 @@ const ImportGuildTab = React.createClass({
               </div>
               <div className='ImportGuildTab-rankCharacters'>
                 {members.map((character, index) => {
-                  characterCssClass = 'ImportGuildTab-character fg-' + character.get('class');
+                  characterCssClass = 'ImportGuildTab-character fg-' + character.get('className');
                   return (
                     <span key={index} className={characterCssClass}>
                       {character.get('name')}

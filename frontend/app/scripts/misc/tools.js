@@ -1,3 +1,5 @@
+import sha1 from 'sha1';
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -21,13 +23,27 @@ function getRandomClass() {
   return classes[getRandomInt(0, classes.length)];
 }
 
+function generateCharacterId(region, realm, name) {
+  return sha1(
+    region.toLowerCase() +
+    realm.toLowerCase() +
+    name.toLowerCase()
+  );
+}
+
 function generateRandomCharacter() {
-  return {
+  let character = {
     name: getRandomName(12),
     region: getRandomName(8),
     realm: getRandomName(8),
-    class: getRandomClass()
+    className: getRandomClass()
   };
+  character.id = generateCharacterId(
+    character.region,
+    character.realm,
+    character.name
+  );
+  return character;
 }
 
 export {

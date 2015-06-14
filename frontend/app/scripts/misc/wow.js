@@ -10,7 +10,8 @@ const roles = {
   HEALER: 'healer',
   MELEE: 'melee',
   RANGED: 'ranged',
-  TANK: 'tank'
+  TANK: 'tank',
+  UNKNOWN: 'unknown'
 };
 
 const classes = {
