@@ -28,11 +28,11 @@ const Raid = React.createClass({
   },
 
   removeRaid() {
-    CompositionActions.deleteRaid(this.props.raid.id);
+    CompositionActions.removeRaid(this.props.raid.id);
   },
 
   removeCharacter(characterId) {
-    CompositionActions.moveCharacter(characterId, 0);
+    CompositionActions.moveCharacter(characterId, '0');
   },
 
   renderCategory(name, content) {
@@ -72,6 +72,8 @@ const Raid = React.createClass({
       'Raid': true,
       'hover': isOver
     });
+
+    console.log('Raid:', this.props.raid, this.props.raid.characters.size);
 
     return connectDropTarget(
       <div className={raidClasses}>

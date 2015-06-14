@@ -10,7 +10,7 @@ const AvailableCharacterList = React.createClass({
   },
 
   delete(characterId) {
-    CompositionActions.deleteCharacter(characterId);
+    CompositionActions.removeCharacter(characterId);
   },
 
   renderNoCharacters() {

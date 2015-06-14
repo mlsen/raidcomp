@@ -18,7 +18,7 @@ const actions = {
 
 const Character = Immutable.Record({
   id: null,
-  currentRaidId: 0,
+  currentRaidId: '0',
   name: null,
   region: null,
   realm: null,
@@ -64,8 +64,8 @@ class CompositionStore {
       // Raids
       // Key '0' contains all characters that are not in a raid yet
       raids: Immutable.OrderedMap({
-        0: {
-          id: 0,
+        '0': {
+          id: '0',
           characters: Immutable.OrderedMap(),
           tokens: Immutable.Map()
         }
@@ -78,12 +78,12 @@ class CompositionStore {
       handleSetComposition: CompositionActions.SET_COMPOSITION,
 
       handleAddCharacter: CompositionActions.ADD_CHARACTER,
-      handleDeleteCharacter: CompositionActions.DELETE_CHARACTER,
+      handleRemoveCharacter: CompositionActions.REMOVE_CHARACTER,
       handleMoveCharacter: CompositionActions.MOVE_CHARACTER,
       handleImportCharacters: CompositionActions.IMPORT,
 
       handleAddRaid: CompositionActions.ADD_RAID,
-      handleDeleteRaid: CompositionActions.DELETE_RAID
+      handleRemoveRaid: CompositionActions.REMOVE_RAID
     });
   }
 
@@ -137,7 +137,7 @@ class CompositionStore {
         this._addRaid(data.raid);
         break;
       case actions.REMOVE_RAID:
-        this._removeRaid(data);
+        this._removeRaid(data.raidId);
         break;
       case actions.REQUEST_NAMES:
         this._requestNames(data);
@@ -157,7 +157,7 @@ class CompositionStore {
     }
     character = new Character({
       id: character.id,
-      currentRaidId: 0,
+      currentRaidId: '0',
       name: character.name,
       region: character.region,
       realm: character.realm,
@@ -187,24 +187,19 @@ class CompositionStore {
     const token = getTokenForClass(character.className);
 
     // Delete from current raid
-    console.log(character.get('currentRaidId'), character.currentRaidId);
+    console.log('currentRaidId:', character.currentRaidId);
     let currentRaid = this.state.raids.get(character.currentRaidId);
     currentRaid.characters = currentRaid.characters.delete(character.id);
     currentRaid.tokens = currentRaid.tokens.set(token, currentRaid.tokens.get(token) - 1);
 
     // Add to new raid
-    let newRaid = this.state.raids.get(raidId.toString());
+    let newRaid = this.state.raids.get(raidId);
     character = character.set('currentRaidId', newRaid.id);
     newRaid.characters = newRaid.characters.set(character.id, character);
     newRaid.tokens = newRaid.tokens.set(token, newRaid.tokens.get(token) + 1);
 
-    let updatedRaids = {};
-    updatedRaids[currentRaid.id] = currentRaid;
-    updatedRaids[newRaid.id] = newRaid;
-
     this.setState({
-      characters: this.state.characters.set(character.id, character),
-      raids: this.state.raids.merge(updatedRaids)
+      characters: this.state.characters.set(character.id, character)
     });
   }
 
@@ -214,17 +209,18 @@ class CompositionStore {
     character = this.state.characters.get(character.id);
 
     // Delete from all characters
-    this.state.characters = this.state.characters.delete(characterId);
+    this.state.characters = this.state.characters.delete(character.id);
 
     // Delete from current raid
     let raid = this.state.raids.get(character.currentRaidId.toString());
     raid.characters = raid.characters.delete(character.id);
-    this.state.raids = this.state.raids.set(raid.id.toString(), raid);
+
+    this.setState({
+      raids:this.state.raids.set(raid.id.toString(), raid)
+    });
   }
 
-  _addRaid(raid) {
-    console.log('_addRaid:', raid);
-
+  _addRaid(raidId) {
     let tokensMap = {};
     for(let token in tokens) {
       if(tokens.hasOwnProperty(token)) {
@@ -232,22 +228,36 @@ class CompositionStore {
       }
     }
 
-    const raidId = raid.raidIds.pop();
-    console.log('RaidId:', raidId);
-
-    raid = {
+    const raid = {
       id: raidId,
       characters: Immutable.OrderedMap(),
       tokens: Immutable.Map(tokensMap)
     };
 
     this.setState({
-      raids: this.state.raids.set(raid.id, raid)
+      raids: this.state.raids.set(raidId, raid)
     });
   }
 
-  _removeRaid(data) {
-    console.log('_removeRaid:', data);
+  _removeRaid(raidId) {
+    console.log('_removeRaid:', raidId);
+
+    const raid = this.state.raids.get(raidId);
+
+    // Put characters back to raid0 on delete
+    raid.characters.map(character => {
+      this.handleMoveCharacter({
+        characterId: character.get('id'),
+        raidId: '0'
+      });
+    });
+
+    let raids = this.state.raids;
+    raids = raids.delete(raidId.toString());
+
+    this.setState({
+      raids: raids
+    });
   }
 
   _requestNames(data) {
@@ -255,7 +265,6 @@ class CompositionStore {
   }
 
   handleAddCharacter(character) {
-    console.log(character);
     character.id = generateCharacterId(character);
     character.spec = character.spec || 'unknown';
     character.role = character.role || 'unknown';
@@ -268,8 +277,15 @@ class CompositionStore {
     });
   }
 
-  handleDeleteCharacter(characterId) {
-
+  handleRemoveCharacter(characterId) {
+    AppStore.getState().socket.emit('raidcomp', {
+      action: actions.REMOVE_CHARACTER,
+      user: 'user',
+      compId: this.state.longCompositionId,
+      character: {
+        id: characterId
+      }
+    });
   }
 
   handleMoveCharacter(props) {
@@ -294,21 +310,13 @@ class CompositionStore {
     });
   }
 
-  handleDeleteRaid(raidId) {
-    const raid = this.state.raids.get(raidId.toString());
-
-    // Put characters back to raid0 on delete
-    raid.characters.map(character => {
-      this.handleMoveCharacter({
-        characterId: character.get('id'),
-        raidId: 0
-      });
+  handleRemoveRaid(raidId) {
+    AppStore.getState().socket.emit('raidcomp', {
+      action: actions.REMOVE_RAID,
+      user: 'user',
+      compId: this.state.longCompositionId,
+      raidId: raidId
     });
-
-    let raids = this.state.raids;
-    raids = raids.delete(raidId.toString());
-
-    this.state.raids = raids;
   }
 
   handleImportCharacters() {

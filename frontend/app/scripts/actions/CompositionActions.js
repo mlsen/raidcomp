@@ -27,7 +27,7 @@ class CompositionActions {
     this.dispatch(character);
   }
 
-  deleteCharacter(characterId) {
+  removeCharacter(characterId) {
     this.dispatch(characterId);
   }
 
@@ -42,7 +42,7 @@ class CompositionActions {
     this.dispatch();
   }
 
-  deleteRaid(raidId) {
+  removeRaid(raidId) {
     this.dispatch(raidId);
   }
 

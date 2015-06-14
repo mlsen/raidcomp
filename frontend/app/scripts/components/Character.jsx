@@ -38,7 +38,7 @@ const Character = React.createClass({
       <li className={cssClass}>
         {this.props.character.name}
         <span className='Character-delete'>
-          <a href='#' onClick={this.props.delete.bind(null, this.props.character.id)}>
+          <a href='javascript:;' onClick={this.props.delete.bind(null, this.props.character.id)}>
             <i className='fa fa-remove'></i>
           </a>
         </span>
