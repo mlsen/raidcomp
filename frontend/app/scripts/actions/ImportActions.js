@@ -1,6 +1,6 @@
 import alt from '../alt';
 import Armory from '../misc/armoryApi';
-import CompositionActions from './CompositionActions';
+import CompositionPublisherActions from './CompositionPublisherActions';
 
 const timeout = 5000;
 
@@ -75,7 +75,7 @@ class ImportActions {
 
   importRanks(ranks) {
     this.dispatch(ranks);
-    CompositionActions.import();
+    CompositionPublisherActions.importCharacters();
   }
 
 }

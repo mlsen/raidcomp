@@ -1,6 +1,6 @@
 import React from 'react';
 import CompositionActions from '../actions/CompositionActions';
-import CompositionStore from '../stores/CompositionStore';
+import CompositionPublisherStore from '../stores/CompositionPublisherStore';
 import { Navigation } from 'react-router';
 
 const Home = React.createClass({
@@ -8,22 +8,21 @@ const Home = React.createClass({
   mixins: [Navigation],
 
   getInitialState() {
-    return CompositionStore.getState();
+    return CompositionPublisherStore.getState();
   },
 
   componentDidMount() {
-    CompositionStore.listen(this.onStoreChange);
+    CompositionPublisherStore.listen(this.onStoreChange);
   },
 
   componentWillUnmount() {
-    CompositionStore.unlisten(this.onStoreChange);
+    CompositionPublisherStore.unlisten(this.onStoreChange);
   },
 
   componentWillUpdate(nextProps, nextState) {
     console.log('componentWillUpdate:', nextState);
-    const compositionId = nextState.longCompositionId || nextState.shortCompositionId;
-    if(compositionId !== null) {
-      this.transitionTo('composition', { compositionId: compositionId });
+    if(nextState.compositionId !== null) {
+      this.transitionTo('composition', { compositionId: nextState.compositionId });
     }
   },
 

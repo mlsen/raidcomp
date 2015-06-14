@@ -18,7 +18,6 @@ const CharacterList = React.createClass({
   },
 
   render() {
-    console.log(this.props.characters, this.props.characters.size);
     return (
       <ul className='CharacterList'>
         <li key='tank' className='CharacterList-role'>Tank</li>

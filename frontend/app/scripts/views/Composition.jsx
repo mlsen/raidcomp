@@ -1,25 +1,25 @@
 import React from 'react';
 import CompositionActions from '../actions/CompositionActions';
-import CompositionStore from '../stores/CompositionStore';
+import CompositionConsumerStore from '../stores/CompositionConsumerStore';
 import Menubar from '../components/Menubar.jsx';
 import Workspace from '../components/Workspace.jsx';
 
 const Composition = React.createClass({
 
   getInitialState() {
-    return CompositionStore.getState();
+    return CompositionConsumerStore.getState();
   },
 
   componentWillMount() {
   },
 
   componentDidMount() {
-    CompositionStore.listen(this.onStoreChange);
+    CompositionConsumerStore.listen(this.onStoreChange);
     CompositionActions.setComposition(this.props.params.compositionId);
   },
 
   componentWillUnmount() {
-    CompositionStore.unlisten(this.onStoreChange);
+    CompositionConsumerStore.unlisten(this.onStoreChange);
   },
 
   onStoreChange(state) {

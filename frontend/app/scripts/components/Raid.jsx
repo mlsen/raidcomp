@@ -1,7 +1,7 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd';
 import classNames from 'classnames';
-import CompositionActions from '../actions/CompositionActions';
+import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import ItemTypes from '../misc/itemTypes';
 import CharacterList from './CharacterList.jsx';
 
@@ -28,11 +28,11 @@ const Raid = React.createClass({
   },
 
   removeRaid() {
-    CompositionActions.removeRaid(this.props.raid.id);
+    CompositionPublisherActions.removeRaid(this.props.raid.id);
   },
 
   removeCharacter(characterId) {
-    CompositionActions.moveCharacter(characterId, '0');
+    CompositionPublisherActions.moveCharacter(characterId, '0');
   },
 
   renderCategory(name, content) {
@@ -72,8 +72,6 @@ const Raid = React.createClass({
       'Raid': true,
       'hover': isOver
     });
-
-    console.log('Raid:', this.props.raid, this.props.raid.characters.size);
 
     return connectDropTarget(
       <div className={raidClasses}>

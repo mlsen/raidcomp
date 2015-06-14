@@ -1,16 +1,10 @@
 import React from 'react';
-import CompositionActions from '../actions/CompositionActions';
 import Raid from './Raid.jsx';
 
 const RaidList = React.createClass({
 
   propTypes: {
     raids: React.PropTypes.object
-  },
-
-  handleCreate(e) {
-    e.preventDefault();
-    CompositionActions.createRaid();
   },
 
   render() {

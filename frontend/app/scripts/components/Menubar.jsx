@@ -1,5 +1,5 @@
 import React from 'react';
-import CompositionActions from '../actions/CompositionActions';
+import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import ImportModal from './ImportModal.jsx';
 
 const Menubar = React.createClass({
@@ -17,7 +17,7 @@ const Menubar = React.createClass({
   },
 
   handleCreateRaid() {
-    CompositionActions.addRaid();
+    CompositionPublisherActions.addRaid();
   },
 
   render() {

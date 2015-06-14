@@ -1,5 +1,6 @@
 import alt from '../alt';
 import Backend from '../misc/backendApi';
+import AppStore from '../stores/AppStore';
 
 class CompositionActions {
 
@@ -22,34 +23,6 @@ class CompositionActions {
   createCompositionFailed(err) {
     this.dispatch(err);
   }
-
-  addCharacter(character) {
-    this.dispatch(character);
-  }
-
-  removeCharacter(characterId) {
-    this.dispatch(characterId);
-  }
-
-  moveCharacter(characterId, raidId) {
-    this.dispatch({
-      characterId: characterId,
-      raidId: raidId
-    });
-  }
-
-  addRaid() {
-    this.dispatch();
-  }
-
-  removeRaid(raidId) {
-    this.dispatch(raidId);
-  }
-
-  import() {
-    this.dispatch();
-  }
-
 }
 
 export default alt.createActions(CompositionActions);
