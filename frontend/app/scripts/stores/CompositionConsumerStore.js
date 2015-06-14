@@ -13,12 +13,13 @@ const actions = {
   REMOVE_CHARACTER: 'removeCharacter',
   REQUEST_NAMES: 'requestNames',
   ADD_RAID: 'addRaid',
-  REMOVE_RAID: 'removeRaid'
+  REMOVE_RAID: 'removeRaid',
+  REQUEST_BULK_DATA: 'requestBulkData'
 };
 
 const Character = Immutable.Record({
   id: null,
-  currentRaidId: '0',
+  raidId: '0',
   name: null,
   region: null,
   realm: null,
@@ -27,13 +28,27 @@ const Character = Immutable.Record({
   role: null
 });
 
+function createCharacterRecord(character) {
+  return new Character({
+    id: character.id,
+    raidId: character.raidId,
+    name: character.name,
+    region: character.region,
+    realm: character.realm,
+    className: character.className,
+    spec: character.spec,
+    role: character.role
+  });
+}
+
 class CompositionConsumerStore {
 
   constructor() {
 
-    this.state = {
+    this.compositionId = null;
+    this.user = null;
 
-      compositionId: null,
+    this.state = {
 
       // All characters
       characters: Immutable.OrderedMap(),
@@ -43,21 +58,21 @@ class CompositionConsumerStore {
       raids: Immutable.OrderedMap({
         '0': {
           id: '0',
-          characters: Immutable.OrderedMap(),
-          tokens: Immutable.Map()
+          characters: Immutable.OrderedMap()
         }
       })
     };
 
     this.bindListeners({
-      handleSetComposition: CompositionActions.SET_COMPOSITION,
+      handleSetComposition: CompositionActions.SET_COMPOSITION
     });
   }
 
-  handleSetComposition(compositionId) {
-    console.log(compositionId.length);
+  handleSetComposition(props) {
+    let { compositionId, user } = props;
+
     // kinda dirty, in case it triggers twice
-    if(this.state.compositionId !== null) {
+    if(this.compositionId !== null) {
       return;
     }
 
@@ -69,17 +84,33 @@ class CompositionConsumerStore {
     if(compositionId.length > 10) {
       compositionId = compositionId.slice(0, 10);
     }
-    console.log('Consumer setComposition', compositionId);
+
+    this.compositionId = compositionId;
+    this.user = user;
 
     this.waitFor(AppStore);
-    AppStore.getState().socket.on(compositionId, data => {
-      this._handleSocket(data);
+    const socket = AppStore.getState().socket;
+
+    // Channel for global messages
+    socket.on(compositionId, data => {
+      console.log('incoming:', data);
+      this._handleMessages(data);
     });
 
-    this.setState({ compositionId: compositionId });
+    // Channel for messages addressing me
+    socket.on(compositionId + ':' + user, data => {
+      console.log(('incoming:user:', data));
+      this._handleUserMessages(data);
+    });
+
+    socket.emit('raidcomp', {
+      action: actions.REQUEST_BULK_DATA,
+      user: user,
+      compId: compositionId
+    });
   }
 
-  _handleSocket(data) {
+  _handleMessages(data) {
     const { action, user } = data;
     switch(action) {
       case actions.ADD_CHARACTER:
@@ -107,20 +138,22 @@ class CompositionConsumerStore {
     }
   }
 
+  _handleUserMessages(data) {
+    const { action, user } = data;
+    switch(action) {
+      case actions.REQUEST_BULK_DATA:
+        this.handleImportBulkData(data.data);
+        break;
+    }
+  }
+
   handleAddCharacter(character) {
     if(this.state.characters.has(character.id)) {
       return;
     }
-    character = new Character({
-      id: character.id,
-      currentRaidId: '0',
-      name: character.name,
-      region: character.region,
-      realm: character.realm,
-      className: character.className,
-      spec: character.spec,
-      role: character.role
-    });
+
+    character.raidId = '0';
+    character = createCharacterRecord(character);
 
     // Add to raid '0'
     let raid = this.state.raids.get('0');
@@ -141,21 +174,18 @@ class CompositionConsumerStore {
 
     // Character info
     let character = this.state.characters.get(characterId);
-    const currentRaidId = character.currentRaidId;
-    const characterToken = getTokenForClass(character.className);
+    const currentRaidId = character.raidId;
 
     // Add to new raid
     let newRaid = this.state.raids.get(raidId);
     newRaid.characters = newRaid.characters.set(characterId, character);
-    newRaid.tokens = newRaid.tokens.set(characterToken, newRaid.tokens.get(characterToken) + 1);
 
     // Delete from old raid
     let currentRaid = this.state.raids.get(currentRaidId);
     currentRaid.characters = currentRaid.characters.delete(characterId);
-    currentRaid.tokens = currentRaid.tokens.set(characterToken, currentRaid.tokens.get(characterToken) - 1);
 
     // Change currentRaidId to raidId
-    character = character.set('currentRaidId', raidId);
+    character = character.set('raidId', raidId);
 
     this.state.raids = this.state.raids.set(raidId, newRaid);
     this.state.raids = this.state.raids.set(currentRaidId, currentRaid);
@@ -171,26 +201,19 @@ class CompositionConsumerStore {
     this.state.characters = this.state.characters.delete(character.id);
 
     // Delete from current raid
-    let raid = this.state.raids.get(character.currentRaidId.toString());
+    let raid = this.state.raids.get(character.raidId);
     raid.characters = raid.characters.delete(character.id);
 
     this.setState({
-      raids:this.state.raids.set(raid.id.toString(), raid)
+      raids:this.state.raids.set(raid.id, raid)
     });
   }
 
   handleAddRaid(raidId) {
-    let tokensMap = {};
-    for(let token in tokens) {
-      if(tokens.hasOwnProperty(token)) {
-        tokensMap[tokens[token]] = 0;
-      }
-    }
 
     const raid = {
       id: raidId,
-      characters: Immutable.OrderedMap(),
-      tokens: Immutable.Map(tokensMap)
+      characters: Immutable.OrderedMap()
     };
 
     this.setState({
@@ -214,6 +237,36 @@ class CompositionConsumerStore {
     this.setState({
       raids: this.state.raids.delete(raidId)
     });
+  }
+
+  handleImportBulkData(data) {
+
+    // add raids
+    data.raidIds.map(raidId => {
+      this.handleAddRaid(raidId);
+    });
+
+    // add characters
+    let characters = this.state.characters;
+    let raids = this.state.raids;
+
+    data.characters.map(character => {
+      character = createCharacterRecord(character);
+
+      // Set globally
+      characters = characters.set(character.id, character);
+
+      // Put in according raid
+      let raid = raids.get(character.raidId);
+      raid.characters = raid.characters.set(character.id, character);
+      raids = raids.set(raid.id, raid);
+    });
+
+    this.setState({
+      characters: characters,
+      raids: raids
+    });
+
   }
 
   handleRequestNames(data) {

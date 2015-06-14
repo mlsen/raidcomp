@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import ItemTypes from '../misc/itemTypes';
 import CharacterList from './CharacterList.jsx';
+import { getTokenForClass, tokens } from '../misc/wow';
 
 const raidTarget = {
   drop(props, monitor) {
@@ -25,6 +26,37 @@ const Raid = React.createClass({
   propTypes: {
     raid: React.PropTypes.object,
     counter: React.PropTypes.number
+  },
+
+  getInitialState() {
+    let numTokens = {};
+    numTokens[tokens.CONQUEROR] = 0;
+    numTokens[tokens.PROTECTOR] = 0;
+    numTokens[tokens.VANQUISHER] = 0;
+
+    return {
+      numTokens: numTokens,
+      numCharacters: 0
+    };
+  },
+
+  componentWillReceiveProps(props) {
+    let numTokens = this.getInitialState().numTokens;
+    let token;
+
+    props.raid.characters.map(character => {
+      token = getTokenForClass(character.className);
+      if(!numTokens.hasOwnProperty(token)) {
+        numTokens[token] = 0;
+      } else {
+        numTokens[token] = numTokens[token] + 1;
+      }
+    });
+
+    this.setState({
+      numTokens: numTokens,
+      numCharacters: this.props.raid.characters.size
+    });
   },
 
   removeRaid() {
@@ -51,7 +83,7 @@ const Raid = React.createClass({
   renderInfoCategory() {
     return this.renderCategory('Info', (
       <ul className='Raid-infoList'>
-        <li>Characters: {this.props.raid.characters.size}</li>
+        <li>Characters: {this.state.numCharacters}</li>
       </ul>
     ));
   },
@@ -59,9 +91,9 @@ const Raid = React.createClass({
   renderTokenCategory() {
     return this.renderCategory('Tokens', (
       <ul className='Raid-tokenList'>
-        <li>Conqueror: {this.props.raid.tokens.get('conqueror')}</li>
-        <li>Protector: {this.props.raid.tokens.get('protector')}</li>
-        <li>Vanquisher: {this.props.raid.tokens.get('vanquisher')}</li>
+        <li>Conqueror: {this.state.numTokens[tokens.CONQUEROR]}</li>
+        <li>Protector: {this.state.numTokens[tokens.PROTECTOR]}</li>
+        <li>Vanquisher: {this.state.numTokens[tokens.VANQUISHER]}</li>
       </ul>
     ));
   },

@@ -12,7 +12,8 @@ const actions = {
   REMOVE_CHARACTER: 'removeCharacter',
   REQUEST_NAMES: 'requestNames',
   ADD_RAID: 'addRaid',
-  REMOVE_RAID: 'removeRaid'
+  REMOVE_RAID: 'removeRaid',
+  REQUEST_BULK_DATA: 'requestBulkData'
 };
 
 class CompositionPublisherStore {
@@ -34,15 +35,20 @@ class CompositionPublisherStore {
 
     this.state = {};
     this.state.compositionId = null;
+    this.state.user = null;
   }
 
   _emit(payload) {
-    console.log('emit:', payload);
     payload.compId = payload.compId || this.state.compositionId;
+    payload.user = payload.user || this.state.user;
+    console.log('emit:', payload);
     AppStore.getState().socket.emit('raidcomp', payload);
   }
 
-  handleSetComposition(compositionId) {
+  handleSetComposition(props) {
+
+    const { compositionId, user } = props;
+
     // in case it triggers twice
     if(this.state.compositionId !== null) {
       return;
@@ -51,7 +57,11 @@ class CompositionPublisherStore {
     if(compositionId.length !== 40) {
       return;
     }
-    this.setState({ compositionId: compositionId });
+
+    this.setState({
+      compositionId: compositionId,
+      user: user
+    });
   }
 
   handleCreateCompositionFailed(err) {
@@ -65,7 +75,6 @@ class CompositionPublisherStore {
 
     this._emit({
       action: actions.ADD_CHARACTER,
-      user: 'user',
       character: character
     });
   }
@@ -74,7 +83,6 @@ class CompositionPublisherStore {
     const { characterId, raidId } = props;
     this._emit({
       action: actions.MOVE_CHARACTER,
-      user: 'user',
       to: raidId,
       character: {
         id: characterId
@@ -85,7 +93,6 @@ class CompositionPublisherStore {
   handleRemoveCharacter(characterId) {
     this._emit({
       action: actions.REMOVE_CHARACTER,
-      user: 'user',
       character: {
         id: characterId
       }
@@ -95,7 +102,6 @@ class CompositionPublisherStore {
   handleAddRaid() {
     this._emit({
       action: actions.ADD_RAID,
-      user: 'user',
       raidId: generateRaidId()
     });
   }
@@ -103,7 +109,6 @@ class CompositionPublisherStore {
   handleRemoveRaid(raidId) {
     this._emit({
       action: actions.REMOVE_RAID,
-      user: 'user',
       raidId: raidId
     });
   }
@@ -130,7 +135,7 @@ function isValidCharacter(character) {
 }
 
 function generateRaidId() {
-  return sha1(Math.random().toString(36).slice(2));
+  return sha1(Math.random());
 }
 
 function generateCharacterId(character) {

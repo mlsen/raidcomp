@@ -1,6 +1,11 @@
+import sha1 from 'sha1';
 import alt from '../alt';
 import Backend from '../misc/backendApi';
 import AppStore from '../stores/AppStore';
+
+function generateRandomId() {
+  return sha1(Math.random());
+}
 
 class CompositionActions {
 
@@ -15,7 +20,10 @@ class CompositionActions {
   }
 
   setComposition(id) {
-    this.dispatch(id);
+    this.dispatch({
+      compositionId: id,
+      user: generateRandomId()
+    });
   }
 
   createCompositionFailed(err) {
