@@ -172,7 +172,7 @@ var Actions = {
       .exec(function (err, characters) {
         if (characters && characters.length) {
           for (var character of characters) {
-            character.raidId = 0;
+            character.raidId = '0';
             character.save();
 
             // let the client handle the moving on remove raid
