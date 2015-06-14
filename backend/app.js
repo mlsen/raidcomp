@@ -6,10 +6,10 @@ var cors = require('cors');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-var bodyparser = require('body-parser');
+// var bodyparser = require('body-parser');
 var mongoose = require('mongoose');
-
 mongoose.connect('mongodb://mongo/raidcomp');
+
 // var db = mongoose.connection;
 // db.on('error', console.error.bind(console, 'connection error:'));
 // db.once('open', function (callback) {
@@ -19,18 +19,19 @@ mongoose.connect('mongodb://mongo/raidcomp');
 //app.use(bodyparser.json());
 app.use(cors());
 
-var router = require('./app/routes/api');
-app.use('/comp', router);
+var ApiRouter = require('./app/routes/api').ApiRouter;
+app.use('/comp', ApiRouter);
 
 // debug
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/app/client.html');
 });
 
-var SocketActions = require('./app/actions/socket');
+var SocketHandler = require('./app/handlers/socket').SocketHandler;
+console.log(SocketHandler);
 io.on('connection', function (socket) {
   socket.on('raidcomp', function (data) {
-    SocketActions.processMessage(data, function(socket, result) {
+    SocketHandler.processMessage(data, function(socket, result) {
       io.emit(socket, result);
     });
   });
