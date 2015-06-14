@@ -2,7 +2,7 @@
 'use strict';
 
 var router = require('express').Router();
-var Raid = require('../models/raidcomp').Raid;
+var RaidComp = require('../models/raidcomp').RaidComp;
 var Character = require('../models/raidcomp').Character;
 
 var generateCompId = function () {
@@ -12,7 +12,7 @@ var generateCompId = function () {
 router.post('/', function (req, res, next) {
   var compId = generateCompId();
 
-  Raid.create({ _compId: compId, raidIds: '0' }, function (err, raid) {
+  RaidComp.create({ _compId: compId, _shortCompId: compId.slice(0, 10), raidIds: '0' }, function (err, raid) {
     if (err) {
       res.status(400).send({ error: 'There was an error creating the RaidComp.' });
       return;
