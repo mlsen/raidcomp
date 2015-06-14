@@ -20,6 +20,7 @@ class CompositionPublisherStore {
   constructor() {
     this.bindListeners({
       handleSetComposition: CompositionActions.SET_COMPOSITION,
+      handleCreateCompositionFailed: CompositionActions.CREATE_COMPOSITION_FAILED,
 
       handleAddCharacter: CompositionPublisherActions.ADD_CHARACTER,
       handleMoveCharacter: CompositionPublisherActions.MOVE_CHARACTER,
@@ -36,15 +37,25 @@ class CompositionPublisherStore {
   }
 
   _emit(payload) {
+    console.log('emit:', payload);
     payload.compId = payload.compId || this.state.compositionId;
     AppStore.getState().socket.emit('raidcomp', payload);
   }
 
   handleSetComposition(compositionId) {
-    if(compositionId.length !== 32) {
+    // in case it triggers twice
+    if(this.state.compositionId !== null) {
+      return;
+    }
+
+    if(compositionId.length !== 40) {
       return;
     }
     this.setState({ compositionId: compositionId });
+  }
+
+  handleCreateCompositionFailed(err) {
+    console.log('Error creating composition:', err);
   }
 
   handleAddCharacter(character) {

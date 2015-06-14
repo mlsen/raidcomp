@@ -55,7 +55,13 @@ class CompositionConsumerStore {
   }
 
   handleSetComposition(compositionId) {
-    if(compositionId.length !== 32 && compositionId.length !== 10) {
+    console.log(compositionId.length);
+    // kinda dirty, in case it triggers twice
+    if(this.state.compositionId !== null) {
+      return;
+    }
+
+    if(compositionId.length !== 40 && compositionId.length !== 10) {
       // Invalid compositionId
       return;
     }
@@ -63,16 +69,14 @@ class CompositionConsumerStore {
     if(compositionId.length > 10) {
       compositionId = compositionId.slice(0, 10);
     }
+    console.log('Consumer setComposition', compositionId);
 
     this.waitFor(AppStore);
     AppStore.getState().socket.on(compositionId, data => {
-      console.log('incoming:', data);
       this._handleSocket(data);
     });
 
-    // this.setState({
-    //   compositionId: compositionId
-    // });
+    this.setState({ compositionId: compositionId });
   }
 
   _handleSocket(data) {

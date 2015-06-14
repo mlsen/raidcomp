@@ -5,8 +5,6 @@ import AppStore from '../stores/AppStore';
 class CompositionActions {
 
   createComposition() {
-    this.dispatch();
-
     Backend.createComposition()
       .then(response => {
         this.actions.setComposition(response.compId);

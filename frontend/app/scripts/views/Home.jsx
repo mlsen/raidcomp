@@ -20,14 +20,12 @@ const Home = React.createClass({
   },
 
   componentWillUpdate(nextProps, nextState) {
-    console.log('componentWillUpdate:', nextState);
     if(nextState.compositionId !== null) {
       this.transitionTo('composition', { compositionId: nextState.compositionId });
     }
   },
 
   onStoreChange(state) {
-    console.log('onStoreChange:', state);
     this.setState(state);
   },
 
