@@ -39,7 +39,7 @@ var Actions = {
 
   sendBulkData: function (data, socketResponse) {
     RaidComp
-    .findOne({ _shortCompId: data.compId })
+    .findOne({ _shortCompId: data.shortCompId })
     .exec(function (err, raid) {
       if (err || !raid) {
         return Actions.throwError(data, 'There\'s no RaidComp with this Id.', socketResponse);
@@ -52,7 +52,7 @@ var Actions = {
           raidIds: raid.raidIds,
           characters: characters
         };
-        socketResponse(data.shortCompId, { action: data.action, user: data.user, data: response });
+        socketResponse(data.shortCompId + ':' + data.user, { action: data.action, user: data.user, data: response });
         return;
       });
     });
