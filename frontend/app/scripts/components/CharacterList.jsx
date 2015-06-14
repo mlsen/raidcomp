@@ -17,6 +17,15 @@ const CharacterList = React.createClass({
     }).toArray();
   },
 
+  renderUnknownRole() {
+    let roleNodes = this.renderRole(roles.UNKNOWN);
+    if(roleNodes.length) {
+      roleNodes.unshift(<li key='unknown' className='CharacterList-role'>Unknown</li>);
+      return roleNodes;
+    }
+    return null;
+  },
+
   render() {
     return (
       <ul className='CharacterList'>
@@ -32,8 +41,7 @@ const CharacterList = React.createClass({
         <li key='melee' className='CharacterList-role'>Melee</li>
         {this.renderRole(roles.MELEE)}
 
-        <li key='unknown' className='CharacterList-role'>Unknown</li>
-        {this.renderRole(roles.UNKNOWN)}
+        {this.renderUnknownRole()}
       </ul>
     );
   }
