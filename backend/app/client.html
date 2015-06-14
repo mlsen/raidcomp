@@ -37,6 +37,9 @@
   function removeRaid() {
     socket.emit('raidcomp', {action: 'removeRaid', compId: compId, user: user, raidId: 'abcdef'});
   }
+  function bulk() {
+    socket.emit('raidcomp', {action: 'requestBulkData', compId: compId.slice(0, 10), user: user});
+  }
 
 </script>
 
@@ -48,4 +51,6 @@
 <br/>
 <div onclick="addRaid();">addRaid</div>
 <div onclick="removeRaid();">removeRaid</div>
+<br/>
 
+<div onclick="bulk();">bulk</div>
