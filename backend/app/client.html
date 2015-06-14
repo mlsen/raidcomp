@@ -2,37 +2,48 @@
 <script>
   var compId = 'bq73rxdpoz8v9529piihmh9vxtvxtj4i';
   var socket = io.connect('http://api.raidcomp.dev/');
+  var user = Math.random().toString(36).slice(2);
+
   socket.on(compId.slice(0, 10), function (data) {
     console.log(data);
 
-    if (data.action === 'requestNames') socket.emit('raidcomp', {action:'sendName', compId: compId, user: 'user', name: 'requestTest'});
-    // socket.emit('my other event', { my: 'data' });
+    if (data.action === 'requestNames' && data.user !== user) socket.emit('raidcomp', {action:'sendName', compId: compId, user: user, requestFrom: data.requestFrom, name: user});
   });
-  socket.on(compId.slice(0, 10)+':user', function (data) {
+  socket.on(compId.slice(0, 10)+':'+user, function (data) {
     console.log(':user', data);
   });
 
+
+  socket.emit('raidcomp', { action: 'sendName', compId: compId, user: user, name: user})
+  socket.emit('raidcomp', { action: 'requestNames', compId: compId, user: user, requestFrom: user})
+  socket.emit('raidcomp', { action: 'requestBulkData', compId: compId, user: user})
+
   function add() {
-  	socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: 'user', character: { id: 'id', name: 'blah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
+    socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: user, character: { id: 'id', name: 'blah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
+    socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: user, character: { id: 'id2', name: 'blhghjghah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
+  	socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: user, character: { id: 'id3', name: 'bljkhjghjah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});
   }
   function moveto2() {
-    socket.emit('raidcomp', {action: 'moveCharacter', to: 'abcdef', compId: compId, user: 'user', character: { id: 'id' } });
+    socket.emit('raidcomp', {action: 'moveCharacter', to: 'abcdef', compId: compId, user: user, character: { id: 'id' } });
   }
   function moveto1() {
-    socket.emit('raidcomp', {action: 'moveCharacter', to: '0', compId: compId, user: 'user', character: { id: 'id' } });
+    socket.emit('raidcomp', {action: 'moveCharacter', to: '0', compId: compId, user: user, character: { id: 'id' } });
   }
   function removeca() {
-    socket.emit('raidcomp', {action: 'removeCharacter', compId: compId, user: 'user', character: {id:'id'}});
+    socket.emit('raidcomp', {action: 'removeCharacter', compId: compId, user: user, character: {id:'id'}});
   }
 
   function requestNames() {
-    socket.emit('raidcomp', {action: 'requestNames', compId: compId, user: 'user'});
+    socket.emit('raidcomp', {action: 'requestNames', compId: compId, user: user});
   }
   function addRaid() {
-    socket.emit('raidcomp', {action: 'addRaid', compId: compId, user: 'user', raidId: 'abcdef'});
+    socket.emit('raidcomp', {action: 'addRaid', compId: compId, user: user, raidId: 'abcdef'});
   }
   function removeRaid() {
-    socket.emit('raidcomp', {action: 'removeRaid', compId: compId, user: 'user', raidId: 'abcdef'});
+    socket.emit('raidcomp', {action: 'removeRaid', compId: compId, user: user, raidId: 'abcdef'});
+  }
+  function bulk() {
+    socket.emit('raidcomp', {action: 'requestBulkData', compId: compId.slice(0, 10), user: user});
   }
 
 </script>
@@ -45,4 +56,6 @@
 <br/>
 <div onclick="addRaid();">addRaid</div>
 <div onclick="removeRaid();">removeRaid</div>
+<br/>
 
+<div onclick="bulk();">bulk</div>
