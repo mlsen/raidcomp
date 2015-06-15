@@ -10,11 +10,18 @@ const CharacterList = React.createClass({
   },
 
   renderRole(role) {
+
+    const characters = this.props.characters.filter(character => {
+      return character.role === role;
+    });
+
+    if(!characters.size) {
+      return null;
+    }
+
     return (
       <li className='CharacterList-role'>
-        {this.props.characters.filter(character => {
-          return character.role === role;
-        }).map(character => {
+        {characters.map(character => {
           return <Character key={character.id} character={character} delete={this.props.delete} />;
         }).toArray()}
       </li>
