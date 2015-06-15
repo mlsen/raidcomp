@@ -13,6 +13,7 @@
 }
 
 .Menubar-brand {
+  color: $limey;
   display: inline;
   margin: 0 1em;
   padding-top: .1em;
@@ -29,5 +30,5 @@
 }
 
 .Menubar-item:hover {
-  background: lighten($dark-gray, 15%);
+  background: $medium-gray;
 }

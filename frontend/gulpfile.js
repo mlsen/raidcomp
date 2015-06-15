@@ -59,7 +59,7 @@ gulp.task('serve', function() {
     root: dist,
     port: port,
     livereload: {
-      port: 35729
+      port: 35728
     }
   });
 });

@@ -50,7 +50,11 @@
   }
 
   .fa-remove {
-    color: red;
+    color: $dark-red;
+  }
+
+  .fa-trash {
+    color: $light-gray;
   }
 
   .fa-question {

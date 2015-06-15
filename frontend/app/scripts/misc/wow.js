@@ -113,10 +113,114 @@ const classTokens = {
   ]
 };
 
+const armorTypes = {
+  CLOTH: 'cloth',
+  LEATHER: 'leather',
+  MAIL: 'mail',
+  PLATE: 'plate'
+};
+
+const classArmorTypes = {
+  cloth: [
+    classes.MAGE,
+    classes.PRIEST,
+    classes.WARLOCK
+  ],
+  leather: [
+    classes.DRUID,
+    classes.MONK,
+    classes.ROGUE
+  ],
+  mail: [
+    classes.HUNTER,
+    classes.SHAMAN
+  ],
+  plate: [
+    classes.DEATHKNIGHT,
+    classes.PALADIN,
+    classes.WARRIOR
+  ]
+};
+
+const trinketTypes = {
+  STR: 'strength',
+  AGI: 'agility',
+  TANK: 'tank',
+  CASTER: 'caster',
+  HEALER: 'healer'
+};
+
+const trinkets = {
+  deathknight: {
+    'Blood': trinketTypes.TANK,
+    'Frost': trinketTypes.STR,
+    'Unholy': trinketTypes.STR
+  },
+  druid: {
+    'Balance': trinketTypes.CASTER,
+    'Guardian': trinketTypes.TANK,
+    'Feral': trinketTypes.AGI,
+    'Restoration': trinketTypes.HEALER
+  },
+  hunter: {
+    'Beast Mastery': trinketTypes.AGI,
+    'Marksmanship': trinketTypes.AGI,
+    'Survival': trinketTypes.AGI
+  },
+  mage: {
+    'Arcane': trinketTypes.CASTER,
+    'Fire': trinketTypes.CASTER,
+    'Frost': trinketTypes.CASTER
+  },
+  monk: {
+    'Brewmaster': trinketTypes.TANK,
+    'Mistweaver': trinketTypes.HEALER,
+    'Windwalker': trinketTypes.AGI
+  },
+  paladin: {
+    'Holy': trinketTypes.HEALER,
+    'Protection': trinketTypes.TANK,
+    'Retribution': trinketTypes.STR
+  },
+  priest: {
+    'Discipline': trinketTypes.HEALER,
+    'Holy': trinketTypes.HEALER,
+    'Shadow': trinketTypes.CASTER
+  },
+  rogue: {
+    'Assasination': trinketTypes.AGI,
+    'Combat': trinketTypes.AGI,
+    'Subtlety': trinketTypes.AGI
+  },
+  shaman: {
+    'Elemental': trinketTypes.CASTER,
+    'Enhancement': trinketTypes.AGI,
+    'Restoration': trinketTypes.HEALER
+  },
+  warlock: {
+    'Affliction': trinketTypes.CASTER,
+    'Demonology': trinketTypes.CASTER,
+    'Destruction': trinketTypes.CASTER
+  },
+  warrior: {
+    'Arms': trinketTypes.STR,
+    'Fury': trinketTypes.STR,
+    'Protection': trinketTypes.TANK
+  }
+};
+
 function getTokenForClass(className) {
   for(let token in classTokens) {
     if(classTokens.hasOwnProperty(token) && classTokens[token].indexOf(className) > -1) {
       return token;
+    }
+  }
+}
+
+function getArmorTypeForClass(className) {
+  for (let armorType in classArmorTypes) {
+    if (classArmorTypes.hasOwnProperty(armorType) && classArmorTypes[armorType].indexOf(className) > -1) {
+      return armorType;
     }
   }
 }
@@ -135,12 +239,24 @@ function getRoleForSpec(className, spec) {
   return null;
 }
 
+function getTrinketForSpec(className, spec) {
+  if (typeof spec !== undefined && spec !== null) {
+    return trinkets[className][spec];
+  }
+  return null;
+}
+
 export {
   roles,
   classes,
   classTokens,
   getRoleForSpec,
   getTokenForClass,
+  trinketTypes,
+  trinkets,
+  getTrinketForSpec,
+  armorTypes,
+  getArmorTypeForClass,
   specs,
   regions,
   tokens

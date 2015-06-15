@@ -17,11 +17,14 @@ $base-z-index: 0;
 
 // Colors
 $dark-gray: #111111;
+$medium-gray: lighten($dark-gray, 15%);
+$light-gray: lighten($dark-gray, 30%);
 $white: #FFFFFF;
 $limey: #D1E751;
 $light-blue: #4DBCE9;
 $dark-blue: #26ADE4;
 $red: red;
+$dark-red: darken($red, 25%);
 
 $class-colors: (
   deathknight: #C41F3B,

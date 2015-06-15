@@ -1,6 +1,6 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  var compId = '996fd3ff0eaabdb33745ca7ba6e8a1865aad5897';
+  var compId = 'a93197ae1a2335c64be9703e09dc73023cab783e';
   var socket = io.connect('http://api.raidcomp.dev/');
   var user = Math.random().toString(36).slice(2);
 
@@ -14,9 +14,9 @@
   });
 
 
-  socket.emit('raidcomp', { action: 'sendName', compId: compId, user: user, name: user})
-  socket.emit('raidcomp', { action: 'requestNames', compId: compId, user: user, requestFrom: user})
-  socket.emit('raidcomp', { action: 'requestBulkData', compId: compId, user: user})
+  socket.emit('raidcomp', { action: 'sendName', compId: compId, user: user, name: user });
+  socket.emit('raidcomp', { action: 'requestNames', compId: compId, user: user, requestFrom: user });
+  socket.emit('raidcomp', { action: 'requestBulkData', compId: compId, user: user });
 
   function add() {
     socket.emit('raidcomp', {action: 'addCharacter', compId: compId, user: user, character: { id: 'id', name: 'blah', className: 'deathknight', realm: 'blackmoore', region: 'eu', spec: 'blood', role:'tank'}});

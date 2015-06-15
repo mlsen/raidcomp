@@ -30,12 +30,12 @@ const Menubar = React.createClass({
           <ul className='Menubar-list'>
             <li className='Menubar-item'>
               <a href='javascript:;' onClick={this.openModal}>
-                <i className='fa fa-fw fa-lg fa-plus'></i> Import Characters
+                <i className='fa fa-fw fa-lg fa-user-plus'></i> Import Characters
               </a>
             </li>
             <li className='Menubar-item'>
               <a href='javascript:;' onClick={this.handleCreateRaid}>
-                <i className='fa fa-fw fa-lg fa-rss'></i> Create Raid
+                <i className='fa fa-fw fa-lg fa-server'></i> Create Raid
               </a>
             </li>
           </ul>

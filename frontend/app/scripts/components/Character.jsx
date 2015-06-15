@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { DragSource } from 'react-dnd';
 import ItemTypes from '../misc/itemTypes';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
@@ -48,17 +49,21 @@ const Character = React.createClass({
     const { connectDragSource, isDragging } = this.props;
     const cssClass = 'Character fg-' + this.props.character.className;
 
+    const removeIcon = classNames({
+      'fa': true,
+      'fa-fw': true,
+      'fa-trash': this.props.character.raidId === '0',
+      'fa-remove': this.props.character.raidId !== '0'
+    });
+
     return connectDragSource(
       <div className={cssClass}>
-        <span className='Character-move'>
-          <i className='fa fa-fw fa-reorder'></i>
-        </span>
         <span className='Character-role'>
           {this.renderRoleIcon()}
         </span>
         <span className='Character-delete'>
           <a href='javascript:;' onClick={this.props.delete.bind(null, this.props.character.id)}>
-            <i className='fa fa-fw fa-remove'></i>
+            <i className={removeIcon}></i>
           </a>
         </span>
         <span className='Character-ilvl'>

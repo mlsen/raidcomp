@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import ItemTypes from '../misc/itemTypes';
 import CharacterList from './CharacterList.jsx';
-import { getTokenForClass, tokens } from '../misc/wow';
+import { getTokenForClass, tokens, getArmorTypeForClass, armorTypes, getTrinketForSpec, trinketTypes } from '../misc/wow';
 
 const raidTarget = {
   drop(props, monitor) {
@@ -35,10 +35,52 @@ const Raid = React.createClass({
     numTokens[tokens.PROTECTOR] = 0;
     numTokens[tokens.VANQUISHER] = 0;
 
+    let numTrinkets = {};
+    numTrinkets[trinketTypes.STR] = 0;
+    numTrinkets[trinketTypes.AGI] = 0;
+    numTrinkets[trinketTypes.TANK] = 0;
+    numTrinkets[trinketTypes.CASTER] = 0;
+    numTrinkets[trinketTypes.HEALER] = 0;
+
+    let numArmorTypes = {};
+    numArmorTypes[armorTypes.CLOTH] = 0;
+    numArmorTypes[armorTypes.LEATHER] = 0;
+    numArmorTypes[armorTypes.MAIL] = 0;
+    numArmorTypes[armorTypes.PLATE] = 0;
+
     return {
       numTokens: numTokens,
+      numArmorTypes: numArmorTypes,
+      numTrinkets: numTrinkets,
       numCharacters: 0
     };
+  },
+
+  componentWillReceiveProps(props) {
+    let numTokens = this.getInitialState().numTokens;
+    let numArmorTypes = this.getInitialState().numArmorTypes;
+    let numTrinkets = this.getInitialState().numTrinkets;
+
+    let countTypes = function(num, type) {
+      if(!num.hasOwnProperty(type)) {
+        num[type] = 0;
+      } else {
+        num[type] = num[type] + 1;
+      }
+    }
+
+    props.characters.map(character => {
+      countTypes(numTokens, getTokenForClass(character.className));
+      countTypes(numArmorTypes, getArmorTypeForClass(character.className));
+      countTypes(numTrinkets, getTrinketForSpec(character.className, character.spec));
+    });
+
+    this.setState({
+      numTokens: numTokens,
+      numArmorTypes: numArmorTypes,
+      numTrinkets: numTrinkets,
+      numCharacters: this.props.characters.size
+    });
   },
 
   removeRaid() {
@@ -64,8 +106,9 @@ const Raid = React.createClass({
 
   renderInfoCategory() {
     return this.renderCategory('Info', (
-      <ul className='Raid-infoList'>
-        <li>Characters: {this.props.characters.size}</li>
+      <ul>
+        <li><i className='fa fa-fw fa-users'></i> {this.state.numCharacters}</li>
+        <li><i className='fa fa-fw fa-ban'></i> 962</li>
       </ul>
     ));
   },
@@ -86,9 +129,30 @@ const Raid = React.createClass({
 
     return this.renderCategory('Tokens', (
       <ul className='Raid-tokenList'>
-        <li>Conqueror: {numTokens[tokens.CONQUEROR]}</li>
-        <li>Protector: {numTokens[tokens.PROTECTOR]}</li>
-        <li>Vanquisher: {numTokens[tokens.VANQUISHER]}</li>
+        <li>{this.state.numTokens[tokens.PROTECTOR]} &times; Protector</li>
+        <li>{this.state.numTokens[tokens.VANQUISHER]} &times; Vanquisher</li>
+        <li>{this.state.numTokens[tokens.CONQUEROR]} &times; Conqueror</li>
+      </ul>
+    ));
+  },
+  renderArmorTypeCategory() {
+    return this.renderCategory('Armor Types', (
+      <ul className='Raid-armorTypeList'>
+        <li>{this.state.numArmorTypes[armorTypes.CLOTH]} &times; Cloth</li>
+        <li>{this.state.numArmorTypes[armorTypes.LEATHER]} &times; Leather</li>
+        <li>{this.state.numArmorTypes[armorTypes.MAIL]} &times; Mail</li>
+        <li>{this.state.numArmorTypes[armorTypes.PLATE]} &times; Plate</li>
+      </ul>
+    ));
+  },
+  renderTrinketCategory() {
+    return this.renderCategory('Trinkets', (
+      <ul className='Raid-trinketList'>
+        <li>{this.state.numTrinkets[trinketTypes.STR]} &times; Strength Trinket</li>
+        <li>{this.state.numTrinkets[trinketTypes.AGI]} &times; Agility Trinket</li>
+        <li>{this.state.numTrinkets[trinketTypes.TANK]} &times; Tank Trinket</li>
+        <li>{this.state.numTrinkets[trinketTypes.CASTER]} &times; Caster Trinket</li>
+        <li>{this.state.numTrinkets[trinketTypes.HEALER]} &times; Healer Trinket</li>
       </ul>
     ));
   },
@@ -104,7 +168,7 @@ const Raid = React.createClass({
       <div className={raidClasses}>
         <div className='Raid-header'>
           <a href='javascript:;' onClick={this.removeRaid}>
-            <i className='Raid-deleteIcon fa fa-lg fa-remove'></i>
+            <i className='Raid-deleteIcon fa fa-lg fa-trash'></i>
           </a>
           Raid {this.props.counter}
         </div>
@@ -115,6 +179,8 @@ const Raid = React.createClass({
           <div className='Raid-summary'>
             {this.renderInfoCategory()}
             {this.renderTokenCategory()}
+            {this.renderArmorTypeCategory()}
+            {this.renderTrinketCategory()}
           </div>
         </div>
       </div>

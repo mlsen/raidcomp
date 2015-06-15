@@ -11,7 +11,7 @@ body {
 }
 
 *::-webkit-scrollbar {
-    width: .7em;
+    width: 0.75em;
 }
 
 *::-webkit-scrollbar-track {
@@ -20,5 +20,5 @@ body {
 
 *::-webkit-scrollbar-thumb {
   border-radius: 2px;
-  background-color: lighten($dark-gray, 15%);
+  background-color: lighten($dark-gray, 20%);
 }

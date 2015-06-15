@@ -4,3 +4,7 @@
 .CharacterList-role {
   margin-bottom: 1em;
 }
+
+.CharacterList-role:last-child {
+  margin-bottom: 0;
+}
