@@ -43,7 +43,10 @@ gulp.task('html', function() {
 
 gulp.task('styles', function(cb) {
   return gulp.src(app + 'styles/*.scss')
-    .pipe($.sass().on('error', $.sass.logError))
+    .pipe($.sass().on('error', function(err) {
+      $.sass.logError(err);
+      this.emit('end');
+    }.bind(this)))
     .pipe($.autoprefixer({browsers: autoprefixerBrowsers}))
     .pipe(gulp.dest(dist + 'css/'))
     .pipe($.size({ title : 'css' }))
