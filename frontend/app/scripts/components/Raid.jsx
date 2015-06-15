@@ -41,25 +41,6 @@ const Raid = React.createClass({
     };
   },
 
-  componentWillReceiveProps(props) {
-    let numTokens = this.getInitialState().numTokens;
-    let token;
-
-    props.characters.map(character => {
-      token = getTokenForClass(character.className);
-      if(!numTokens.hasOwnProperty(token)) {
-        numTokens[token] = 0;
-      } else {
-        numTokens[token] = numTokens[token] + 1;
-      }
-    });
-
-    this.setState({
-      numTokens: numTokens,
-      numCharacters: this.props.characters.size
-    });
-  },
-
   removeRaid() {
     CompositionPublisherActions.removeRaid(this.props.raidId);
   },
@@ -84,17 +65,30 @@ const Raid = React.createClass({
   renderInfoCategory() {
     return this.renderCategory('Info', (
       <ul className='Raid-infoList'>
-        <li>Characters: {this.state.numCharacters}</li>
+        <li>Characters: {this.props.characters.size}</li>
       </ul>
     ));
   },
 
   renderTokenCategory() {
+
+    let numTokens = this.getInitialState().numTokens;
+    let token;
+
+    this.props.characters.map(character => {
+      token = getTokenForClass(character.className);
+      if(!numTokens.hasOwnProperty(token)) {
+        numTokens[token] = 0;
+      } else {
+        numTokens[token] = numTokens[token] + 1;
+      }
+    });
+
     return this.renderCategory('Tokens', (
       <ul className='Raid-tokenList'>
-        <li>Conqueror: {this.state.numTokens[tokens.CONQUEROR]}</li>
-        <li>Protector: {this.state.numTokens[tokens.PROTECTOR]}</li>
-        <li>Vanquisher: {this.state.numTokens[tokens.VANQUISHER]}</li>
+        <li>Conqueror: {numTokens[tokens.CONQUEROR]}</li>
+        <li>Protector: {numTokens[tokens.PROTECTOR]}</li>
+        <li>Vanquisher: {numTokens[tokens.VANQUISHER]}</li>
       </ul>
     ));
   },
