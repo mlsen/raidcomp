@@ -2,17 +2,5 @@
 }
 
 .CharacterList-role {
-  padding: .5em;
-  margin-top: 2em;
-  margin-bottom: .5em;
-  text-align: center;
-  background: lighten($dark-gray, 10%);
-  border-radius: 2px;
-  font-weight: bold;
-  // border-top: 5px solid lighten($dark-gray, 40%);
-  border-top: 5px solid darken($limey, 20%);
-
-  &:first-child {
-    margin-top: 0;
-  }
+  margin-bottom: 1em;
 }

@@ -41,7 +41,6 @@ class CompositionPublisherStore {
   _emit(payload) {
     payload.compId = payload.compId || this.state.compositionId;
     payload.user = payload.user || this.state.user;
-    console.log('emit:', payload);
     AppStore.getState().socket.emit('raidcomp', payload);
   }
 

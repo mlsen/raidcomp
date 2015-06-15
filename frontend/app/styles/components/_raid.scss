@@ -2,28 +2,29 @@
   width: 500px;
 
   // Leave a bit of space to drop further characters
-  padding-bottom: 2em;
+  padding-bottom: .8em;
 
   text-align: center;
-  background: lighten($dark-gray, 5%);
-  border-bottom: 1px solid $base-border-color;
+  border-radius: 2px;
+  border: 1px solid $base-border-color;
   margin: 0 .5em 1em;
 }
 
 .Raid.hover {
-  background: $light-blue;
+  background: darken($dark-blue, 10%);
 }
 
 .Raid-header {
-  padding: .5em;
-  border-top: 5px solid lighten($dark-gray, 40%);
+  padding: .2em .4em;
+  background: lighten($dark-gray, 5%);
+  border-top: 3px solid lighten($dark-gray, 40%);
   border-bottom: 1px solid $base-border-color;
   font-weight: bold;
   color: $action-color;
 }
 
 .Raid-deleteIcon {
-  padding-top: .1em;
+  padding-top: .2em;
   color: $error-color;
   float: right;
 }
@@ -33,29 +34,26 @@
 }
 
 .Raid-characters {
-  width: 50%;
+  width: 280px;
   float: left;
 }
 
 .Raid-summary {
-  margin-left: calc(50% + .5em);
+  width: 180px;
+  float: right;
 }
 
 .Raid-category {
-  padding: 0 0 0 .5em;
-  margin-bottom: .5em;
+  margin-bottom: .8em;
 }
 
 .Raid-categoryHeader {
-  padding: .5em 0;
-  background: lighten($dark-gray, 10%);
-  border-radius: 2px;
+  padding: .2em 0;
   font-weight: bold;
-  border-top: 5px solid darken($light-blue, 20%);
 }
 
 .Raid-categoryBody {
-  padding: .5em 0;
+  // padding: .5em 0;
 }
 
 .Raid-tokenList {

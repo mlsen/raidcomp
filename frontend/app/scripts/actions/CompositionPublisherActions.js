@@ -24,7 +24,6 @@ class CompositionPublisherActions {
   }
 
   removeRaid(raidId) {
-    console.log('PublisherActions removeRaid:', raidId);
     this.dispatch(raidId);
   }
 
