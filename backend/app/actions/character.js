@@ -32,7 +32,9 @@ var CharacterAction = {
           region: data.character.region,
           className: data.character.className,
           spec: data.character.spec,
-          role: data.character.role
+          role: data.character.role,
+          number: data.character.ilvl,
+          legendaryStage: data.character.legendaryStage
         };
 
         if (!character) {
@@ -112,7 +114,7 @@ var CharacterAction = {
 
   validateCharacter: function (character) {
     return character.id && character.name && character.realm && character.region &&
-      character.className && character.spec && character.role;
+      character.className && character.role;
   }
 };
 
