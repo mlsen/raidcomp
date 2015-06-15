@@ -16,7 +16,6 @@ const Workspace = React.createClass({
     const roster = this.props.characters.filter(character => {
       return character.raidId === '0';
     });
-      console.log('Workspace:', this.props.characters, roster);
 
     return (
 

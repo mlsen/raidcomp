@@ -88,13 +88,11 @@ class CompositionConsumerStore {
 
     // Channel for global messages
     socket.on(compositionId, data => {
-      console.log('incoming:', data);
       this._handleMessages(data);
     });
 
     // Channel for messages addressing me
     socket.on(compositionId + ':' + user, data => {
-      console.log(('incoming:user:', data));
       this._handleUserMessages(data);
     });
 
@@ -124,7 +122,6 @@ class CompositionConsumerStore {
         this.handleAddRaid(data.raid);
         break;
       case actions.REMOVE_RAID:
-        console.log('remove raid olol');
         this.handleRemoveRaid(data.raidId);
         break;
       case actions.REQUEST_NAMES:

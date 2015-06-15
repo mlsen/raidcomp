@@ -24,7 +24,7 @@ function collect(connect, monitor) {
 const Raid = React.createClass({
 
   propTypes: {
-    raidId: React.PropTypes.object,
+    raidId: React.PropTypes.string,
     characters: React.PropTypes.object,
     counter: React.PropTypes.number
   },
@@ -112,7 +112,7 @@ const Raid = React.createClass({
           <a href='javascript:;' onClick={this.removeRaid}>
             <i className='Raid-deleteIcon fa fa-lg fa-remove'></i>
           </a>
-          Raid {this.props.raidId}
+          Raid {this.props.counter}
         </div>
         <div className='Raid-body'>
           <div className='Raid-characters'>
