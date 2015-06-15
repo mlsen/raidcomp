@@ -11,7 +11,7 @@
 }
 
 .Character-role, .Character-move {
-  padding: 0 .3rem;
+  padding: 0 .3em;
   border-right: 1px solid lighten($dark-gray, 10%);
   float: left;
 }
@@ -20,9 +20,13 @@
   color: lighten($dark-gray, 50%);
 }
 
+.Character-name {
+  padding: 0 .4em;
+}
+
 .Character-delete, .Character-ilvl {
   color: $white;
-  padding: 0 .3rem;
+  padding: 0 .3em;
   border-left: 1px solid lighten($dark-gray, 10%);
   float: right;
 }
