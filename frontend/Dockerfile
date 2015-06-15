@@ -1,10 +1,8 @@
 FROM gliderlabs/alpine:edge
 
-RUN apk add --update nodejs && rm -rf /var/cache/apk/*
+RUN apk add --update nginx && rm -rf /var/cache/apk/*
 
-ADD . /srv/rc
-RUN cd /srv/rc && npm install
+RUN rm -rf /usr/share/nginx/html
+ADD ./dist /usr/share/nginx/html
 
-WORKDIR /srv/rc
-
-EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

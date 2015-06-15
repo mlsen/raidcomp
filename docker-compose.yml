@@ -17,12 +17,12 @@ proxy:
 
 backend:
   build: ./backend
-  command: node --harmony /srv/rc/app.js
+  command: node --harmony /srv/raidcomp/app.js
   links:
     - mongo
   volumes:
-    - ./backend/app:/srv/rc/app
-    - ./backend/app.js:/srv/rc/app.js
+    - ./backend/app:/srv/raidcomp/app
+    - ./backend/app.js:/srv/raidcomp/app.js
   ports:
     - "5000:5000"
   environment:

@@ -1,0 +1,25 @@
+proxy:
+  image: jwilder/nginx-proxy
+  ports:
+    - "80:80"
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+
+frontend:
+  build: ./frontend
+  expose:
+    - "80"
+  environment:
+    VIRTUAL_HOST: raidcomp.mlsn.me
+
+backend:
+  build: ./backend
+  links:
+    - mongo
+  expose:
+    - "5000"
+  environment:
+    VIRTUAL_HOST: api.raidcomp.mlsn.me
+
+mongo:
+  image: mongo
