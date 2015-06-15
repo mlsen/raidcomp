@@ -12,13 +12,23 @@ const Workspace = React.createClass({
   },
 
   render() {
+
+    const roster = this.props.characters.filter(character => {
+      return character.raidId === '0';
+    });
+      console.log('Workspace:', this.props.characters, roster);
+
     return (
+
       <div className='Workspace'>
         <AvailableCharacterList
           characters={this.props.characters}
-          roster={this.props.raids.get('0').characters}
+          roster={roster}
         />
-        <RaidList raids={this.props.raids} />
+        <RaidList
+          characters={this.props.characters}
+          raids={this.props.raids}
+        />
       </div>
     );
   }

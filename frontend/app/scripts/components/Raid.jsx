@@ -9,7 +9,7 @@ import { getTokenForClass, tokens } from '../misc/wow';
 const raidTarget = {
   drop(props, monitor) {
     return {
-      raidId: props.raid.id
+      raidId: props.raidId
     };
   }
 };
@@ -24,7 +24,8 @@ function collect(connect, monitor) {
 const Raid = React.createClass({
 
   propTypes: {
-    raid: React.PropTypes.object,
+    raidId: React.PropTypes.object,
+    characters: React.PropTypes.object,
     counter: React.PropTypes.number
   },
 
@@ -44,7 +45,7 @@ const Raid = React.createClass({
     let numTokens = this.getInitialState().numTokens;
     let token;
 
-    props.raid.characters.map(character => {
+    props.characters.map(character => {
       token = getTokenForClass(character.className);
       if(!numTokens.hasOwnProperty(token)) {
         numTokens[token] = 0;
@@ -55,12 +56,12 @@ const Raid = React.createClass({
 
     this.setState({
       numTokens: numTokens,
-      numCharacters: this.props.raid.characters.size
+      numCharacters: this.props.characters.size
     });
   },
 
   removeRaid() {
-    CompositionPublisherActions.removeRaid(this.props.raid.id);
+    CompositionPublisherActions.removeRaid(this.props.raidId);
   },
 
   removeCharacter(characterId) {
@@ -111,11 +112,11 @@ const Raid = React.createClass({
           <a href='javascript:;' onClick={this.removeRaid}>
             <i className='Raid-deleteIcon fa fa-lg fa-remove'></i>
           </a>
-          Raid {this.props.counter}
+          Raid {this.props.raidId}
         </div>
         <div className='Raid-body'>
           <div className='Raid-characters'>
-            <CharacterList characters={this.props.raid.characters} delete={this.removeCharacter} />
+            <CharacterList characters={this.props.characters} delete={this.removeCharacter} />
           </div>
           <div className='Raid-summary'>
             {this.renderInfoCategory()}

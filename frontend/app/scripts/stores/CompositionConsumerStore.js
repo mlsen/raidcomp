@@ -55,12 +55,7 @@ class CompositionConsumerStore {
 
       // Raids
       // Key '0' contains all characters that are not in a raid yet
-      raids: Immutable.OrderedMap({
-        '0': {
-          id: '0',
-          characters: Immutable.OrderedMap()
-        }
-      })
+      raids: Immutable.OrderedSet()
     };
 
     this.bindListeners({
@@ -155,13 +150,8 @@ class CompositionConsumerStore {
     character.raidId = '0';
     character = createCharacterRecord(character);
 
-    // Add to raid '0'
-    let raid = this.state.raids.get('0');
-    raid.characters = raid.characters.set(character.id, character);
-
     this.setState({
-      characters: this.state.characters.set(character.id, character),
-      raids: this.state.raids.set('0', raid)
+      characters: this.state.characters.set(character.id, character)
     });
   }
 
@@ -174,99 +164,54 @@ class CompositionConsumerStore {
 
     // Character info
     let character = this.state.characters.get(characterId);
-    const currentRaidId = character.raidId;
-
-    // Add to new raid
-    let newRaid = this.state.raids.get(raidId);
-    newRaid.characters = newRaid.characters.set(characterId, character);
-
-    // Delete from old raid
-    let currentRaid = this.state.raids.get(currentRaidId);
-    currentRaid.characters = currentRaid.characters.delete(characterId);
-
-    // Change currentRaidId to raidId
     character = character.set('raidId', raidId);
 
-    this.state.raids = this.state.raids.set(raidId, newRaid);
-    this.state.raids = this.state.raids.set(currentRaidId, currentRaid);
-    this.state.characters = this.state.characters.set(characterId, character);
-
-    this.emitChange();
+    this.setState({
+      characters: this.state.characters.set(character.id, character)
+    });
   }
 
   handleRemoveCharacter(character) {
-    character = this.state.characters.get(character.id);
-
     // Delete from all characters
-    this.state.characters = this.state.characters.delete(character.id);
-
-    // Delete from current raid
-    let raid = this.state.raids.get(character.raidId);
-    raid.characters = raid.characters.delete(character.id);
-
     this.setState({
-      raids:this.state.raids.set(raid.id, raid)
+      characters: this.state.characters.delete(character.id)
     });
   }
 
   handleAddRaid(raidId) {
-
-    const raid = {
-      id: raidId,
-      characters: Immutable.OrderedMap()
-    };
-
     this.setState({
-      raids: this.state.raids.set(raidId, raid)
+      raids: this.state.raids.add(raidId)
     });
   }
 
   handleRemoveRaid(raidId) {
-    const raid = this.state.raids.get(raidId);
-
-    console.log(raidId, this.state.raids.get(raidId));
-
-    // Put characters back to raid0 on delete
-    raid.characters.map(character => {
-      this.handleMoveCharacter({
-        characterId: character.get('id'),
-        raidId: '0'
-      });
+    let characters = this.state.characters;
+    characters = characters.map(character => {
+      if(character.get('raidId') === raidId) {
+        character = character.set('raidId', '0');
+      }
+      return character;
     });
 
     this.setState({
+      characters: characters,
       raids: this.state.raids.delete(raidId)
     });
   }
 
   handleImportBulkData(data) {
 
-    // add raids
-    data.raidIds.map(raidId => {
-      this.handleAddRaid(raidId);
-    });
-
     // add characters
-    let characters = this.state.characters;
-    let raids = this.state.raids;
-
+    let characters = {};
     data.characters.map(character => {
       character = createCharacterRecord(character);
-
-      // Set globally
-      characters = characters.set(character.id, character);
-
-      // Put in according raid
-      let raid = raids.get(character.raidId);
-      raid.characters = raid.characters.set(character.id, character);
-      raids = raids.set(raid.id, raid);
+      characters[character.id] = character;
     });
 
     this.setState({
-      characters: characters,
-      raids: raids
+      characters: Immutable.Map(characters),
+      raids: Immutable.Set(data.raidIds)
     });
-
   }
 
   handleRequestNames(data) {
