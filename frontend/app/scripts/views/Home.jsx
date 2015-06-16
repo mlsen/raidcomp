@@ -9,7 +9,9 @@ const Home = React.createClass({
   mixins: [Navigation],
 
   getInitialState() {
-    return CompositionPublisherStore.getState();
+    let state = CompositionPublisherStore.getState();
+    state.error = null;
+    return state;
   },
 
   componentDidMount() {
@@ -34,16 +36,53 @@ const Home = React.createClass({
     CompositionActions.createComposition();
   },
 
+  handleSubmit(e) {
+    e.preventDefault();
+    const compositionId = this.refs.compositionId.getDOMNode().value;
+    if(compositionId.length !== 10 && compositionId.length !== 40) {
+      this.setState({
+        error: 'Invalid Composition ID.'
+      });
+      return;
+    }
+    this.transitionTo('composition', { compositionId: compositionId });
+  },
+
+  renderError() {
+    return (
+      <div className='Home-error'>
+        {this.state.error}
+      </div>
+    );
+
+  },
+
   render() {
+
+    let error = null;
+    if(this.state.error) {
+      error = this.renderError();
+    }
+
     return (
       <div className='Home'>
         <Menubar />
         <div className='Home-box'>
           <div className='Home-boxHeader'>
-            Start now!
+            Choose wisely..
           </div>
           <div className='Home-boxBody'>
             <button onClick={this.createComposition}>Create Composition</button>
+            <div className='Home-separator'>
+              <span className='Home-separatorText'>OR</span>
+            </div>
+            <div className='Home-boxInput'>
+              <input type='text' ref='compositionId' placeholder='Enter ID' />
+              <button onClick={this.handleSubmit}>
+                <i className='fa fa-fw fa-arrow-right'></i>
+              </button>
+            </div>
+            {error}
           </div>
         </div>
       </div>

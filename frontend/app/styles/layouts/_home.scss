@@ -1,25 +1,72 @@
 .Home {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
 }
 
 .Home-box {
-    max-width: 50%;
-    align-self: center;
-    border: 1px solid lighten($dark-gray, 20%);
-    border-radius: 2px;
+  // max-width: 50%;
+  width: 300px;
+  border: 1px solid lighten($dark-gray, 20%);
+  border-radius: 2px;
+  text-align: center;
 }
 
 .Home-boxHeader {
-    background: lighten($dark-gray, 5%);
-    border-bottom: 1px solid lighten($dark-gray, 20%);
-    text-align: center;
-    font-size: 2em;
-    padding: .2em 0;
+  background: lighten($dark-gray, 5%);
+  border-bottom: 1px solid lighten($dark-gray, 20%);
+  font-size: 1.7em;
+  padding: .3em 2em;
 }
 
 .Home-boxBody {
-    padding: 2em;
+  padding: 2em;
+}
+
+.Home-boxInput {
+
+  position: relative;
+
+  & > button {
+    @include button(flat, $action-color);
+    @include position(absolute, 0em 0em 0em null);
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    outline: none;
+    padding: 5px 10px;
+  }
+
+  & > input {
+    @include appearance(none);
+    @include box-sizing(border-box);
+    @include transition(border-color);
+    border-radius: $base-border-radius;
+    border-radius: $base-border-radius;
+    border: 1px solid $base-border-color;
+    display: block;
+    font-size: 1em;
+    font-style: italic;
+    margin: 0;
+    position: relative;
+    padding: ($base-spacing / 3) ($base-spacing / 3);
+    width: 100%;
+  }
+}
+
+.Home-error {
+  margin-top: 1em;
+  color: $error-color;
+}
+
+.Home-separator {
+  border-bottom: 1px solid lighten($dark-gray, 20%);
+  margin: 1em 0 2em;
+}
+
+.Home-separatorText {
+  background: $dark-gray;
+  position: relative;
+  top: 10px;
+  padding: 0 1em;
 }
