@@ -1,16 +1,39 @@
 import React from 'react';
 import Modal from 'react-modal';
 import Tabs from 'react-simpletabs';
-import ImportGuildTab from './ImportGuildTab.jsx';
+import ImportActions from '../actions/ImportActions';
+import ImportStore from '../stores/ImportStore';
+import ImportGuildTab from '../components/ImportGuildTab.jsx';
 
 Modal.setAppElement(document.getElementById('modal'));
 Modal.injectCSS();
-
 
 const ImportModal = React.createClass({
 
   propTypes: {
     isOpen: React.PropTypes.bool
+  },
+
+  getInitialState() {
+    return ImportStore.getState();
+  },
+
+  componentDidMount() {
+    ImportStore.listen(this.onStoreChange);
+  },
+
+  componentWillUnmount() {
+    ImportStore.unlisten(this.onStoreChange);
+  },
+
+  componentWillReceiveProps(props) {
+    if(!this.props.isOpen && props.isOpen) {
+      ImportActions.fetchRealms('eu');
+    }
+  },
+
+  onStoreChange(state) {
+    this.setState(state);
   },
 
   render() {
@@ -22,7 +45,11 @@ const ImportModal = React.createClass({
           </a>
           <Tabs>
             <Tabs.Panel title='Import Guild'>
-              <ImportGuildTab />
+              <ImportGuildTab
+                guild={this.state.guild}
+                realms={this.state.realms}
+                loading={this.state.loading}
+                error={this.state.error} />
             </Tabs.Panel>
             <Tabs.Panel title='Import Character'>
               <p>Import Character Content</p>

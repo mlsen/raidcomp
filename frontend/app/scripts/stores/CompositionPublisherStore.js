@@ -5,16 +5,8 @@ import CompositionActions from '../actions/CompositionActions';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import AppStore from './AppStore';
 import ImportStore from './ImportStore';
-
-const actions = {
-  ADD_CHARACTER: 'addCharacter',
-  MOVE_CHARACTER: 'moveCharacter',
-  REMOVE_CHARACTER: 'removeCharacter',
-  REQUEST_NAMES: 'requestNames',
-  ADD_RAID: 'addRaid',
-  REMOVE_RAID: 'removeRaid',
-  REQUEST_BULK_DATA: 'requestBulkData'
-};
+import actions from '../misc/socketActions';
+import Backend from '../misc/backendApi';
 
 class CompositionPublisherStore {
 
@@ -30,7 +22,7 @@ class CompositionPublisherStore {
       handleAddRaid: CompositionPublisherActions.ADD_RAID,
       handleRemoveRaid: CompositionPublisherActions.REMOVE_RAID,
 
-      handleImportCharacters: CompositionPublisherActions.IMPORT_CHARACTERS
+      handleImportStaging: CompositionPublisherActions.IMPORT_STAGING
     });
 
     this.state = {};
@@ -49,11 +41,7 @@ class CompositionPublisherStore {
     const { compositionId, user } = props;
 
     // in case it triggers twice
-    if(this.state.compositionId !== null) {
-      return;
-    }
-
-    if(compositionId.length !== 40) {
+    if(this.state.compositionId !== null || compositionId.length !== 40) {
       return;
     }
 
@@ -112,16 +100,26 @@ class CompositionPublisherStore {
     });
   }
 
-  handleImportCharacters() {
-    this.waitFor(ImportStore);
-    const importCharacters = ImportStore.getState().importCharacters;
+  handleImportStaging() {
+    let staging = ImportStore.getState().staging;
 
-    importCharacters.map(character => {
-      this.handleAddCharacter(character.toObject());
+    staging = staging.map(character => {
+      if(!character.complete) {
+        Backend.fetchCharacter(character.region, character.realm, character.name)
+          .then(completeCharacter => {
+            character.ilvl = completeCharacter.items.averageItemLevel;
+            character.complete = true;
+            this.handleAddCharacter(character);
+          })
+          .catch(err => {
+            this.handleAddCharacter(character);
+          });
+      } else {
+        this.handleAddCharacter(character);
+      }
     });
   }
 }
-
 
 function isValidCharacter(character) {
   return (

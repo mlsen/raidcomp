@@ -1,30 +1,28 @@
 import React from 'react';
-import classNames from 'classnames';
 import ImportActions from '../actions/ImportActions';
-import ImportStore from '../stores/ImportStore';
+import CompositionPublisherActions from '../actions/CompositionPublisherActions';
+import classNames from 'classnames';
 import { regions } from '../misc/wow';
 
 const ImportGuildTab = React.createClass({
 
+  propTypes: {
+    guild: React.PropTypes.object,
+    realms: React.PropTypes.object
+  },
+
   getInitialState() {
     return {
-      store: ImportStore.getState(),
-      selectedRegion: 'eu',
-      selectedRanks: new Set()
+      selectedRegion: 'eu'
     };
   },
 
-  componentDidMount() {
-    ImportStore.listen(this.onStoreChange);
-    ImportActions.fetchRealms(this.state.selectedRegion);
-  },
-
-  componentWillUnmount() {
-    ImportStore.unlisten(this.onStoreChange);
-  },
-
-  onStoreChange(state) {
-    this.setState({ store: state });
+  handleRegionChange(e) {
+    const region = e.target.value;
+    if(!this.props.realms.has(region)) {
+      ImportActions.fetchRealms(region);
+    }
+    this.setState({ selectedRegion: region });
   },
 
   handleSearch(e) {
@@ -32,36 +30,23 @@ const ImportGuildTab = React.createClass({
     const region = this.state.selectedRegion;
     const realm = this.refs.realm.getDOMNode().value;
     const guild = this.refs.guild.getDOMNode().value;
-    this.setState({ selectedRanks: new Set() });
     ImportActions.fetchGuild(region, realm, guild);
   },
 
-  handleRegionChange(e) {
-    const region = e.target.value;
-    if(!this.state.store.realms.has(region)) {
-      ImportActions.fetchRealms(region);
-    }
-    this.setState({ selectedRegion: region });
-  },
-
   handleSelect(rank) {
-    let selectedRanks = this.state.selectedRanks;
-    rank = parseInt(rank);
-
-    if(!selectedRanks.has(rank)) {
-      selectedRanks.add(rank);
-    } else {
-      selectedRanks.delete(rank);
-    }
-
-    this.setState({
-      selectedRanks: selectedRanks
-    });
+    ImportActions.selectGuildRank(rank);
   },
 
-  handleImport(e) {
-    e.preventDefault();
-    ImportActions.importRanks(this.state.selectedRanks);
+  handleImportStaging() {
+    CompositionPublisherActions.importStaging();
+  },
+
+  renderErrorMessage() {
+    return (
+      <div className='ImportGuildTab-error'>
+        {this.props.error.message}
+      </div>
+    );
   },
 
   renderSpinner() {
@@ -70,70 +55,6 @@ const ImportGuildTab = React.createClass({
         <div className='bounce1'></div>
         <div className='bounce2'></div>
         <div className='bounce3'></div>
-      </div>
-    );
-  },
-
-  renderErrorMessage() {
-    return (
-      <div className='ImportGuildTab-error'>
-        {this.state.store.errorMessage}
-      </div>
-    );
-  },
-
-  renderResults() {
-
-    if(this.state.store.errorMessage) {
-      return this.renderErrorMessage();
-    }
-
-    if(this.state.store.loading) {
-      return this.renderSpinner();
-    }
-
-    let headerStyle = null;
-    let characterCssClass = '';
-
-    return (
-      <div>
-        {this.state.store.ranks.map((members, rank) => {
-
-          let rankSelected = this.state.selectedRanks.has(parseInt(rank));
-
-          const rankClasses = classNames({
-            'ImportGuildTab-rank': true,
-            'selected': rankSelected
-          });
-
-          const checkedIconClasses = classNames({
-            'ImportGuildTab-checked': rankSelected,
-            'ImportGuildTab-unchecked': !rankSelected,
-            'fa': true,
-            'fa-lg': true,
-            'fa-fw': true,
-            'fa-check': true
-          });
-
-          return (
-            <div key={rank} className={rankClasses} onClick={this.handleSelect.bind(this, rank)}>
-              <div className='ImportGuildTab-rankHeader'>
-                <i className={checkedIconClasses}></i>
-                Rank: {rank}
-              </div>
-              <div className='ImportGuildTab-rankCharacters'>
-                {members.map((character, index) => {
-                  characterCssClass = 'ImportGuildTab-character fg-' + character.get('className');
-                  return (
-                    <span key={index} className={characterCssClass}>
-                      {character.get('name')}
-                    </span>
-                  );
-                }).toArray()}
-              </div>
-            </div>
-          );
-        }).toArray()}
       </div>
     );
   },
@@ -153,14 +74,12 @@ const ImportGuildTab = React.createClass({
   },
 
   renderRealms() {
+    const realms = this.props.realms.get(this.state.selectedRegion);
     let nodes = [];
-    if(this.state.store.realms.has(this.state.selectedRegion)) {
-      this.state.store.realms.get(this.state.selectedRegion).map(realm => {
-        nodes.push(
-          <option key={realm.get('slug')} value={realm.get('slug')}>
-            {realm.get('name')}
-          </option>
-        );
+
+    if(realms) {
+      realms.map(realm => {
+        nodes.push(<option key={realm.slug} value={realm.slug}>{realm.name}</option>)
       });
     }
 
@@ -171,32 +90,88 @@ const ImportGuildTab = React.createClass({
     );
   },
 
+  renderSearchForm() {
+    return (
+      <div className='ImportGuildTab-form'>
+        <p>
+          <label>Region</label>
+          {this.renderRegions()}
+        </p>
+        <p>
+          <label>Realm</label>
+          {this.renderRealms()}
+        </p>
+        <p>
+          <label>Guild Name</label>
+          <input type='text' ref='guild' />
+        </p>
+        <button className='ImportGuildTab-searchButton' onClick={this.handleSearch}>
+          Search
+        </button>
+        <button className='ImportGuildTab-importButton' onClick={this.handleImportStaging}>
+          Import selected
+        </button>
+      </div>
+    );
+  },
+
+  renderResults() {
+
+    if(this.props.error) {
+      return this.renderErrorMessage();
+    }
+
+    if(this.props.loading) {
+      return this.renderSpinner();
+    }
+
+    return (
+      <div className='ImportGuildTab-results'>
+        {this.props.guild.members.map((members, rank) => {
+
+          const rankSelected = this.props.guild.selectedRanks.has(rank);
+
+          const rankCss = classNames({
+            'ImportGuildTab-rank': true,
+            'selected': rankSelected
+          });
+
+          const checkedIconCss = classNames({
+            'ImportGuildTab-checked': rankSelected,
+            'ImportGuildTab-unchecked': !rankSelected,
+            'fa': true,
+            'fa-lg': true,
+            'fa-fw': true,
+            'fa-check': true
+          });
+
+          return (
+            <div key={rank} className={rankCss} onClick={this.handleSelect.bind(this, rank)}>
+              <div className='ImportGuildTab-rankHeader'>
+                <i className={checkedIconCss}></i>
+                Rank: {rank}
+              </div>
+              <div className='ImportGuildTab-rankCharacters'>
+                {members.map((character, index) => {
+                  return (
+                    <span key={index} className={'ImportGuildTab-character fg-' + character.className}>
+                      {character.name}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }).toArray()}
+      </div>
+    );
+  },
+
   render() {
     return (
       <div className='ImportGuildTab'>
-        <div className='ImportGuildTab-form'>
-          <p>
-            <label>Region</label>
-            {this.renderRegions()}
-          </p>
-          <p>
-            <label>Realm</label>
-            {this.renderRealms()}
-          </p>
-          <p>
-            <label>Guild Name</label>
-            <input type='text' ref='guild' />
-          </p>
-          <button className='ImportGuildTab-searchButton' onClick={this.handleSearch}>
-            Search
-          </button>
-          <button className='ImportGuildTab-importButton' onClick={this.handleImport}>
-            Import selected
-          </button>
-        </div>
-        <div className='ImportGuildTab-results'>
-          {this.renderResults()}
-        </div>
+        {this.renderSearchForm()}
+        {this.renderResults()}
       </div>
     );
   }

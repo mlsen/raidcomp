@@ -2,20 +2,10 @@ import Immutable from 'immutable';
 import sha1 from 'sha1';
 import alt from '../alt';
 import CompositionActions from '../actions/CompositionActions';
-import ImportStore from './ImportStore';
 import AppStore from './AppStore';
 import { getTokenForClass, tokens } from '../misc/wow';
 import { generateRandomCharacter } from '../misc/tools';
-
-const actions = {
-  ADD_CHARACTER: 'addCharacter',
-  MOVE_CHARACTER: 'moveCharacter',
-  REMOVE_CHARACTER: 'removeCharacter',
-  REQUEST_NAMES: 'requestNames',
-  ADD_RAID: 'addRaid',
-  REMOVE_RAID: 'removeRaid',
-  REQUEST_BULK_DATA: 'requestBulkData'
-};
+import actions from '../misc/socketActions';
 
 const Character = Immutable.Record({
   id: null,
@@ -25,7 +15,8 @@ const Character = Immutable.Record({
   realm: null,
   className: null,
   spec: null,
-  role: null
+  role: null,
+  ilvl: null
 });
 
 function createCharacterRecord(character) {
@@ -37,7 +28,8 @@ function createCharacterRecord(character) {
     realm: character.realm,
     className: character.className,
     spec: character.spec,
-    role: character.role
+    role: character.role,
+    ilvl: character.ilvl || 0
   });
 }
 

@@ -1,6 +1,9 @@
 import Immutable from 'immutable';
 import alt from '../alt';
+import CompositionActions from '../actions/CompositionActions';
 import ImportActions from '../actions/ImportActions';
+import AppStore from './AppStore';
+import actions from '../misc/socketActions';
 import { classes, getRoleForSpec } from '../misc/wow';
 
 const classIds = {
@@ -17,102 +20,108 @@ const classIds = {
   11: classes.DRUID
 };
 
+function makeCharacter(region, realm, character) {
+  const className = classIds[character.class];
+  const spec = character.hasOwnProperty('spec') ? character.spec.name : null;
+
+  return {
+    // Determines whether the character needs to be single-fetched
+    complete: !!character.ilvl || false,
+
+    region: region,
+    realm: realm,
+    name: character.name,
+    className: className,
+    spec: spec,
+    role: getRoleForSpec(className, spec),
+    ilvl: character.ilvl || null
+  };
+}
+
 class ImportStore {
 
   constructor() {
-    this.state = {};
-    this.state.realms = Immutable.Map();
-    this.state.ranks = Immutable.Map();
-    this.state.errorMessage = null;
-    this.state.loading = false;
-
     this.bindListeners({
-
-      handleFetchGuild: ImportActions.FETCH_GUILD,
-      handleUpdateMembers: ImportActions.UPDATE_MEMBERS,
-      handleFetchGuildFailed: ImportActions.FETCH_GUILD_FAILED,
-
       handleFetchRealms: ImportActions.FETCH_REALMS,
+      handleFetchGuild: ImportActions.FETCH_GUILD,
+      handleFetchCharacter: ImportActions.FETCH_CHARACTER,
+      handleFetchFailed: ImportActions.FETCH_FAILED,
+
       handleUpdateRealms: ImportActions.UPDATE_REALMS,
-      handleFetchRealmsFailed: ImportActions.FETCH_REALMS_FAILED,
+      handleUpdateGuild: ImportActions.UPDATE_GUILD,
 
-      handleImportRanks: ImportActions.IMPORT_RANKS
+      handleSelectGuildRank: ImportActions.SELECT_GUILD_RANK
     });
-  }
 
-  handleFetchGuild() {
-    this.state.errorMessage = null;
-    this.state.loading = true;
-    this.state.ranks = Immutable.Map();
-  }
-
-  handleUpdateMembers(props) {
-    let ranks = {};
-    let character = {};
-
-    props.members.map(member => {
-      if(!ranks.hasOwnProperty(member.rank)) {
-        ranks[member.rank] = [];
-      }
-
-      let className = classIds[member.character.class];
-      let spec = member.character.hasOwnProperty('spec') ? member.character.spec.name : null;
-
-      character = {
-        region: props.guild.region,
-        realm: props.guild.realm,
-        name: member.character.name,
-        className: className,
-        spec: spec,
-        role: getRoleForSpec(className, spec)
-      };
-      ranks[member.rank].push(character);
-    });
-    this.state.ranks = Immutable.fromJS(ranks);
+    this.state = {};
     this.state.loading = false;
-    this.state.errorMessage = null;
+    this.state.error = null;
+
+    this.state.realms = Immutable.Map();
+
+    this.state.guild = {
+      members: Immutable.Map(),
+      selectedRanks: Immutable.Set()
+    };
+
+    this.state.staging = Immutable.List();
   }
 
-  handleFetchGuildFailed(err) {
-    this.state.errorMessage = 'No guild data available.';
+  handleFetchFailed(err) {
+    this.setState({ loading: false, error: err });
   }
 
   handleFetchRealms() {
-    this.state.errorMessage = null;
-    this.state.loading = true;
+    this.setState({ loading: true, error: null });
   }
 
   handleUpdateRealms(props) {
     const { region, realms } = props;
-
-    let strippedRealms = [];
-    realms.map(realm => {
-      strippedRealms.push({
-        name: realm.name,
-        slug: realm.slug
-      });
-    });
-    this.state.realms = this.state.realms.set(region, Immutable.fromJS(strippedRealms)),
+    this.state.realms = this.state.realms.set(region, Immutable.List(realms));
     this.state.loading = false;
-    this.state.errorMessage = null;
+    this.state.error = null;
   }
 
-  handleFetchRealmsFailed(err) {
-    this.state.errorMessage = 'Loading realms failed.';
+  handleFetchGuild() {
+    this.state.guild.selectedRanks = Immutable.Set();
+    this.state.loading = true;
+    this.state.error = null;
   }
 
-  handleImportRanks(ranks) {
-    let key = null;
-    let characters = [];
+  handleUpdateGuild(props) {
+    const { region, realm, guild } = props;
+    let members = {};
 
-    ranks.forEach(rank => {
-      key = rank.toString();
+    guild.members.map(member => {
+      if(!members.hasOwnProperty(member.rank)) {
+        members[member.rank] = [];
+      }
 
-      this.state.ranks.get(key).map(character => {
-        characters.push(character);
-      });
+      let character = makeCharacter(region, realm, member.character);
+      members[member.rank].push(character);
     });
-    this.state.importCharacters = Immutable.fromJS(characters);
+
+    this.state.guild.members = Immutable.Map(members);
+    this.state.loading = false;
+    this.state.error = null;
+  }
+
+  handleFetchCharacter() {
+    this.setState({ loading: true, error: null });
+  }
+
+  handleSelectGuildRank(rank) {
+    this.state.guild.selectedRanks = (
+      this.state.guild.selectedRanks.has(rank) ?
+      this.state.guild.selectedRanks.delete(rank) :
+      this.state.guild.selectedRanks.add(rank)
+    );
+
+    let staging = [];
+    this.state.guild.selectedRanks.map(rank => {
+      staging = staging.concat(this.state.guild.members.get(rank));
+    });
+    this.state.staging = Immutable.List(staging);
   }
 
 }

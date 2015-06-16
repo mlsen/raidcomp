@@ -53,6 +53,13 @@ gulp.task('styles', function(cb) {
     .pipe($.connect.reload());
 });
 
+gulp.task('fonts', function(cb) {
+  return gulp.src(app + 'styles/fonts/*')
+    .pipe(gulp.dest(dist + 'css/fonts/'))
+    .pipe($.size({ title: 'fonts' }))
+    .pipe($.connect.reload());
+});
+
 // add livereload on the given port
 gulp.task('serve', function() {
   $.connect.server({
@@ -74,6 +81,7 @@ gulp.task('images', function(cb) {
 // watch styl, html and js file changes
 gulp.task('watch', function() {
   gulp.watch(app + 'styles/**/*.scss', ['styles']);
+  gulp.watch(app + 'styles/fonts/*', ['fonts']);
   gulp.watch(app + 'index.html', ['html']);
   gulp.watch(app + 'scripts/**/*.js', ['scripts']);
   gulp.watch(app + 'scripts/**/*.jsx', ['scripts']);
@@ -90,5 +98,5 @@ gulp.task('default', ['build', 'serve', 'watch']);
 
 // waits until clean is finished then builds the project
 gulp.task('build', ['clean'], function(){
-  gulp.start(['images', 'html','scripts','styles']);
+  gulp.start(['images', 'html','scripts','styles', 'fonts']);
 });

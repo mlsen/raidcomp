@@ -82,10 +82,16 @@ const Raid = React.createClass({
   },
 
   renderInfoCategory() {
+    let totalIlvl = 0;
+    this.props.characters.forEach(character => {
+      totalIlvl = totalIlvl + character.ilvl;
+    });
+    const averageIlvl = parseInt(totalIlvl / this.props.characters.size);
+
     return this.renderCategory('Info', (
       <ul>
         <li><i className='fa fa-fw fa-users'></i> {this.props.characters.size}</li>
-        <li><i className='fa fa-fw fa-ban'></i> 962</li>
+        <li><i className='fa fa-fw fa-ban'></i> {averageIlvl}</li>
       </ul>
     ));
   },

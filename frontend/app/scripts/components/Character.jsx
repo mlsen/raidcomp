@@ -67,7 +67,7 @@ const Character = React.createClass({
           </a>
         </span>
         <span className='Character-ilvl'>
-          692
+          {this.props.character.ilvl}
         </span>
         <span className='Character-name'>
           {this.props.character.name}

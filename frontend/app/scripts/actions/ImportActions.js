@@ -1,81 +1,64 @@
 import alt from '../alt';
-import Armory from '../misc/armoryApi';
-import CompositionPublisherActions from './CompositionPublisherActions';
+import Backend from '../misc/backendApi';
 
-const timeout = 5000;
 
 class ImportActions {
 
-  fetchGuild(region, realm, name) {
-    this.dispatch();
-
-    // Dirty hack because jsonp doesn't allow proper error handling
-    const failure = setTimeout(() => {
-      this.actions.fetchGuildFailed({
-        msg: 'Operation timed out.'
-      });
-    }, timeout);
-
-    Armory.fetchGuild(region, realm, name)
-      .then(guild => {
-
-        // Dirty hack..
-        clearTimeout(failure);
-
-        this.actions.updateMembers({
-          region: region,
-          realm: realm,
-          guild: name
-        },
-        guild.members);
-      });
-  }
-
-  updateMembers(guild, members) {
-    this.dispatch({
-      guild: guild,
-      members: members
-    });
-  }
-
-  fetchGuildFailed(err) {
-    this.dispatch(err);
-  }
-
   fetchRealms(region) {
     this.dispatch();
-
-    // Dirty hack because jsonp doesn't allow proper error handling
-    const failure = setTimeout(() => {
-      this.actions.fetchGuildFailed({
-        msg: 'Operation timed out.'
-      });
-    }, timeout);
-
-    Armory.fetchRealms(region)
+    Backend.fetchRealms(region)
       .then(response => {
-
-        // hack
-        clearTimeout(failure);
-
-        this.actions.updateRealms(region, response.realms);
+        this.actions.updateRealms({
+          region: region,
+          realms: response.realms
+        });
+      })
+      .catch(err => {
+        this.actions.fetchFailed({
+          message: 'Could not retrieve realm data.'
+        });
       });
   }
 
-  updateRealms(region, realms) {
+  fetchGuild(region, realm, guild) {
+    this.dispatch();
+    Backend.fetchGuild(region, realm, guild)
+      .then(response => {
+        this.actions.updateGuild({
+          region: region,
+          realm: realm,
+          guild: response
+        });
+      })
+      .catch(err => {
+        this.actions.fetchFailed({
+          message: 'Could not retrieve guild data.'
+        });
+      });
+  }
+
+  fetchCharacter(region, realm, character) {
     this.dispatch({
       region: region,
-      realms: realms
+      realm: realm,
+      character: character
     });
   }
 
-  fetchRealmsFailed(err) {
+  fetchFailed(err) {
     this.dispatch(err);
   }
 
-  importRanks(ranks) {
-    this.dispatch(ranks);
-    CompositionPublisherActions.importCharacters();
+  updateRealms(props) {
+    this.dispatch(props);
+  }
+
+  updateGuild(props) {
+    this.dispatch(props);
+  }
+
+  selectGuildRank(rank) {
+    this.dispatch(rank);
   }
 
 }

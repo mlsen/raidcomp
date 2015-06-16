@@ -1,6 +1,6 @@
 import React from 'react';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
-import ImportModal from './ImportModal.jsx';
+import ImportModal from '../views/ImportModal.jsx';
 
 const Menubar = React.createClass({
 

@@ -1,6 +1,4 @@
 import alt from '../alt';
-import Backend from '../misc/backendApi';
-import AppStore from '../stores/AppStore';
 
 class CompositionPublisherActions {
 
@@ -27,7 +25,7 @@ class CompositionPublisherActions {
     this.dispatch(raidId);
   }
 
-  importCharacters() {
+  importStaging() {
     this.dispatch();
   }
 }

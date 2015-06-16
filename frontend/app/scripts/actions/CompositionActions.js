@@ -14,7 +14,7 @@ class CompositionActions {
       .then(response => {
         this.actions.setComposition(response.compId);
       })
-      .fail(err => {
+      .catch(err => {
         this.actions.createCompositionFailed(err);
       });
   }
