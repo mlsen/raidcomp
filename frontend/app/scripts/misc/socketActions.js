@@ -8,11 +8,7 @@ const actions = {
   REMOVE_RAID: 'removeRaid',
 
   REQUEST_BULK_DATA: 'requestBulkData',
-  REQUEST_NAMES: 'requestNames',
-
-  FETCH_REALMS: 'realmsArmoryImport',
-  FETCH_GUILD: 'guildArmoryImport',
-  FETCH_CHARACTER: 'characterArmoryImport'
+  REQUEST_NAMES: 'requestNames'
 };
 
 export default actions;
