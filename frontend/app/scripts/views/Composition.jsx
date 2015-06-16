@@ -1,16 +1,29 @@
 import React from 'react';
 import CompositionActions from '../actions/CompositionActions';
+import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import CompositionConsumerStore from '../stores/CompositionConsumerStore';
-import Menubar from '../components/Menubar.jsx';
+import ImportModal from '../views/ImportModal.jsx';
+import { Menubar, MenubarItem } from '../components/Menubar.jsx';
 import Workspace from '../components/Workspace.jsx';
 
 const Composition = React.createClass({
 
   getInitialState() {
-    return CompositionConsumerStore.getState();
+    let state = CompositionConsumerStore.getState();
+    state.isModalOpen = false;
+    return state;
   },
 
-  componentWillMount() {
+  openModal() {
+    this.setState({ isModalOpen: true });
+  },
+
+  closeModal() {
+    this.setState({ isModalOpen: false });
+  },
+
+  handleCreateRaid() {
+    CompositionPublisherActions.addRaid();
   },
 
   componentDidMount() {
@@ -29,8 +42,15 @@ const Composition = React.createClass({
   render() {
     return (
       <div className='Composition'>
-        <Menubar />
+        <Menubar>
+          <MenubarItem icon='fa-user' text='Import Characters' onClick={this.openModal} />
+          <MenubarItem icon='fa-server' text='Create Raid' onClick={this.handleCreateRaid} />
+        </Menubar>
         <Workspace characters={this.state.characters} raids={this.state.raids} />
+        <ImportModal
+          isOpen={this.state.isModalOpen}
+          onRequestClose={this.closeModal}
+        />
       </div>
     );
   }

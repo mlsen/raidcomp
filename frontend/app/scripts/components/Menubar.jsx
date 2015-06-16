@@ -1,25 +1,6 @@
 import React from 'react';
-import CompositionPublisherActions from '../actions/CompositionPublisherActions';
-import ImportModal from '../views/ImportModal.jsx';
 
 const Menubar = React.createClass({
-
-  getInitialState() {
-    return { isModalOpen: false };
-  },
-
-  openModal() {
-    this.setState({ isModalOpen: true });
-  },
-
-  closeModal() {
-    this.setState({ isModalOpen: false });
-  },
-
-  handleCreateRaid() {
-    CompositionPublisherActions.addRaid();
-  },
-
   render() {
     return (
       <div>
@@ -28,26 +9,30 @@ const Menubar = React.createClass({
             Raid Composer
           </div>
           <ul className='Menubar-list'>
-            <li className='Menubar-item'>
-              <a href='javascript:;' onClick={this.openModal}>
-                <i className='fa fa-fw fa-lg fa-user-plus'></i> Import Characters
-              </a>
-            </li>
-            <li className='Menubar-item'>
-              <a href='javascript:;' onClick={this.handleCreateRaid}>
-                <i className='fa fa-fw fa-lg fa-server'></i> Create Raid
-              </a>
-            </li>
+            {this.props.children}
           </ul>
         </nav>
-        <ImportModal
-          isOpen={this.state.isModalOpen}
-          onRequestClose={this.closeModal}
-        />
       </div>
     );
   }
-
 });
 
-export default Menubar;
+const MenubarItem = React.createClass({
+  propTypes: {
+    onClick: React.PropTypes.func,
+    icon: React.PropTypes.string,
+    text: React.PropTypes.string
+  },
+
+  render() {
+    return (
+      <li className='Menubar-item'>
+        <a href='javascript:;' onClick={this.props.onClick}>
+          <i className={'fa fa-fw fa-lg ' + this.props.icon}></i> {this.props.text}
+        </a>
+      </li>
+    );
+  }
+});
+
+export { Menubar, MenubarItem };

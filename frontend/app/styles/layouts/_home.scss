@@ -1,3 +1,25 @@
 .Home {
-    // margin-top: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+}
+
+.Home-box {
+    max-width: 50%;
+    align-self: center;
+    border: 1px solid lighten($dark-gray, 20%);
+    border-radius: 2px;
+}
+
+.Home-boxHeader {
+    background: lighten($dark-gray, 5%);
+    border-bottom: 1px solid lighten($dark-gray, 20%);
+    text-align: center;
+    font-size: 2em;
+    padding: .2em 0;
+}
+
+.Home-boxBody {
+    padding: 2em;
 }

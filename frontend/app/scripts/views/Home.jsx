@@ -2,6 +2,7 @@ import React from 'react';
 import CompositionActions from '../actions/CompositionActions';
 import CompositionPublisherStore from '../stores/CompositionPublisherStore';
 import { Navigation } from 'react-router';
+import { Menubar, MenubarItem } from '../components/Menubar.jsx';
 
 const Home = React.createClass({
 
@@ -36,7 +37,15 @@ const Home = React.createClass({
   render() {
     return (
       <div className='Home'>
-        <button onClick={this.createComposition}>Create Composition</button>
+        <Menubar />
+        <div className='Home-box'>
+          <div className='Home-boxHeader'>
+            Start now!
+          </div>
+          <div className='Home-boxBody'>
+            <button onClick={this.createComposition}>Create Composition</button>
+          </div>
+        </div>
       </div>
     );
   }
