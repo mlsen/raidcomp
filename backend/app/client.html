@@ -45,7 +45,12 @@
   function bulk() {
     socket.emit('raidcomp', {action: 'requestBulkData', compId: compId.slice(0, 10), user: user});
   }
-
+function guildimport() {
+  socket.emit('raidcomp', {action:'guildArmoryImport', compId: compId, user:user, region:'eu', realm:'blackmoore', guild:'die gummibärenbande'});
+  socket.emit('raidcomp', {action:'guildArmoryImport', compId: compId, user:user, region:'eu', realm:'blackmoore', guild:'die asddas'});
+  socket.emit('raidcomp', {action:'characterArmoryImport', compId: compId, user:user, region:'eu', realm:'blackmoore', character:'pieksi'});
+  socket.emit('raidcomp', {action:'realmsArmoryImport', compId: compId, user:user, region:'eu'});
+}
 </script>
 
 <div onclick="add();">add char</div>
@@ -59,3 +64,5 @@
 <br/>
 
 <div onclick="bulk();">bulk</div>
+
+<div onclick="guildimport();">guildimport</div>

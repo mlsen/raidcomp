@@ -5,6 +5,7 @@ var RaidCompAction = require('../actions/raidComp').RaidCompAction;
 var CharacterAction = require('../actions/character').CharacterAction;
 var UserAction = require('../actions/user').UserAction;
 var BulkAction = require('../actions/bulk').BulkAction;
+var ArmoryImportAction = require('../actions/armoryImport').ArmoryImportAction;
 
 var socketActions = {
   ADD_CHARACTER: 'addCharacter',
@@ -14,7 +15,10 @@ var socketActions = {
   REMOVE_RAID: 'removeRaid',
   REQUEST_NAMES: 'requestNames',
   SEND_NAME: 'sendName',
-  REQUEST_BULK_DATA: 'requestBulkData'
+  REQUEST_BULK_DATA: 'requestBulkData',
+  GUILD_ARMORY_IMPORT: 'guildArmoryImport',
+  CHARACTER_ARMORY_IMPORT: 'characterArmoryImport',
+  REALMS_ARMORY_IMPORT: 'realmsArmoryImport'
 };
 
 var SocketHandler = {
@@ -53,6 +57,18 @@ var SocketHandler = {
 
       case socketActions.REQUEST_BULK_DATA:
         BulkAction.sendBulkData(data, socketResponse);
+      break;
+
+      case socketActions.GUILD_ARMORY_IMPORT:
+        ArmoryImportAction.importGuild(data, socketResponse);
+      break;
+
+      case socketActions.CHARACTER_ARMORY_IMPORT:
+        ArmoryImportAction.importCharacter(data, socketResponse);
+      break;
+
+      case socketActions.REALMS_ARMORY_IMPORT:
+        ArmoryImportAction.importRealms(data, socketResponse);
       break;
     }
   },
