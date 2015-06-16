@@ -33,7 +33,7 @@ var CharacterAction = {
           className: data.character.className,
           spec: data.character.spec,
           role: data.character.role,
-          number: data.character.ilvl,
+          ilvl: data.character.ilvl,
           legendaryStage: data.character.legendaryStage
         };
 
