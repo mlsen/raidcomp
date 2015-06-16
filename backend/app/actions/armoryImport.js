@@ -20,7 +20,7 @@ var ArmoryImportAction = {
         return respondWithError(data, 'Import failed.', socketResponse);
       }
 
-      socketResponse(data.shortCompId, { action: data.action, user: data.user, response: body });
+      socketResponse(data.shortCompId + ':' + data.user, { action: data.action, user: data.user, response: body });
       return;
     });
   },
