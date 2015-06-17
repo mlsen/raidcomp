@@ -27,6 +27,9 @@ var CharacterAction = {
         }
 
         var newCharacter = {
+          _compId: data.compId,
+          id: data.character.id,
+          raidId: data.character.raidId || '0',
           name: data.character.name,
           realm: data.character.realm,
           region: data.character.region,
@@ -38,10 +41,6 @@ var CharacterAction = {
         };
 
         if (!character) {
-          newCharacter._compId = data.compId;
-          newCharacter.raidId = '0';
-          newCharacter.id = data.character.id;
-
           Character.create(newCharacter, function (err, character) {
             if (err || !character)
               respondWithError(data, 'Failed to create new character.', socketResponse);
@@ -53,12 +52,11 @@ var CharacterAction = {
           Character.update(
             { _compId: data.compId, id: data.character.id },
             newCharacter,
-            function (err, character) {
-              if (err || !character)
+            function(err) {
+              if(err) {
                 respondWithError(data, 'Failed to update character.', socketResponse);
-
-              socketResponse(data.shortCompId, { action: 'updateCharacter', user: data.user, character: character});
-              return;
+              }
+              socketResponse(data.shortCompId, { action: 'updateCharacter', user: data.user, character: newCharacter});
             }
           );
         }
