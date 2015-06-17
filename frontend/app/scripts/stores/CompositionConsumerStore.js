@@ -82,13 +82,11 @@ class CompositionConsumerStore {
 
     // Channel for global messages
     socket.on(compositionId, data => {
-      console.log('incoming:', data);
       this._handleMessages(data);
     });
 
     // Channel for messages addressing me
     socket.on(compositionId + ':' + user, data => {
-      console.log('user incoming:', data);
       this._handleUserMessages(data);
     });
 
@@ -159,10 +157,6 @@ class CompositionConsumerStore {
   }
 
   handleUpdateCharacter(character) {
-    console.log('update character:', character);
-    // character = this.state.characters.get(character.id);
-    // console.log('Ok, character found:', character.toObject());
-
     this.setState({
       characters: this.state.characters.set(character.id, createCharacterRecord(character))
     });
