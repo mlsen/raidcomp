@@ -37,10 +37,10 @@ class CompositionConsumerStore {
 
   constructor() {
 
-    this.compositionId = null;
-    this.user = null;
-
     this.state = {
+
+      compositionId: null,
+      user: null,
 
       // All characters
       characters: Immutable.OrderedMap(),
@@ -59,7 +59,7 @@ class CompositionConsumerStore {
     let { compositionId, user } = props;
 
     // kinda dirty, in case it triggers twice
-    if(this.compositionId !== null) {
+    if(this.state.compositionId !== null) {
       return;
     }
 
@@ -72,19 +72,21 @@ class CompositionConsumerStore {
       compositionId = compositionId.slice(0, 10);
     }
 
-    this.compositionId = compositionId;
-    this.user = user;
+    this.state.compositionId = compositionId;
+    this.state.user = user;
 
     this.waitFor(AppStore);
     const socket = AppStore.getState().socket;
 
     // Channel for global messages
     socket.on(compositionId, data => {
+      console.log('incoming:', data);
       this._handleMessages(data);
     });
 
     // Channel for messages addressing me
     socket.on(compositionId + ':' + user, data => {
+      console.log('user incoming:', data);
       this._handleUserMessages(data);
     });
 
@@ -123,7 +125,14 @@ class CompositionConsumerStore {
   }
 
   _handleUserMessages(data) {
-    const { action, user } = data;
+    const { action, user, error } = data;
+
+    // not very clean..
+    if(error && error.indexOf('no RaidComp with this Id') > -1) {
+      this.setState({ compositionId: null, user: null });
+      return;
+    }
+
     switch(action) {
       case actions.REQUEST_BULK_DATA:
         this.handleImportBulkData(data.data);

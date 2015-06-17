@@ -1,4 +1,5 @@
 import React from 'react';
+import { Navigation } from 'react-router';
 import CompositionActions from '../actions/CompositionActions';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import CompositionConsumerStore from '../stores/CompositionConsumerStore';
@@ -7,6 +8,8 @@ import { Menubar, MenubarItem } from '../components/Menubar.jsx';
 import Workspace from '../components/Workspace.jsx';
 
 const Composition = React.createClass({
+
+  mixins: [Navigation],
 
   getInitialState() {
     let state = CompositionConsumerStore.getState();
@@ -29,6 +32,12 @@ const Composition = React.createClass({
   componentDidMount() {
     CompositionConsumerStore.listen(this.onStoreChange);
     CompositionActions.setComposition(this.props.params.compositionId);
+  },
+
+  componentWillUpdate(nextProps, nextState) {
+    if(nextState.compositionId === null) {
+      this.transitionTo('app');
+    }
   },
 
   componentWillUnmount() {
