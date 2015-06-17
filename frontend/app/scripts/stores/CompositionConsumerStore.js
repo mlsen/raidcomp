@@ -16,7 +16,8 @@ const Character = Immutable.Record({
   className: null,
   spec: null,
   role: null,
-  ilvl: null
+  ilvl: null,
+  legendaryStage: null
 });
 
 function createCharacterRecord(character) {
@@ -29,7 +30,8 @@ function createCharacterRecord(character) {
     className: character.className,
     spec: character.spec,
     role: character.role,
-    ilvl: character.ilvl || 0
+    ilvl: character.ilvl || 0,
+    legendaryStage: character.legendaryStage || 1
   });
 }
 
@@ -103,6 +105,9 @@ class CompositionConsumerStore {
       case actions.ADD_CHARACTER:
         this.handleAddCharacter(data.character);
         break;
+      case actions.UPDATE_CHARACTER:
+        this.handleUpdateCharacter(data.character);
+        break;
       case actions.MOVE_CHARACTER:
         this.handleMoveCharacter({
           characterId: data.character.id,
@@ -150,6 +155,16 @@ class CompositionConsumerStore {
 
     this.setState({
       characters: this.state.characters.set(character.id, character)
+    });
+  }
+
+  handleUpdateCharacter(character) {
+    console.log('update character:', character);
+    // character = this.state.characters.get(character.id);
+    // console.log('Ok, character found:', character.toObject());
+
+    this.setState({
+      characters: this.state.characters.set(character.id, createCharacterRecord(character))
     });
   }
 

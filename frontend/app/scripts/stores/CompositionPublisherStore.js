@@ -16,6 +16,7 @@ class CompositionPublisherStore {
       handleCreateCompositionFailed: CompositionActions.CREATE_COMPOSITION_FAILED,
 
       handleAddCharacter: CompositionPublisherActions.ADD_CHARACTER,
+      handleUpdateCharacter: CompositionPublisherActions.UPDATE_CHARACTER,
       handleMoveCharacter: CompositionPublisherActions.MOVE_CHARACTER,
       handleRemoveCharacter: CompositionPublisherActions.REMOVE_CHARACTER,
 
@@ -33,6 +34,7 @@ class CompositionPublisherStore {
   _emit(payload) {
     payload.compId = payload.compId || this.state.compositionId;
     payload.user = payload.user || this.state.user;
+    console.log('emit:', payload);
     AppStore.getState().socket.emit('raidcomp', payload);
   }
 
@@ -63,6 +65,13 @@ class CompositionPublisherStore {
     this._emit({
       action: actions.ADD_CHARACTER,
       character: character
+    });
+  }
+
+  handleUpdateCharacter(character) {
+    this._emit({
+      action: actions.ADD_CHARACTER,
+      character: character.toObject()
     });
   }
 

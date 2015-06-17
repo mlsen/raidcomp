@@ -40,15 +40,27 @@ const Character = React.createClass({
     delete: React.PropTypes.func
   },
 
-  renderRoleIcon() {
-    const cssClass = 'fa fa-fw ' + roleIcons[this.props.character.role];
-    return <i className={cssClass}></i>
+  getInitialState() {
+    return { showSettings: false };
   },
 
-  render() {
-    const { connectDragSource, isDragging } = this.props;
-    const cssClass = 'Character fg-' + this.props.character.className;
+  showSettings() {
+    this.setState({ showSettings: !this.state.showSettings });
+  },
 
+  changeRole(role) {
+    let character = this.props.character.set('role', role);
+    console.log('new character:', character.toObject());
+    CompositionPublisherActions.updateCharacter(character);
+  },
+
+  renderRoleIcon() {
+    const cssClass = 'fa fa-fw ' + roleIcons[this.props.character.role];
+    return <i className={cssClass} onClick={this.showSettings}></i>
+  },
+
+  renderCharacter() {
+    const cssClass = 'Character-normal fg-' + this.props.character.className;
     const removeIcon = classNames({
       'fa': true,
       'fa-fw': true,
@@ -56,7 +68,7 @@ const Character = React.createClass({
       'fa-remove': this.props.character.raidId !== '0'
     });
 
-    return connectDragSource(
+    return (
       <div className={cssClass}>
         <span className='Character-role'>
           {this.renderRoleIcon()}
@@ -72,6 +84,44 @@ const Character = React.createClass({
         <span className='Character-name'>
           {this.props.character.name}
         </span>
+      </div>
+    );
+  },
+
+  renderSettings() {
+
+    let roleIconNodes = [];
+    for(let role in roleIcons) {
+      if(role === roles.UNKNOWN) {
+        break;
+      }
+
+      let spanCss = classNames({
+        'Character-role': true,
+        'highlighted': this.props.character.role == role
+      });
+      let iconCss = 'fa fa-fw ' + roleIcons[role];
+
+      roleIconNodes.push(
+        <span key={role} className={spanCss} onClick={this.changeRole.bind(this, role)}>
+          <i className={iconCss}></i>
+        </span>
+      );
+    }
+
+    return (
+      <div className='Character-settings'>
+        {roleIconNodes}
+      </div>
+    );
+  },
+
+  render() {
+    const { connectDragSource, isDragging } = this.props;
+
+    return connectDragSource(
+      <div className='Character'>
+        {this.state.showSettings ? this.renderSettings() : this.renderCharacter()}
       </div>
     );
   }

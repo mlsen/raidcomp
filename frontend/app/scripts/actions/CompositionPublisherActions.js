@@ -6,6 +6,10 @@ class CompositionPublisherActions {
     this.dispatch(character);
   }
 
+  updateCharacter(character) {
+    this.dispatch(character);
+  }
+
   removeCharacter(characterId) {
     this.dispatch(characterId);
   }

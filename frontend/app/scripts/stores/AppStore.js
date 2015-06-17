@@ -17,7 +17,7 @@ class AppStore {
 
   handleConnect() {
     if(this.state.socket === null) {
-      this.state.socket = io.connect('http://api.raidcomp.mlsn.me');
+      this.state.socket = io.connect('http://api.raidcomp.dev');
     }
   }
 
