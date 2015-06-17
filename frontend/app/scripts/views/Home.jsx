@@ -68,22 +68,17 @@ const Home = React.createClass({
       <div className='Home'>
         <Menubar />
         <div className='Home-box'>
-          <div className='Home-boxHeader'>
-            Choose wisely..
+          <button onClick={this.createComposition}>Create Composition</button>
+          <div className='Home-separator'>
+            <span className='Home-separatorText'>OR</span>
           </div>
-          <div className='Home-boxBody'>
-            <button onClick={this.createComposition}>Create Composition</button>
-            <div className='Home-separator'>
-              <span className='Home-separatorText'>OR</span>
-            </div>
-            <div className='Home-boxInput'>
-              <input type='text' ref='compositionId' placeholder='Enter ID' />
-              <button onClick={this.handleSubmit}>
-                <i className='fa fa-fw fa-arrow-right'></i>
-              </button>
-            </div>
-            {error}
+          <div className='Home-boxInput'>
+            <input type='text' ref='compositionId' placeholder='Enter ID' />
+            <button onClick={this.handleSubmit}>
+              <i className='fa fa-fw fa-arrow-right'></i>
+            </button>
           </div>
+          {error}
         </div>
       </div>
     );
