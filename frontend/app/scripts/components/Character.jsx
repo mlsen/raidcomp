@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { DragSource } from 'react-dnd';
 import ItemTypes from '../misc/itemTypes';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
-import { roles } from '../misc/wow';
+import { roles, specs } from '../misc/wow';
 
 const characterSource = {
   beginDrag(props) {
@@ -49,9 +49,11 @@ const Character = React.createClass({
   },
 
   changeRole(role) {
-    let character = this.props.character.set('role', role);
-    console.log('new character:', character.toObject());
-    CompositionPublisherActions.updateCharacter(character);
+    if(role !== this.props.character.role) {
+      let character = this.props.character.set('role', role);
+      CompositionPublisherActions.updateCharacter(character);
+    }
+    this.setState({ showSettings: false });
   },
 
   renderRoleIcon() {
@@ -91,10 +93,8 @@ const Character = React.createClass({
   renderSettings() {
 
     let roleIconNodes = [];
-    for(let role in roleIcons) {
-      if(role === roles.UNKNOWN) {
-        break;
-      }
+    for(let spec in specs[this.props.character.className]) {
+      let role = specs[this.props.character.className][spec];
 
       let spanCss = classNames({
         'Character-role': true,

@@ -1,4 +1,4 @@
-const baseUrl = 'http://api.raidcomp.dev';
+const baseUrl = 'http://api.raidcomp.mlsn.me';
 const api = {};
 
 api.createComposition = function() {
