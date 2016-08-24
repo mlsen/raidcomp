@@ -5,36 +5,36 @@ import Backend from '../misc/backendApi';
 class ImportActions {
 
   fetchRealms(region) {
-    // this.dispatch();
     Backend.fetchRealms(region)
       .then(response => {
-        this.actions.updateRealms({
+        this.updateRealms({
           region: region,
           realms: response.realms
         });
       })
       .catch(err => {
-        this.actions.fetchFailed({
+        this.fetchFailed({
           message: 'Could not retrieve realm data.'
         });
       });
+    return false;
   }
 
   fetchGuild(region, realm, guild) {
-    // this.dispatch();
     Backend.fetchGuild(region, realm, guild)
       .then(response => {
-        this.actions.updateGuild({
+        this.updateGuild({
           region: region,
           realm: realm,
           guild: response
         });
       })
       .catch(err => {
-        this.actions.fetchFailed({
+        this.fetchFailed({
           message: 'Could not retrieve guild data.'
         });
       });
+    return false;
   }
 
   fetchCharacter(region, realm, character) {

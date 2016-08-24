@@ -6,6 +6,7 @@ var cors = require('cors');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var request = require('request');
+var config = require('./app/config');
 
 // var bodyparser = require('body-parser');
 var mongoose = require('mongoose');
@@ -30,11 +31,11 @@ app.get('/', function (req, res) {
 
 // Proxy route for armory requests
 var regions = {
-  cn: 'www.battlenet.com.cn',
-  eu: 'eu.battle.net',
-  kr: 'kr.battle.net',
-  tw: 'tw.battle.net',
-  us: 'us.battle.net'
+  // cn: 'www.battlenet.com.cn',
+  eu: 'eu.api.battle.net',
+  kr: 'kr.api.battle.net',
+  tw: 'tw.api.battle.net',
+  us: 'us.api.battle.net'
 };
 
 app.get(/armory\/([a-z]{2})\/(.+)/, function(req, res, next) {
@@ -44,14 +45,20 @@ app.get(/armory\/([a-z]{2})\/(.+)/, function(req, res, next) {
   if(!regions.hasOwnProperty(req.params[0])) {
     return res.status(400).json({ error: 'No such region.'} );
   }
-  var reqUrl = 'https://' + regions[req.params[0]] + '/api/wow/';
+  var reqUrl = 'https://' + regions[req.params[0]] + '/wow/';
   // 3 = length of region + /
   var removeChars = '/armory/'.length + 3;
   reqUrl = reqUrl.concat(req.url.substring(removeChars));
 
+  var hasQueryParams = reqUrl.indexOf('?') !== -1
+  reqUrl += (hasQueryParams) ? '&' : '?';
+  reqUrl += 'locale=en_GB&apikey=' + config.apiKey;
+  console.log(reqUrl);
+
   request.get({ url: reqUrl, json: true }, function(error, response, body) {
-    console.log(error);
-    res.status(response.statusCode).json(body);
+    if (response) {
+      res.status(response.statusCode).json(body);
+    }
   });
 });
 

@@ -7,19 +7,26 @@ proxy:
 
 frontend:
   build: ./frontend
-  expose:
-    - "80"
+  command: nginx -g "pid /tmp/nginx.pid; daemon off;"
+  volumes:
+    - ./frontend/dist:/srv/rc/app
+  ports:
+    - "1337:1337"
   environment:
-    VIRTUAL_HOST: raidcomp.mlsn.me
+    VIRTUAL_HOST: raidcomp.xmyno.me
 
 backend:
   build: ./backend
+  command: node --harmony /srv/raidcomp/app.js
   links:
     - mongo
-  expose:
-    - "5000"
+  volumes:
+    - ./backend/app:/srv/raidcomp/app
+    - ./backend/app.js:/srv/raidcomp/app.js
+  ports:
+    - "5000:5000"
   environment:
-    VIRTUAL_HOST: api.raidcomp.mlsn.me
+    VIRTUAL_HOST: api.raidcomp.xmyno.me
 
 mongo:
   image: mongo

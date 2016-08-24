@@ -22,7 +22,7 @@ class CompositionPublisherActions {
   }
 
   addRaid() {
-    return;
+    return true;
   }
 
   removeRaid(raidId) {
@@ -30,7 +30,7 @@ class CompositionPublisherActions {
   }
 
   importStaging() {
-    return;
+    return true;
   }
 }
 

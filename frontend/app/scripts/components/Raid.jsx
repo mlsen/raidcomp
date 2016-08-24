@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import ItemTypes from '../misc/itemTypes';
 import CharacterList from './CharacterList.jsx';
-import { getTokenForClass, tokens, getArmorTypeForClass, armorTypes, getTrinketForSpec, trinketTypes } from '../misc/wow';
+import { getTokenForClass, tokens, getArmorTypeForClass, armorTypes, getTrinketForSpec, trinketTypes, relicTypes, getRelicForSpec } from '../misc/wow';
 
 const raidTarget = {
   drop(props, monitor) {
@@ -32,7 +32,8 @@ const Raid = React.createClass({
   numSummaryTypes: {
     numTokens: {},
     numArmorTypes: {},
-    numTrinkets: {}
+    numTrinkets: {},
+    numRelics: {}
   },
 
   setInitialState: function () {
@@ -50,6 +51,17 @@ const Raid = React.createClass({
     this.numSummaryTypes.numArmorTypes[armorTypes.LEATHER] = 0;
     this.numSummaryTypes.numArmorTypes[armorTypes.MAIL] = 0;
     this.numSummaryTypes.numArmorTypes[armorTypes.PLATE] = 0;
+
+    this.numSummaryTypes.numRelics[relicTypes.BLOOD] = 0;
+    this.numSummaryTypes.numRelics[relicTypes.SHADOW] = 0;
+    this.numSummaryTypes.numRelics[relicTypes.IRON] = 0;
+    this.numSummaryTypes.numRelics[relicTypes.FROST] = 0;
+    this.numSummaryTypes.numRelics[relicTypes.FIRE] = 0;
+    this.numSummaryTypes.numRelics[relicTypes.FEL] = 0;
+    this.numSummaryTypes.numRelics[relicTypes.ARCANE] = 0;
+    this.numSummaryTypes.numRelics[relicTypes.LIFE] = 0;
+    this.numSummaryTypes.numRelics[relicTypes.STORM] = 0;
+    this.numSummaryTypes.numRelics[relicTypes.HOLY] = 0;
   },
 
   countTypes(num, type) {
@@ -57,6 +69,11 @@ const Raid = React.createClass({
       num[type] = 0;
     } else {
       num[type] = num[type] + 1;
+    }
+  },
+  countTypesArray(num, typeArr) {
+    for (let i = 0; i < typeArr.length; i++) {
+      this.countTypes(num, typeArr[i]);
     }
   },
 
@@ -128,6 +145,22 @@ const Raid = React.createClass({
       </ul>
     ));
   },
+  renderRelicCategory() {
+    return this.renderCategory('Relics', (
+      <ul className='Raid-relicList'>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.BLOOD]} &times; Blood</li>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.SHADOW]} &times; Shadow</li>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.IRON]} &times; Iron</li>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.FROST]} &times; Frost</li>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.FIRE]} &times; Fire</li>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.FEL]} &times; Fel</li>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.ARCANE]} &times; Arcane</li>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.LIFE]} &times; Life</li>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.STORM]} &times; Storm</li>
+        <li>{this.numSummaryTypes.numRelics[relicTypes.HOLY]} &times; Holy</li>
+      </ul>
+    ));
+  },
 
   render() {
     const { connectDropTarget, isOver } = this.props;
@@ -141,6 +174,7 @@ const Raid = React.createClass({
       this.countTypes(this.numSummaryTypes.numTokens, getTokenForClass(character.className));
       this.countTypes(this.numSummaryTypes.numArmorTypes, getArmorTypeForClass(character.className));
       this.countTypes(this.numSummaryTypes.numTrinkets, getTrinketForSpec(character.className, character.spec));
+      this.countTypesArray(this.numSummaryTypes.numRelics, getRelicForSpec(character.className, character.spec));
     });
 
     return connectDropTarget(
@@ -160,6 +194,9 @@ const Raid = React.createClass({
             {this.renderTokenCategory()}
             {this.renderArmorTypeCategory()}
             {this.renderTrinketCategory()}
+          </div>
+          <div className='Raid-relics'>
+            {this.renderRelicCategory()}
           </div>
         </div>
       </div>

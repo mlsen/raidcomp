@@ -5,11 +5,11 @@ var Character = require('../models/character').Character;
 var respondWithError = require('../misc/utils').respondWithError;
 
 var regions = {
-  cn: 'www.battlenet.com.cn',
-  eu: 'eu.battle.net',
-  kr: 'kr.battle.net',
-  tw: 'tw.battle.net',
-  us: 'us.battle.net'
+  //cn: 'www.battlenet.com.cn',
+  eu: 'eu.api.battle.net',
+  kr: 'kr.api.battle.net',
+  tw: 'tw.api.battle.net',
+  us: 'us.api.battle.net'
 };
 
 var ArmoryImportAction = {
@@ -29,7 +29,7 @@ var ArmoryImportAction = {
     if (!data.region || !data.realm || !data.guild || !regions.hasOwnProperty(data.region)) {
       return respondWithError(data, 'Required attributes were missing', socketResponse);
     }
-    var requestUrl = 'https://' + regions[data.region] + '/api/wow/guild/' + data.realm + '/' + data.guild + '?fields=members';
+    var requestUrl = 'https://' + regions[data.region] + '/wow/guild/' + data.realm + '/' + data.guild + '?fields=members';
     this._armoryRequest(data, requestUrl, socketResponse);
   },
 
@@ -37,7 +37,7 @@ var ArmoryImportAction = {
     if (!data.region || !data.realm || !data.character || !regions.hasOwnProperty(data.region)) {
       return respondWithError(data, 'Required attributes were missing', socketResponse);
     }
-    var requestUrl = 'https://' + regions[data.region] + '/api/wow/character/' + data.realm + '/' + data.character + '?fields=achievements,items,audit';
+    var requestUrl = 'https://' + regions[data.region] + '/wow/character/' + data.realm + '/' + data.character + '?fields=achievements,items,audit';
     this._armoryRequest(data, requestUrl, socketResponse);
   },
 
@@ -45,7 +45,7 @@ var ArmoryImportAction = {
     if (!data.region || !regions.hasOwnProperty(data.region)) {
       return respondWithError(data, 'Required attributes were missing', socketResponse);
     }
-    var requestUrl = 'https://' + regions[data.region] + '/api/wow/realm/status';
+    var requestUrl = 'https://' + regions[data.region] + '/wow/realm/status';
     this._armoryRequest(data, requestUrl, socketResponse);
   }
 };

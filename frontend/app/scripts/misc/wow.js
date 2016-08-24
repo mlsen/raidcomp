@@ -16,6 +16,7 @@ const roles = {
 
 const classes = {
   DEATHKNIGHT: 'deathknight',
+  DEMONHUNTER: 'demonhunter',
   DRUID: 'druid',
   HUNTER: 'hunter',
   MAGE: 'mage',
@@ -33,6 +34,10 @@ const specs = {
     'Blood': roles.TANK,
     'Frost': roles.MELEE,
     'Unholy': roles.MELEE
+  },
+  demonhunter: {
+    'Havoc': roles.MELEE,
+    'Vengeance': roles.TANK
   },
   druid: {
     'Balance': roles.RANGED,
@@ -67,7 +72,7 @@ const specs = {
   },
   rogue: {
     'Assasination': roles.MELEE,
-    'Combat': roles.MELEE,
+    'Outlaw': roles.MELEE,
     'Subtlety': roles.MELEE
   },
   shaman: {
@@ -97,7 +102,8 @@ const classTokens = {
   conqueror: [
     classes.PALADIN,
     classes.PRIEST,
-    classes.WARLOCK
+    classes.WARLOCK,
+    classes.DEMONHUNTER
   ],
   protector: [
     classes.HUNTER,
@@ -129,7 +135,8 @@ const classArmorTypes = {
   leather: [
     classes.DRUID,
     classes.MONK,
-    classes.ROGUE
+    classes.ROGUE,
+    classes.DEMONHUNTER
   ],
   mail: [
     classes.HUNTER,
@@ -155,6 +162,10 @@ const trinkets = {
     'Blood': trinketTypes.TANK,
     'Frost': trinketTypes.STR,
     'Unholy': trinketTypes.STR
+  },
+  demonhunter: {
+    'Havoc': trinketTypes.AGI,
+    'Vengeance': trinketTypes.TANK
   },
   druid: {
     'Balance': trinketTypes.CASTER,
@@ -189,7 +200,7 @@ const trinkets = {
   },
   rogue: {
     'Assasination': trinketTypes.AGI,
-    'Combat': trinketTypes.AGI,
+    'Outlaw': trinketTypes.AGI,
     'Subtlety': trinketTypes.AGI
   },
   shaman: {
@@ -206,6 +217,82 @@ const trinkets = {
     'Arms': trinketTypes.STR,
     'Fury': trinketTypes.STR,
     'Protection': trinketTypes.TANK
+  }
+};
+
+const relicTypes = {
+  BLOOD: 'blood',
+  SHADOW: 'shadow',
+  IRON: 'iron',
+  FROST: 'frost',
+  FIRE: 'fire',
+  FEL: 'fel',
+  ARCANE: 'arcane',
+  LIFE: 'life',
+  STORM: 'storm',
+  HOLY: 'holy'
+}
+
+const relics = {
+  deathknight: {
+    'Blood': [relicTypes.BLOOD, relicTypes.SHADOW, relicTypes.IRON],
+    'Frost': [relicTypes.FROST, relicTypes.SHADOW],
+    'Unholy': [relicTypes.FIRE, relicTypes.SHADOW, relicTypes.BLOOD]
+  },
+  demonhunter: {
+    'Havoc': [relicTypes.FEL, relicTypes.SHADOW],
+    'Vengeance': [relicTypes.IRON, relicTypes.ARCANE, relicTypes.FEL]
+  },
+  druid: {
+    'Balance': [relicTypes.ARCANE, relicTypes.LIFE],
+    'Guardian': [relicTypes.FIRE, relicTypes.BLOOD, relicTypes.LIFE],
+    'Feral': [relicTypes.FROST, relicTypes.BLOOD, relicTypes.LIFE],
+    'Restoration': [relicTypes.LIFE, relicTypes.FROST]
+  },
+  hunter: {
+    'Beast Mastery': [relicTypes.STORM, relicTypes.ARCANE, relicTypes.IRON],
+    'Marksmanship': [relicTypes.STORM, relicTypes.BLOOD, relicTypes.LIFE],
+    'Survival': [relicTypes.STORM, relicTypes.IRON, relicTypes.BLOOD]
+  },
+  mage: {
+    'Arcane': [relicTypes.ARCANE, relicTypes.FROST],
+    'Fire': [relicTypes.FIRE, relicTypes.ARCANE],
+    'Frost': [relicTypes.FROST, relicTypes.ARCANE]
+  },
+  monk: {
+    'Brewmaster':[relicTypes.LIFE, relicTypes.STORM, relicTypes.IRON],
+    'Mistweaver':[relicTypes.FROST, relicTypes.LIFE, relicTypes.STORM],
+    'Windwalker':[relicTypes.STORM, relicTypes.IRON]
+  },
+  paladin: {
+    'Holy':[relicTypes.HOLY, relicTypes.LIFE],
+    'Retribution':[relicTypes.HOLY, relicTypes.FIRE],
+    'Protection':[relicTypes.HOLY, relicTypes.IRON, relicTypes.ARCANE]
+  },
+  priest: {
+    'Discipline':[relicTypes.HOLY, relicTypes.SHADOW],
+    'Holy':[relicTypes.HOLY, relicTypes.LIFE],
+    'Shadow':[relicTypes.SHADOW, relicTypes.BLOOD]
+  },
+  rogue: {
+    'Assasination':[relicTypes.SHADOW, relicTypes.IRON, relicTypes.BLOOD],
+    'Outlaw':[relicTypes.BLOOD, relicTypes.IRON, relicTypes.STORM],
+    'Subtlety':[relicTypes.FEL, relicTypes.SHADOW]
+  },
+  shaman: {
+    'Elemental':[relicTypes.STORM, relicTypes.FROST],
+    'Enhancement':[relicTypes.FIRE, relicTypes.IRON, relicTypes.STORM],
+    'Restoration':[relicTypes.LIFE, relicTypes.FROST]
+  },
+  warlock: {
+    'Affliction':[relicTypes.SHADOW, relicTypes.BLOOD],
+    'Demonology':[relicTypes.SHADOW, relicTypes.FIRE, relicTypes.FEL],
+    'Destruction':[relicTypes.FEL, relicTypes.FIRE]
+  },
+  warrior: {
+    'Arms':[relicTypes.IRON, relicTypes.BLOOD, relicTypes.SHADOW],
+    'Fury':[relicTypes.FIRE, relicTypes.STORM, relicTypes.IRON],
+    'Protection':[relicTypes.IRON, relicTypes.BLOOD, relicTypes.FIRE]
   }
 };
 
@@ -246,6 +333,13 @@ function getTrinketForSpec(className, spec) {
   return null;
 }
 
+function getRelicForSpec(className, spec) {
+  if (typeof spec !== undefined && spec !== null) {
+    return relics[className][spec];
+  }
+  return null;
+}
+
 export {
   roles,
   classes,
@@ -259,5 +353,8 @@ export {
   getArmorTypeForClass,
   specs,
   regions,
-  tokens
+  tokens,
+  relicTypes,
+  relics,
+  getRelicForSpec
 };

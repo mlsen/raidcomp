@@ -13,7 +13,7 @@ module.exports.getConfig = function(type) {
       loaders: [{
         test: /\.jsx?$/,
         include: __dirname + '/app',
-        exclude: /node_modules/,
+        exclude: [/node_modules/, 'scripts/config-example.jsx'],
         loader: 'babel-loader'
       }]
     },

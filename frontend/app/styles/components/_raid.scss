@@ -1,5 +1,5 @@
 .Raid {
-  width: 500px;
+  width: 550px;
   border-radius: 2px;
   border: 1px solid $base-border-color;
   border-top: 3px solid lighten($dark-gray, 40%);
@@ -36,7 +36,7 @@
 }
 
 .Raid-summary {
-  width: 180px;
+  width: 140px;
   padding: 1em 0 1em 1em;
 
   li {
@@ -56,6 +56,11 @@
     padding-right: 0.25em;
     vertical-align: 1px;
   }
+}
+
+.Raid-relics {
+  padding: 1em 0 1em 1em;
+  width: 140px;
 }
 
 .Raid-category {

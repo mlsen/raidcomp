@@ -1,4 +1,6 @@
-const baseUrl = 'http://api.raidcomp.dev';
+import config from '../config.jsx';
+
+const baseUrl = config.baseUrl;
 const api = {};
 
 api.createComposition = function() {
@@ -9,15 +11,17 @@ api.createComposition = function() {
   });
 };
 
-api.armoryRequest = function(region, url) {
-  return fetch(baseUrl + '/armory/' + region + url)
+api.armoryRequest = function(region, url, params) {
+  let requrl = baseUrl + '/armory/' + region + url;
+  console.log(requrl);
+  return fetch(requrl)
     .then(response => {
       return response.json();
     });
 };
 
 api.fetchRealms = function(region) {
-  return api.armoryRequest(region, '/realm/status');
+  return api.armoryRequest(region, '/realm/status', '');
 };
 
 api.fetchGuild = function(region, realm, guild) {

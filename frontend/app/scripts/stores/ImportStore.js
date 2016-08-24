@@ -17,7 +17,8 @@ const classIds = {
   8: classes.MAGE,
   9: classes.WARLOCK,
   10: classes.MONK,
-  11: classes.DRUID
+  11: classes.DRUID,
+  12: classes.DEMONHUNTER
 };
 
 function makeCharacter(region, realm, character) {

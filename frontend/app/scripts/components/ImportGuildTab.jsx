@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ImportActions from '../actions/ImportActions';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import classNames from 'classnames';
@@ -28,8 +29,10 @@ const ImportGuildTab = React.createClass({
   handleSearch(e) {
     e.preventDefault();
     const region = this.state.selectedRegion;
-    const realm = this.refs.realm.getDOMNode().value;
-    const guild = this.refs.guild.getDOMNode().value;
+    // const realm = this.refs.realm.getDOMNode().value;
+    // const guild = this.refs.guild.getDOMNode().value;
+    const realm = ReactDOM.findDOMNode(this.refs.realm).value;
+    const guild = ReactDOM.findDOMNode(this.refs.guild).value;
     ImportActions.fetchGuild(region, realm, guild);
   },
 
