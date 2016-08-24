@@ -19,7 +19,7 @@ $base-z-index: 0;
 $dark-gray: #111111;
 $medium-gray: lighten($dark-gray, 15%);
 $light-gray: lighten($dark-gray, 30%);
-$white: #FFFFFF;
+$white: #dedede;
 $limey: #D1E751;
 $light-blue: #4DBCE9;
 $dark-blue: #26ADE4;
@@ -28,6 +28,7 @@ $dark-red: darken($red, 25%);
 
 $class-colors: (
   deathknight: #C41F3B,
+  demonhunter: #A330C9,
   druid: #FF7D0A,
   hunter: #ABD473,
   mage: #69CCF0,
@@ -38,6 +39,69 @@ $class-colors: (
   shaman: #0070DE,
   warlock: #9482C9,
   warrior: #C79C6E
+);
+
+$classSpecs: (
+  deathknight: (
+    'Blood',
+    'Frost',
+    'Unholy'
+  ),
+  demonhunter: (
+    'Havoc',
+    'Vengeance'
+  ),
+  druid: (
+    'Balance',
+    'Guardian',
+    'Feral',
+    'Restoration'
+  ),
+  hunter: (
+    'BeastMastery',
+    'Marksmanship',
+    'Survival'
+  ),
+  mage: (
+    'Arcane',
+    'Fire',
+    'Frost'
+  ),
+  monk: (
+    'Brewmaster',
+    'Mistweaver',
+    'Windwalker'
+  ),
+  paladin: (
+    'Holy',
+    'Protection',
+    'Retribution'
+  ),
+  priest: (
+    'Discipline',
+    'Holy',
+    'Shadow'
+  ),
+  rogue: (
+    'Assassination',
+    'Outlaw',
+    'Subtlety'
+  ),
+  shaman: (
+    'Elemental',
+    'Enhancement',
+    'Restoration'
+  ),
+  warlock: (
+    'Affliction',
+    'Demonology',
+    'Destruction'
+  ),
+  warrior: (
+    'Arms',
+    'Fury',
+    'Protection'
+  )
 );
 
 $error-color: $red;

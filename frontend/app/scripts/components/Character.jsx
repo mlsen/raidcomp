@@ -41,24 +41,31 @@ const Character = React.createClass({
   },
 
   getInitialState() {
-    return { showSettings: false };
+    return { showSpecSelect: false };
   },
 
-  showSettings() {
-    this.setState({ showSettings: !this.state.showSettings });
+  showSpecSelect() {
+    this.setState({ showSpecSelect: !this.state.showSpecSelect });
   },
 
-  changeRole(role) {
-    if(role !== this.props.character.role) {
-      let character = this.props.character.set('role', role);
+  changeSpec(spec) {
+    if (spec !== this.props.character.spec) {
+      let role = specs[this.props.character.className][spec];
+      let character = this.props.character.set('spec', spec).set('role', role);
       CompositionPublisherActions.updateCharacter(character);
     }
-    this.setState({ showSettings: false });
+    this.setState({ showSpecSelect: false });
   },
 
   renderRoleIcon() {
     const cssClass = 'fa fa-fw ' + roleIcons[this.props.character.role];
-    return <i className={cssClass} onClick={this.showSettings}></i>
+    return <i className={cssClass}></i>
+  },
+
+  renderSpecIcon() {
+    const spec = this.props.character.spec;
+    const cssClass = (!spec) ? 'fa fa-fw fa-remove' : 'Spec-' + spec.replace(' ', '');
+    return <i className={cssClass} onClick={this.showSpecSelect}></i>
   },
 
   renderCharacter() {
@@ -75,6 +82,9 @@ const Character = React.createClass({
         <span className='Character-role'>
           {this.renderRoleIcon()}
         </span>
+        <span className='Character-spec'>
+          {this.renderSpecIcon()}
+        </span>
         <span className='Character-delete'>
           <a href='javascript:;' onClick={this.props.delete.bind(null, this.props.character.id)}>
             <i className={removeIcon}></i>
@@ -90,28 +100,22 @@ const Character = React.createClass({
     );
   },
 
-  renderSettings() {
-
-    let roleIconNodes = [];
+  renderSpecSelect() {
+    let specNodes = [];
     for(let spec in specs[this.props.character.className]) {
-      let role = specs[this.props.character.className][spec];
-
       let spanCss = classNames({
-        'Character-role': true,
-        'highlighted': this.props.character.role == role
+        'Character-spec': true,
+        'highlighted': this.props.character.spec == spec
       });
-      let iconCss = 'fa fa-fw ' + roleIcons[role];
 
-      roleIconNodes.push(
-        <span key={role} className={spanCss} onClick={this.changeRole.bind(this, role)}>
-          <i className={iconCss}></i>
-        </span>
+      specNodes.push(
+        <span key={spec} className={spanCss} onClick={this.changeSpec.bind(this, spec)}>{spec}</span>
       );
     }
 
     return (
-      <div className='Character-settings'>
-        {roleIconNodes}
+      <div className='Character-specSelect'>
+        {specNodes}
       </div>
     );
   },
@@ -121,7 +125,7 @@ const Character = React.createClass({
 
     return connectDragSource(
       <div className='Character'>
-        {this.state.showSettings ? this.renderSettings() : this.renderCharacter()}
+        {this.state.showSpecSelect ? this.renderSpecSelect() : this.renderCharacter()}
       </div>
     );
   }

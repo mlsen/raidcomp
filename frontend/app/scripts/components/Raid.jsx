@@ -72,6 +72,7 @@ const Raid = React.createClass({
     }
   },
   countTypesArray(num, typeArr) {
+    if (!typeArr) return;
     for (let i = 0; i < typeArr.length; i++) {
       this.countTypes(num, typeArr[i]);
     }

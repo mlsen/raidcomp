@@ -71,7 +71,7 @@ const specs = {
     'Shadow': roles.RANGED
   },
   rogue: {
-    'Assasination': roles.MELEE,
+    'Assassination': roles.MELEE,
     'Outlaw': roles.MELEE,
     'Subtlety': roles.MELEE
   },

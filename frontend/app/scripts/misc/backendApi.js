@@ -13,7 +13,6 @@ api.createComposition = function() {
 
 api.armoryRequest = function(region, url, params) {
   let requrl = baseUrl + '/armory/' + region + url;
-  console.log(requrl);
   return fetch(requrl)
     .then(response => {
       return response.json();
