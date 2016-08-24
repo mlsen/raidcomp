@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import Tabs from 'react-simpletabs';
+// import Tabs from 'react-simpletabs';
 import ImportActions from '../actions/ImportActions';
 import ImportStore from '../stores/ImportStore';
 import ImportGuildTab from '../components/ImportGuildTab.jsx';
@@ -43,18 +43,13 @@ const ImportModal = React.createClass({
           <a href='javascript:;' onClick={this.props.onRequestClose}>
             <i className='fa fa-lg fa-close ImportModal-closeIcon'></i>
           </a>
-          <Tabs>
-            <Tabs.Panel title='Import Guild'>
+
               <ImportGuildTab
                 guild={this.state.guild}
                 realms={this.state.realms}
                 loading={this.state.loading}
                 error={this.state.error} />
-            </Tabs.Panel>
-            <Tabs.Panel title='Import Character'>
-              <p>Import Character Content</p>
-            </Tabs.Panel>
-          </Tabs>
+
         </div>
       </Modal>
     );

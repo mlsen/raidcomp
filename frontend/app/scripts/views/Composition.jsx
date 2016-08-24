@@ -9,7 +9,10 @@ import Workspace from '../components/Workspace.jsx';
 
 const Composition = React.createClass({
 
-  mixins: [Navigation],
+  // mixins: [Navigation],
+  // contextTypes: {
+  //       router: React.PropTypes.object.isRequired
+  // },
 
   getInitialState() {
     let state = CompositionConsumerStore.getState();
@@ -31,12 +34,14 @@ const Composition = React.createClass({
 
   componentDidMount() {
     CompositionConsumerStore.listen(this.onStoreChange);
-    CompositionActions.setComposition(this.props.params.compositionId);
+    console.log("Mounting: " + this.props.params.compositionId);
+    CompositionActions.setComposition.defer(this.props.params.compositionId);
   },
 
   componentWillUpdate(nextProps, nextState) {
     if(nextState.compositionId === null) {
-      this.transitionTo('app');
+      console.log("hi...")
+      //this.context.router.push('/');
     }
   },
 

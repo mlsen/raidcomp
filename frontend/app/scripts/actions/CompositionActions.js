@@ -1,5 +1,5 @@
 import sha1 from 'sha1';
-import alt from '../alt';
+import alt from '../alt.jsx';
 import Backend from '../misc/backendApi';
 import AppStore from '../stores/AppStore';
 
@@ -12,22 +12,27 @@ class CompositionActions {
   createComposition() {
     Backend.createComposition()
       .then(response => {
-        this.actions.setComposition(response.compId);
+        this.setComposition(response.compId)
       })
       .catch(err => {
-        this.actions.createCompositionFailed(err);
+        this.createCompositionFailed(err);
       });
+      return false;
   }
 
   setComposition(id) {
-    this.dispatch({
-      compositionId: id,
-      user: generateRandomId()
-    });
+    return (dispatch) => {
+      dispatch({
+        compositionId: id,
+        user: generateRandomId()
+      });
+    }
   }
 
   createCompositionFailed(err) {
-    this.dispatch(err);
+    return (dispatch) => {
+      dispatch(err);
+    }
   }
 }
 

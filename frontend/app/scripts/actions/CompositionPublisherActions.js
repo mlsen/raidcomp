@@ -1,36 +1,36 @@
-import alt from '../alt';
+import alt from '../alt.jsx';
 
 class CompositionPublisherActions {
 
   addCharacter(character) {
-    this.dispatch(character);
+    return character;
   }
 
   updateCharacter(character) {
-    this.dispatch(character);
+    return character;
   }
 
   removeCharacter(characterId) {
-    this.dispatch(characterId);
+    return characterId;
   }
 
   moveCharacter(characterId, raidId) {
-    this.dispatch({
+    return {
       characterId: characterId,
       raidId: raidId
-    });
+    };
   }
 
   addRaid() {
-    this.dispatch();
+    return;
   }
 
   removeRaid(raidId) {
-    this.dispatch(raidId);
+    return raidId;
   }
 
   importStaging() {
-    this.dispatch();
+    return;
   }
 }
 

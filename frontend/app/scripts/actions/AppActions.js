@@ -1,9 +1,12 @@
-import alt from '../alt';
+import alt from '../alt.jsx';
+import io from 'socket.io-client';
+
 
 class AppActions {
 
-  connect() {
-    this.dispatch();
+  connectToSocket() {
+    console.log("connecting to socket");
+    return io.connect('http://api.raidcomp.dev');
   }
 
 }

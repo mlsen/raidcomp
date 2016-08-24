@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import alt from '../alt';
+import alt from '../alt.jsx';
 import CompositionActions from '../actions/CompositionActions';
 import ImportActions from '../actions/ImportActions';
 import AppStore from './AppStore';

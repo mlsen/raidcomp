@@ -1,11 +1,11 @@
-import alt from '../alt';
+import alt from '../alt.jsx';
 import Backend from '../misc/backendApi';
 
 
 class ImportActions {
 
   fetchRealms(region) {
-    this.dispatch();
+    // this.dispatch();
     Backend.fetchRealms(region)
       .then(response => {
         this.actions.updateRealms({
@@ -21,7 +21,7 @@ class ImportActions {
   }
 
   fetchGuild(region, realm, guild) {
-    this.dispatch();
+    // this.dispatch();
     Backend.fetchGuild(region, realm, guild)
       .then(response => {
         this.actions.updateGuild({
@@ -38,27 +38,27 @@ class ImportActions {
   }
 
   fetchCharacter(region, realm, character) {
-    this.dispatch({
+    return {
       region: region,
       realm: realm,
       character: character
-    });
+    };
   }
 
   fetchFailed(err) {
-    this.dispatch(err);
+    return err;
   }
 
   updateRealms(props) {
-    this.dispatch(props);
+    return props;
   }
 
   updateGuild(props) {
-    this.dispatch(props);
+    return props;
   }
 
   selectGuildRank(rank) {
-    this.dispatch(rank);
+    return rank;
   }
 
 }

@@ -1,8 +1,9 @@
 import Immutable from 'immutable';
 import sha1 from 'sha1';
-import alt from '../alt';
+import alt from '../alt.jsx';
 import CompositionActions from '../actions/CompositionActions';
 import AppStore from './AppStore';
+import AppActions from '../actions/AppActions';
 import { getTokenForClass, tokens } from '../misc/wow';
 import { generateRandomCharacter } from '../misc/tools';
 import actions from '../misc/socketActions';
@@ -53,13 +54,14 @@ class CompositionConsumerStore {
     };
 
     this.bindListeners({
-      handleSetComposition: CompositionActions.SET_COMPOSITION
+      handleSetComposition: CompositionActions.SET_COMPOSITION,
     });
   }
 
   handleSetComposition(props) {
     let { compositionId, user } = props;
 
+    console.log("handeCreateComp" + compositionId + user);
     // kinda dirty, in case it triggers twice
     if(this.state.compositionId !== null) {
       return;
@@ -78,22 +80,23 @@ class CompositionConsumerStore {
     this.state.user = user;
 
     this.waitFor(AppStore);
-    const socket = AppStore.getState().socket;
-
+    const socket = AppStore.state.socket;
     // Channel for global messages
-    socket.on(compositionId, data => {
+
+    console.log("onSocketConnect ConsumerStore", this.state.compositionId);
+    socket.on(this.state.compositionId, data => {
       this._handleMessages(data);
     });
 
     // Channel for messages addressing me
-    socket.on(compositionId + ':' + user, data => {
+    socket.on(this.state.compositionId + ':' + this.state.user, data => {
       this._handleUserMessages(data);
     });
 
     socket.emit('raidcomp', {
       action: actions.REQUEST_BULK_DATA,
-      user: user,
-      compId: compositionId
+      user: this.state.user,
+      compId: this.state.compositionId
     });
   }
 

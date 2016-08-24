@@ -86,7 +86,9 @@ const Raid = React.createClass({
     this.props.characters.forEach(character => {
       totalIlvl = totalIlvl + character.ilvl;
     });
-    const averageIlvl = parseInt(totalIlvl / this.props.characters.size);
+    let averageIlvl = parseInt(totalIlvl / this.props.characters.size);
+    if (isNaN(averageIlvl)) { averageIlvl = 0; }
+
 
     return this.renderCategory('Info', (
       <ul>

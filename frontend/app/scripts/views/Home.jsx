@@ -6,7 +6,10 @@ import { Menubar, MenubarItem } from '../components/Menubar.jsx';
 
 const Home = React.createClass({
 
-  mixins: [Navigation],
+  // mixins: [Navigation],
+  contextTypes: {
+        router: React.PropTypes.object.isRequired
+  },
 
   getInitialState() {
     let state = CompositionPublisherStore.getState();
@@ -24,7 +27,7 @@ const Home = React.createClass({
 
   componentWillUpdate(nextProps, nextState) {
     if(nextState.compositionId !== null) {
-      this.transitionTo('composition', { compositionId: nextState.compositionId });
+      this.context.router.push('/comp/' + nextState.compositionId);
     }
   },
 
@@ -45,7 +48,7 @@ const Home = React.createClass({
       });
       return;
     }
-    this.transitionTo('composition', { compositionId: compositionId });
+    this.context.router.push('/comp/' + compositionId);
   },
 
   renderError() {

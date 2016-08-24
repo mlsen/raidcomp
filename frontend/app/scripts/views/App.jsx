@@ -6,13 +6,17 @@ import Workspace from '../components/Workspace.jsx';
 const App = React.createClass({
 
   componentWillMount() {
-    AppActions.connect();
+    AppActions.connectToSocket();
   },
 
   render() {
+    var children = React.Children.map(this.props.children, function (child) {
+      return React.cloneElement(child, {})
+    })
+
     return (
       <div className='Content'>
-        <RouteHandler />
+        {children}
       </div>
     );
   }

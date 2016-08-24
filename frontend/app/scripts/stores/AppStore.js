@@ -1,6 +1,5 @@
 import Immutable from 'immutable';
-import io from 'socket.io-client';
-import alt from '../alt';
+import alt from '../alt.jsx';
 import AppActions from '../actions/AppActions';
 
 class AppStore {
@@ -11,14 +10,12 @@ class AppStore {
     this.state.socket = null;
 
     this.bindListeners({
-      handleConnect: AppActions.CONNECT
+      onSocketConnect: AppActions.CONNECT_TO_SOCKET
     });
   }
 
-  handleConnect() {
-    if(this.state.socket === null) {
-      this.state.socket = io.connect('http://api.raidcomp.mlsn.me');
-    }
+  onSocketConnect(socket) {
+    this.state.socket = socket;
   }
 
 }

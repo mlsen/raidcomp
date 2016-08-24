@@ -2,7 +2,9 @@ FROM gliderlabs/alpine:edge
 
 RUN apk add --update nginx && rm -rf /var/cache/apk/*
 
-RUN rm -rf /usr/share/nginx/html
-ADD ./dist /usr/share/nginx/html
+#RUN mkdir -p /var/lib/nginx/logs && touch /var/lib/nginx/logs/
+#RUN mkdir -p /var/log/nginx && touch /var/log/nginx/rc_fe_access.log
+ADD ./nginx-raidcomp.conf /etc/nginx/nginx.conf
+#ADD ./dist /srv/rc/app
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "pid /tmp/nginx.pid; daemon off;"]

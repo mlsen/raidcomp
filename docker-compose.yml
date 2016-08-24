@@ -5,15 +5,16 @@ proxy:
   volumes:
     - /var/run/docker.sock:/tmp/docker.sock
 
-# frontend:
-#   build: ./frontend
-#   command: npm run start
-#   volumes:
-#     - ./frontend/app:/srv/rc/app
-#   ports:
-#     - "1337:1337"
-#   environment:
-#     VIRTUAL_HOST: raidcomp.dev
+frontend:
+  build: ./frontend
+  command: nginx -g "pid /tmp/nginx.pid; daemon off;"
+  volumes:
+    - ./frontend/dist:/srv/rc/app
+    #- ./log/frontend:/var/log
+  ports:
+    - "1337:1337"
+  environment:
+    VIRTUAL_HOST: raidcomp.dev
 
 backend:
   build: ./backend

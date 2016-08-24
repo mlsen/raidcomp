@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import sha1 from 'sha1';
-import alt from '../alt';
+import alt from '../alt.jsx';
 import CompositionActions from '../actions/CompositionActions';
 import CompositionPublisherActions from '../actions/CompositionPublisherActions';
 import AppStore from './AppStore';
@@ -41,7 +41,7 @@ class CompositionPublisherStore {
   handleSetComposition(props) {
 
     const { compositionId, user } = props;
-
+    console.log("Publish: " + compositionId);
     // in case it triggers twice
     if(this.state.compositionId !== null || compositionId.length !== 40) {
       return;

@@ -3,7 +3,7 @@ module.exports.getConfig = function(type) {
   var isDev = type === 'development';
 
   var config = {
-    entry: './app/scripts/main.js',
+    entry: './app/scripts/main.jsx',
     output: {
       path: __dirname,
       filename: 'main.js'
@@ -12,10 +12,18 @@ module.exports.getConfig = function(type) {
     module: {
       loaders: [{
         test: /\.jsx?$/,
+        include: __dirname + '/app',
         exclude: /node_modules/,
         loader: 'babel-loader'
       }]
+    },
+    query: {
+      presets:['react', 'es2015']
     }
+    // externals: {
+    //   // 'react': 'React',
+    //   'react/lib/ExecutionEnvironment': true
+    // }
   };
 
   if(isDev){
