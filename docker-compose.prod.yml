@@ -1,19 +1,13 @@
-proxy:
-  image: jwilder/nginx-proxy
-  ports:
-    - "80:80"
-  volumes:
-    - /var/run/docker.sock:/tmp/docker.sock
-
 frontend:
   build: ./frontend
   command: nginx -g "pid /tmp/nginx.pid; daemon off;"
   volumes:
     - ./frontend/dist:/srv/rc/app
   ports:
-    - "1337:1337"
+    - "1337"
   environment:
     VIRTUAL_HOST: raidcomp.xmyno.me
+    VIRTUAL_PORT: 80
 
 backend:
   build: ./backend
@@ -24,9 +18,10 @@ backend:
     - ./backend/app:/srv/raidcomp/app
     - ./backend/app.js:/srv/raidcomp/app.js
   ports:
-    - "5000:5000"
+    - "5000"
   environment:
     VIRTUAL_HOST: api.raidcomp.xmyno.me
+    VIRTUAL_PORT: 80
 
 mongo:
   image: mongo
