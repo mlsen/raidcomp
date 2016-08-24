@@ -12,12 +12,6 @@ var config = require('./app/config');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://mongo/raidcomp');
 
-// var db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function (callback) {
-//  // do stuff
-// });
-
 //app.use(bodyparser.json());
 app.use(cors());
 
@@ -39,9 +33,6 @@ var regions = {
 };
 
 app.get(/armory\/([a-z]{2})\/(.+)/, function(req, res, next) {
-  // req.params[0] = region shortform
-  // req.url = full url
-
   if(!regions.hasOwnProperty(req.params[0])) {
     return res.status(400).json({ error: 'No such region.'} );
   }
@@ -53,7 +44,6 @@ app.get(/armory\/([a-z]{2})\/(.+)/, function(req, res, next) {
   var hasQueryParams = reqUrl.indexOf('?') !== -1
   reqUrl += (hasQueryParams) ? '&' : '?';
   reqUrl += 'locale=en_GB&apikey=' + config.apiKey;
-  console.log(reqUrl);
 
   request.get({ url: reqUrl, json: true }, function(error, response, body) {
     if (response) {

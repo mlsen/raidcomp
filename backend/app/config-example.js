@@ -5,7 +5,5 @@ var config = {
   apiKey: '<BATTLENET APIKEY>'
 };
 
-module.exports = {
-  config: config
-};
+module.exports = config;
 }());
