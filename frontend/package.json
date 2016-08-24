@@ -19,6 +19,7 @@
     "babel-loader": "*",
     "babel-preset-es2015": "^6.13.2",
     "del": "*",
+    "es6-promise": "^3.2.1",
     "gulp": "*",
     "gulp-autoprefixer": "*",
     "gulp-concat": "*",

@@ -1,3 +1,4 @@
+var Promise = require('es6-promise').Promise;
 var gulp = require('gulp');
 var path = require('path');
 var $ = require('gulp-load-plugins')();
